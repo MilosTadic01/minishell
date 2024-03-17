@@ -3,6 +3,7 @@
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
+CYAN='\033[0;36m'
 NC='\033[0m'
 
 echo
@@ -43,6 +44,55 @@ echo -e '$ echo '\''banana\\napple'\' ${RED}'-e' ${NC}
 echo 'banana\napple' -e
 
 echo
+echo -e ${GREEN}'###<echo w/ invalid option after a valid one>###'${NC}
+echo '$ echo -e -x '\''banana\napple'\'
+echo -e -x 'banana\napple'
+
+echo
+echo -e ${GREEN}'###<echo w/ invalid option before a valid one>###'${NC}
+echo '$ echo -x -e '\''banana\napple'\'
+echo -x -e 'banana\napple'
+
+echo
+echo -e ${GREEN}'###<echo w/ invalid option after a valid one in an options cluster>###'${NC}
+echo '$ echo -ex '\''banana\napple'\'
+echo -ex 'banana\napple'
+
+echo
+echo -e ${GREEN}'###<echo w/ invalid option before a valid one in an options cluster>###'${NC}
+echo '$ echo -xe '\''banana\napple'\'
+echo -xe 'banana\napple'
+
+echo
+echo -e ${GREEN}'###<echo -e /n -E /n>###'${NC}
+echo '$ echo -e '\''banana\napple'\' -E '\''banana\napple'\'''
+echo -e 'banana\napple' -E 'banana\napple'
+
+echo
+echo -e ${GREEN}'###<>###'${NC}
+echo '$ '
+
+echo
+echo -e ${GREEN}'###<>###'${NC}
+echo '$ '
+
+echo
+echo -e ${GREEN}'###<>###'${NC}
+echo '$ '
+
+echo
+echo -e ${GREEN}'###<>###'${NC}
+echo '$ '
+
+echo
+echo -e ${GREEN}'###<>###'${NC}
+echo '$ '
+
+echo
+echo -e ${GREEN}'###<>###'${NC}
+echo '$ '
+
+echo
 echo -e ${GREEN}'###<>###'${NC}
 echo '$ '
 
@@ -52,5 +102,14 @@ echo '$ < infile.txt cat | sort | < infile.txt uniq > outfile.txt'
 < infile.txt cat | sort | < infile.txt uniq > outfile.txt
 echo '$ cat outfile.txt'
 cat outfile.txt
+
+echo
+echo -e ${RED}'###<CONCLUSIONS>###'${NC}
+echo 'Any options must come before any arguments.'
+echo 'Any invalid option will be interpreted as an argument.'
+echo -e 'Fig 4. Shell Grammar in Backus­Naur Form:' ${CYAN}
+echo 'cmd [arg]* [ | cmd [arg]* ]*
+    [ [> filename] [< filename] [ >& filename] [>> filename] [>>& filename] ]* [&]'
+echo -e ${NC}
 
 echo
