@@ -110,6 +110,11 @@ echo 'Any invalid option will be interpreted as an argument.'
 echo -e 'Fig 4. Shell Grammar in Backus­Naur Form:' ${CYAN}
 echo 'cmd [arg]* [ | cmd [arg]* ]*
     [ [> filename] [< filename] [ >& filename] [>> filename] [>>& filename] ]* [&]'
+
+echo -e ${RED}'###<UNSORTED BITS OF KNOWLEDGE>###'${NC}
+echo 'ctrl+d should exit a process. How did I not notice this before?'
+echo 'tab character is not ascii tab when it is input on the bas cmd line, its sth special'
+
 echo -e ${NC}
 
 echo
