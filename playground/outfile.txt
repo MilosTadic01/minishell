@@ -1,4 +1,4 @@
-banana
+-e banana
 apple
 banana
 apple
