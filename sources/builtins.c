@@ -6,11 +6,14 @@
 /*   By: mitadic <mitadic@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 17:58:34 by mitadic           #+#    #+#             */
-/*   Updated: 2024/03/17 18:13:31 by mitadic          ###   ########.fr       */
+/*   Updated: 2024/03/26 14:16:21 by mitadic          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 void	ft_cat
+{
+	//
+}
 
 // Inaccurate depiction, what we'd pass here is the row info of the Command Table,
 // so we'd use something like 'berta->tokens[2]->path', but my C-fu isn't fresh
