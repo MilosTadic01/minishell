@@ -69,8 +69,19 @@ echo '$ echo -e '\''banana\napple'\' -E '\''banana\napple'\'''
 echo -e 'banana\napple' -E 'banana\napple'
 
 echo
-echo -e ${GREEN}'###<>###'${NC}
-echo '$ '
+echo -e ${GREEN}'###<Levels of "garbage options">###'${NC}
+echo '$ ls'
+ls
+echo '$ ls --'
+ls --
+echo '$ ls -----'
+ls -----
+echo '$ ps --'
+echo -e ${GREEN}'###<That was ls, but watch this with ps (it'\''s not a builting though)>###'${NC}
+echo '$ ps'
+ps
+echo '$ ps -'
+ps -
 
 echo
 echo -e ${GREEN}'###<>###'${NC}
