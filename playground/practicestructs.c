@@ -1,5 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../libft/libft.h"
+
+void	*ft_malloc(t_list *lst, int type, size_t size)
+{
+	if (type == INT_P)
+		return (ft_malloc_int_p(lst, size));
+	if (type == INT_PP)
+		return (ft_malloc_int_pp(lst, size));
+	else if (type == CHAR_P)
+		return (ft_malloc_char_p(lst, size));
+	else if (type == CHAR_PP)
+		return (ft_malloc_char_pp(lst, size));
+}
+
+void	ft_free(void **ptr)
+{
+}
 
 typedef struct	s_vals
 {
