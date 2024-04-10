@@ -3,10 +3,23 @@ write a shell in C
 
 let's break it
 
-The Open Group Base Secifications Issue 6
-IEEE Std 1003.1, 2004 Edition
-The definition of the Shell Command Language:
-https://pubs.opengroup.org/onlinepubs/009604499/utilities/xcu_chap02.html
+## Navigating the massive knowledge of Shell
+
+### Formal docs
+
+* [The Open Group Base Secifications Issue 6. IEEE Std 1003.1, 2004 Edition. The definition of the Shell Command Language](https://pubs.opengroup.org/onlinepubs/009604499/utilities/xcu_chap02.html) (Note that 1003.2 is actually the issue that might be more relevant to Bash, though I forgot why)
+* [The GNU Bash manual](https://www.gnu.org/software/bash/manual/)
+
+### Referencing specific commands (nav)
+
+* `type <cmd>` - what would get executed by Shell if `<cmd>` were part of the command
+  * `type -a <cmd>` - show all possibilities for execution, whereas the top one will get executed if not otherwise specified
+* `help <cmd>` - the "man pages" for Shell builtins specifically
+* `man <cmd>` vs `info <cmd>` - ultimately, just try both, often they'll end up being the same
+* compgen - a milion options, a milion useful printouts
+  * `compgen -b` - list the builtin cmds of this shell
+  * `compgen -v` - list the builtin vars of this shell
+  * `compgen -a` - list the aliases of this shell
 
 ## Authorized functions
 
