@@ -1,0 +1,12 @@
+statement ::= (command | command PIPE statement)
+
+command ::= (basic_command)? REDIRECT_IN literal |
+			(basic_command)? REDIRECT_IN_IN literal |
+			(basic_command)? REDIRECT_OUT literal |
+			(basic_command)? REDIRECT_OUT_OUT literal |
+			REDIRECT_IN literal basic_command |
+			REDIRECT_OUT literal basic_command |
+			REDIRECT_IN_IN literal basic_command |
+			REDIRECT_OUT_OUT literal basic_command |
+
+basic_command ::= (literal)+

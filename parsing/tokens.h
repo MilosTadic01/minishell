@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:07:22 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/01 17:32:30 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/10 11:43:47 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@
 # define SINGLE_QUOTE 3
 # define REDIRECT_IN 4
 # define REDIRECT_OUT 5
+# define EQUALS 6
 
-# define APPEND_OUT 10
-# define READ_DELIM 11
+# define REDIRECT_OUT_OUT 10
+# define REDIRECT_IN_IN 11
 # define AND 12
 # define OR 13
 # define EXIT_STATUS 14
@@ -34,8 +35,8 @@
 # define ENV 105
 # define EXIT 106
 
-# define LITERAL 1000
-# define VARIABLE 1001
-# define FLAG 10000
+# define LITERAL 200
+# define VARIABLE 201
+# define FLAG 202
 
 #endif
