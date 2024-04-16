@@ -6,13 +6,13 @@
 /*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:32 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/16 16:55:46 by daria            ###   ########.fr       */
+/*   Updated: 2024/04/16 21:29:56 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//echo "$HOME" doesn't work for some reason
+//echo -n "&& and here 'aaa' $HOME '"
 
 /*t_token	*extract_tokens(char *input_string)
 {
@@ -24,7 +24,7 @@
 
 int	quotation_status(t_input *in)
 {
-	if (unclosed_quotations_check(in))
+	if (in->quotations == DEFAULT && unclosed_quotations_check(in))
 		return (UNCLOSED_QUOTATIONS);
 	if (in->current_char == DOUBLE_QUOTE)
 	{
@@ -48,19 +48,20 @@ int	quotation_status(t_input *in)
 int	unclosed_quotations_check(t_input *in)
 {
 	int		q;
-	t_input	*copy;
+	char	*copy;
 
-	copy = in;
-	q = copy->current_char;
-	if (peek_char(copy))
-		next_char(copy);
+	copy = ft_strdup(in->input);
+	copy += in->current_position;
+	q = *copy;
+	if (*(copy + 1))
+		copy++;
 	else
 		return (UNCLOSED_QUOTATIONS);
-	while (copy->current_char)
+	while (*copy)
 	{
-		if (copy->current_char == q)
+		if (*copy == q)
 			return (SUCCESS);
-		next_char(copy);
+		copy++;
 	}
 	return (UNCLOSED_QUOTATIONS);
 }
@@ -96,7 +97,7 @@ t_token	*get_literal_token(t_input *in)
 		return (token);
 	while (in->current_char)
 	{
-		if (ft_isspace(in->current_char))
+		if (ft_isspace(in->current_char) && in->quotations == DEFAULT)
 			break ;
 		skip_spaces(in);
 		if (in->current_char == SINGLE_QUOTE || in->current_char == DOUBLE_QUOTE)
@@ -178,12 +179,9 @@ char	*expand_variable(t_input *in, int state)
 	while (ft_isalnum(in->current_char) || in->current_char == '_')
 		next_char(in);
 	var_name = ft_substr(in->input, start, in->current_position - start);
-	//printf("NAME:%s\n", var_name);
 	tmp_value = getenv(var_name);
-	//printf("VALUE:%s\n", tmp_value);
 	if (tmp_value && state)
 		tmp_value = ft_rm_consec_spaces(tmp_value);
-	printf("VALUE:%s\n", tmp_value);
 	return (tmp_value);
 }
 
@@ -191,6 +189,7 @@ t_token	*get_output_redir_token(t_input *in)
 {
 	t_token	*token;
 
+	token = NULL;
 	if (in->current_char == REDIRECT_OUT && peek_char(in) == REDIRECT_OUT)
 	{
 		token = new_token(">>", REDIRECT_OUT_OUT);
@@ -209,6 +208,7 @@ t_token	*get_input_redir_token(t_input *in)
 {
 	t_token	*token;
 
+	token = NULL;
 	if (in->current_char == REDIRECT_IN && peek_char(in) == REDIRECT_IN)
 	{
 		token = new_token("<<", REDIRECT_IN_IN);
@@ -227,6 +227,7 @@ t_token	*get_ampersand_token(t_input *in)
 {
 	t_token	*token;
 
+	token = NULL;
 	if (in->current_char == AMPERSAND)
 	{
 		if (peek_char(in) == AMPERSAND)
@@ -245,6 +246,7 @@ t_token	*get_pipe_token(t_input *in)
 {
 	t_token	*token;
 
+	token = NULL;
 	if (in->current_char == PIPE)
 	{
 		if (peek_char(in) == PIPE)
