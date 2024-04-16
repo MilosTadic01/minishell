@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:35 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/12 17:05:22 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/16 15:48:55 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,6 @@ void	next_char(t_input *in);
 void	skip_spaces(t_input *in);
 t_token	*new_token(char *value, int type);
 char	peek_char(t_input *in);
+int	is_control_char(t_input *in);
 
 #endif

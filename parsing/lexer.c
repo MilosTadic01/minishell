@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:32 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/12 17:46:38 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/16 16:55:46 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//echo "$HOME" doesn't work for some reason
 
 /*t_token	*extract_tokens(char *input_string)
 {
@@ -50,6 +52,10 @@ int	unclosed_quotations_check(t_input *in)
 
 	copy = in;
 	q = copy->current_char;
+	if (peek_char(copy))
+		next_char(copy);
+	else
+		return (UNCLOSED_QUOTATIONS);
 	while (copy->current_char)
 	{
 		if (copy->current_char == q)
@@ -65,41 +71,14 @@ t_token	*create_token(t_input *in)
 
 	token = NULL;
 	skip_spaces(in);
-	//parses next token, taking into account quotations status
-	//case 1: arbitrary character
-	//			if quotes close, peek further to make sure that it's the end of a literal, else keep parsing
-	//case 2: |
-	//			DEFAULT + OR
-	//			DEFAULT + PIPE
-	//			*_QUOTES + OR
-	//			*_QUOTES + PIPE
-	//case 3:
-	//			DEFAULT + &&
-	//			*_QUOTES + &&
 	if (in->current_char == PIPE)
 		token = get_pipe_token(in);
 	else if (in->current_char == AMPERSAND)
 		token = get_ampersand_token(in);
-	//case 4: <
-	//			DEFAULT + <<
-	//			DEFAULT + <
-	//			*_QUOTES + <<
-	//			*_QUOTES + <
 	else if (in->current_char == REDIRECT_IN)
 		token = get_input_redir_token(in);
-	//case 5: >
-	//			DEFAULT + >>
-	//			DEFAULT + >
-	//			*_QUOTES + >>
-	//			*_QUOTES + >
 	else if (in->current_char == REDIRECT_OUT)
 		token = get_output_redir_token(in);
-	//case 6: $
-	//			DEFAULT + $
-	//			SINGLE_QUOTES + $
-	//			DOUBLE_QUOTES + $
-	//else if (in->current_char == DOLLAR)
-	//	token = get_variable_value_token(in);
 	else
 		token = get_literal_token(in);
 	return (token);
@@ -108,31 +87,39 @@ t_token	*create_token(t_input *in)
 t_token	*get_literal_token(t_input *in)
 {
 	char	*seq;
-	//char	*res;
+	char	*res;
 	t_token	*token;
 
 	token = NULL;
-	while (in->current_char && !ft_isspace(in->current_char) && in->current_char != PIPE)
+	res = NULL;
+	if (!in->current_char)
+		return (token);
+	while (in->current_char)
 	{
+		if (ft_isspace(in->current_char))
+			break ;
 		skip_spaces(in);
 		if (in->current_char == SINGLE_QUOTE || in->current_char == DOUBLE_QUOTE)
 		{
 			if (quotation_status(in))
+			{
+				ft_putstr_fd("PARSING ERROR\n", 2);
 				return (NULL);
+			}
+			if (!in->current_char)
+				break ;
 		}
-		if (!in->current_char)
-			break ;
-		if (in->current_char == AMPERSAND && peek_char(in) == AMPERSAND)
-			break ;
-		else if (in->current_char == PIPE)
-			break ;
-		else if (in->current_char == REDIRECT_IN || in->current_char == REDIRECT_OUT)
-			break ;
+		if (in->quotations == DEFAULT)
+		{
+			if (is_control_char(in))
+				break ;
+			else if (ft_isspace(in->current_char))
+				break ;
+		}
 		seq = get_literal_part(in);
-		printf("%s", seq);
-		//res = ft_concat(res, seq);
+		res = ft_concat(res, seq);
 	}
-	//token = new_token(res, LITERAL);
+	token = new_token(res, LITERAL);
 	return (token);
 }
 
@@ -144,20 +131,17 @@ char	*get_literal_part(t_input *in)
 	start = in->current_position;
 	if (in->quotations == SINGLE_QUOTE)
 	{
-		while (in->current_char != SINGLE_QUOTE)
+		while (in->current_char && in->current_char != SINGLE_QUOTE)
 			next_char(in);
 		seq = ft_substr(in->input, start, in->current_position - start);
 	}
 	else if (in->quotations == DOUBLE_QUOTE)
 	{
 		if (in->current_char == DOLLAR)
-		{
-			next_char(in);
 			seq = expand_variable(in, DOUBLE_QUOTE);
-		}
 		else
 		{
-			while (in->current_char != DOLLAR && in->current_char != DOUBLE_QUOTE)
+			while (in->current_char && in->current_char != DOLLAR && in->current_char != DOUBLE_QUOTE)
 				next_char(in);
 			seq = ft_substr(in->input, start, in->current_position - start);
 		}
@@ -166,22 +150,22 @@ char	*get_literal_part(t_input *in)
 	{
 		if (in->current_char == DOLLAR)
 			seq = expand_variable(in, DEFAULT);
-		while (in->current_char != SINGLE_QUOTE && in->current_char != DOUBLE_QUOTE
-					&& in->current_char != DOLLAR)
+		else
 		{
-			if (ft_isspace(in->current_char))
-				break ;
-			next_char(in);
+			while (in->current_char && in->current_char != SINGLE_QUOTE && in->current_char != DOUBLE_QUOTE
+					&& in->current_char != DOLLAR)
+			{
+				if (ft_isspace(in->current_char))
+					break ;
+				if (is_control_char(in))
+					break ;
+				next_char(in);
+			}
+			seq = ft_substr(in->input, start, in->current_position - start);
 		}
-		seq = ft_substr(in->input, start, in->current_position - start);
 	}
 	return (seq);
 }
-
-/*char	*get_quotation_literal(t_input *in, int quote_type)
-{
-	;
-}*/
 
 char	*expand_variable(t_input *in, int state)
 {
@@ -189,13 +173,17 @@ char	*expand_variable(t_input *in, int state)
 	char	*var_name;
 	int		start;
 
+	next_char(in);
 	start = in->current_position;
 	while (ft_isalnum(in->current_char) || in->current_char == '_')
 		next_char(in);
 	var_name = ft_substr(in->input, start, in->current_position - start);
+	//printf("NAME:%s\n", var_name);
 	tmp_value = getenv(var_name);
+	//printf("VALUE:%s\n", tmp_value);
 	if (tmp_value && state)
 		tmp_value = ft_rm_consec_spaces(tmp_value);
+	printf("VALUE:%s\n", tmp_value);
 	return (tmp_value);
 }
 
@@ -310,4 +298,13 @@ t_token	*new_token(char *value, int type)
 	new_token->token_type = type;
 	new_token->value = value;
 	return (new_token);
+}
+
+int	is_control_char(t_input *in)
+{
+	if (in->current_char == PIPE || in->current_char == REDIRECT_IN || in->current_char == REDIRECT_OUT)
+		return (1);
+	if (in->current_char == AMPERSAND && peek_char(in) == AMPERSAND)
+		return (1);
+	return (0);
 }

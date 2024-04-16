@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+         #
+#    By: daria <daria@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/27 12:28:47 by dzubkova          #+#    #+#              #
-#    Updated: 2024/04/11 13:37:07 by dzubkova         ###   ########.fr        #
+#    Updated: 2024/04/16 12:17:09 by daria            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FILES = main.c lexer.c lexer_utils.c get_tokens.c parser.c
+FILES = main.c lexer.c
 OFILES = $(FILES:.c=.o)
 HFILES = tokens.h minishell.h parser.h structs.h
 
