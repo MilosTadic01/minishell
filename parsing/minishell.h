@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/27 12:35:37 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/11 11:33:18 by dzubkova         ###   ########.fr       */
+/*   Created: 2024/04/11 14:23:40 by dzubkova          #+#    #+#             */
+/*   Updated: 2024/04/12 12:22:28 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,35 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
-# include "tokens.h"
+# include "lexer.h"
+# include "errors.h"
 
-typedef struct s_input
-{
-	char	*input;
-	char	current_char;
-	int		current_position;
-	int		quotations;
-	int		token_initialized;
-}	t_input;
+# define PIPE 124
+# define SINGLE_QUOTE 39
+# define DOUBLE_QUOTE 34
+# define AMPERSAND 38
+# define REDIRECT_IN 60
+# define REDIRECT_OUT 62
+# define DOLLAR 36
+# define EQUALS 5
 
-t_list	*lex_input(char *string);
-void	get_next_char(t_input *in);
-char	peek_next_char(t_input in);
-void	get_next_token(t_token *next_token, t_input *in);
-void	skip_spaces(t_input *in);
-void	get_char_sequence(t_input *in, t_token *next_token);
-int		match_builtin(char *seq);
-int		is_control_char(t_input in);
-void	get_quotation_tokens(t_input *in, t_token *next_token);
-t_input	initialize_input(char *command_string);
-void	get_and_option(t_token *next_token, t_input *in, int *flag);
-void	get_char_sequence(t_input *in, t_token *next_token);
-void	get_next_token(t_token *next_token, t_input *in);
-void	get_quotes_literals(t_token *next_token, t_input *in, int *flag);
-void	get_pipes_variables(t_token *next_token, t_input *in, int *flag);
-void	get_redirections(t_token *next_token, t_input *in, int *flag);
-void	get_quotation_tokens(t_input *in, t_token *next_token);
-void	get_variable_value(t_token *next_token, t_input *in);
-void	init_token(t_token *new_token, t_input *in, char *value, int type);
-void	reset_quotes(t_input *in, int *flag);
+# define REDIRECT_OUT_OUT 6262
+# define REDIRECT_IN_IN 6060
+# define AND 3838
+# define OR 124124
+# define EXIT_STATUS 14
+
+# define ECHO 100
+# define CD 101
+# define PWD 102
+# define EXPORT 103
+# define UNSET 104
+# define ENV 105
+# define EXIT 106
+
+# define LITERAL 200
+
+# define DEFAULT 0
+# define SUCCESS 0
 
 #endif

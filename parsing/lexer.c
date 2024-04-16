@@ -5,58 +5,185 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/27 12:28:43 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/11 14:58:59 by dzubkova         ###   ########.fr       */
+/*   Created: 2024/04/11 14:23:32 by dzubkova          #+#    #+#             */
+/*   Updated: 2024/04/12 17:46:38 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list	*lex_input(char *string)
+/*t_token	*extract_tokens(char *input_string)
 {
-	t_input	in;
-	t_list	*token_list;
-	t_token next_token;
+	//initializes a t_input data stucture with input string
+	//iterates on the string till the end
+	//when gets a token, returns it
+	//if gets NULL, throws an invalid syntax error
+}*/
 
-	token_list = NULL;
-	in = initialize_input(string);
-	while (in.current_char)
+int	quotation_status(t_input *in)
+{
+	if (unclosed_quotations_check(in))
+		return (UNCLOSED_QUOTATIONS);
+	if (in->current_char == DOUBLE_QUOTE)
 	{
-		get_next_token(&next_token, &in);
-		if (in.token_initialized)
-			ft_lstadd_back(&token_list, ft_lstnew(&(t_type){.as_token = &next_token}, AS_TOKEN));
+		if (in->quotations == DOUBLE_QUOTE)
+			in->quotations = DEFAULT;
+		else if (in->quotations == DEFAULT)
+			in->quotations = DOUBLE_QUOTE;
+		next_char(in);
 	}
-	return (token_list);
+	else if (in->current_char == SINGLE_QUOTE)
+	{
+		if (in->quotations == SINGLE_QUOTE)
+			in->quotations = DEFAULT;
+		else if (in->quotations == DEFAULT)
+			in->quotations = SINGLE_QUOTE;
+		next_char(in);
+	}
+	return (SUCCESS);
 }
 
-void	init_token(t_token *new_token, t_input *in, char *value, int type)
+int	unclosed_quotations_check(t_input *in)
 {
-	new_token->token_type = type;
-	new_token->value = value;
-	in->token_initialized = 1;
+	int		q;
+	t_input	*copy;
+
+	copy = in;
+	q = copy->current_char;
+	while (copy->current_char)
+	{
+		if (copy->current_char == q)
+			return (SUCCESS);
+		next_char(copy);
+	}
+	return (UNCLOSED_QUOTATIONS);
 }
 
-void	get_next_token(t_token *next_token, t_input *in)
+t_token	*create_token(t_input *in)
 {
-	int	flag;
+	t_token	*token;
 
-	in->token_initialized = 0;
+	token = NULL;
 	skip_spaces(in);
-	flag = 0;
-	reset_quotes(in, &flag);
-	if (!flag)
-		get_quotes_literals(next_token, in, &flag);
-	if (!flag)
-		get_pipes_variables(next_token, in, &flag);
-	if (!flag)
-		get_redirections(next_token, in, &flag);
-	if (!flag)
-		get_and_option(next_token, in, &flag);
-	if (!flag)
-		get_char_sequence(in, next_token);
+	//parses next token, taking into account quotations status
+	//case 1: arbitrary character
+	//			if quotes close, peek further to make sure that it's the end of a literal, else keep parsing
+	//case 2: |
+	//			DEFAULT + OR
+	//			DEFAULT + PIPE
+	//			*_QUOTES + OR
+	//			*_QUOTES + PIPE
+	//case 3:
+	//			DEFAULT + &&
+	//			*_QUOTES + &&
+	if (in->current_char == PIPE)
+		token = get_pipe_token(in);
+	else if (in->current_char == AMPERSAND)
+		token = get_ampersand_token(in);
+	//case 4: <
+	//			DEFAULT + <<
+	//			DEFAULT + <
+	//			*_QUOTES + <<
+	//			*_QUOTES + <
+	else if (in->current_char == REDIRECT_IN)
+		token = get_input_redir_token(in);
+	//case 5: >
+	//			DEFAULT + >>
+	//			DEFAULT + >
+	//			*_QUOTES + >>
+	//			*_QUOTES + >
+	else if (in->current_char == REDIRECT_OUT)
+		token = get_output_redir_token(in);
+	//case 6: $
+	//			DEFAULT + $
+	//			SINGLE_QUOTES + $
+	//			DOUBLE_QUOTES + $
+	//else if (in->current_char == DOLLAR)
+	//	token = get_variable_value_token(in);
+	else
+		token = get_literal_token(in);
+	return (token);
 }
 
-void	get_variable_value(t_token *next_token, t_input *in)
+t_token	*get_literal_token(t_input *in)
+{
+	char	*seq;
+	//char	*res;
+	t_token	*token;
+
+	token = NULL;
+	while (in->current_char && !ft_isspace(in->current_char) && in->current_char != PIPE)
+	{
+		skip_spaces(in);
+		if (in->current_char == SINGLE_QUOTE || in->current_char == DOUBLE_QUOTE)
+		{
+			if (quotation_status(in))
+				return (NULL);
+		}
+		if (!in->current_char)
+			break ;
+		if (in->current_char == AMPERSAND && peek_char(in) == AMPERSAND)
+			break ;
+		else if (in->current_char == PIPE)
+			break ;
+		else if (in->current_char == REDIRECT_IN || in->current_char == REDIRECT_OUT)
+			break ;
+		seq = get_literal_part(in);
+		printf("%s", seq);
+		//res = ft_concat(res, seq);
+	}
+	//token = new_token(res, LITERAL);
+	return (token);
+}
+
+char	*get_literal_part(t_input *in)
+{
+	char	*seq;
+	int		start;
+
+	start = in->current_position;
+	if (in->quotations == SINGLE_QUOTE)
+	{
+		while (in->current_char != SINGLE_QUOTE)
+			next_char(in);
+		seq = ft_substr(in->input, start, in->current_position - start);
+	}
+	else if (in->quotations == DOUBLE_QUOTE)
+	{
+		if (in->current_char == DOLLAR)
+		{
+			next_char(in);
+			seq = expand_variable(in, DOUBLE_QUOTE);
+		}
+		else
+		{
+			while (in->current_char != DOLLAR && in->current_char != DOUBLE_QUOTE)
+				next_char(in);
+			seq = ft_substr(in->input, start, in->current_position - start);
+		}
+	}
+	else
+	{
+		if (in->current_char == DOLLAR)
+			seq = expand_variable(in, DEFAULT);
+		while (in->current_char != SINGLE_QUOTE && in->current_char != DOUBLE_QUOTE
+					&& in->current_char != DOLLAR)
+		{
+			if (ft_isspace(in->current_char))
+				break ;
+			next_char(in);
+		}
+		seq = ft_substr(in->input, start, in->current_position - start);
+	}
+	return (seq);
+}
+
+/*char	*get_quotation_literal(t_input *in, int quote_type)
+{
+	;
+}*/
+
+char	*expand_variable(t_input *in, int state)
 {
 	char	*tmp_value;
 	char	*var_name;
@@ -64,56 +191,123 @@ void	get_variable_value(t_token *next_token, t_input *in)
 
 	start = in->current_position;
 	while (ft_isalnum(in->current_char) || in->current_char == '_')
-		get_next_char(in);
+		next_char(in);
 	var_name = ft_substr(in->input, start, in->current_position - start);
 	tmp_value = getenv(var_name);
-	if (tmp_value)
-		init_token(next_token, in, tmp_value, LITERAL);
+	if (tmp_value && state)
+		tmp_value = ft_rm_consec_spaces(tmp_value);
+	return (tmp_value);
 }
 
-void	get_char_sequence(t_input *in, t_token *next_token)
+t_token	*get_output_redir_token(t_input *in)
 {
-	int		start;
-	char	*seq;
+	t_token	*token;
 
-	start = in->current_position;
-	while (!ft_isspace(in->current_char) && !is_control_char(*in))
+	if (in->current_char == REDIRECT_OUT && peek_char(in) == REDIRECT_OUT)
 	{
-		if (in->current_char == '\'' || in->current_char == '\"')
-			break ;
-		get_next_char(in);
+		token = new_token(">>", REDIRECT_OUT_OUT);
+		next_char(in);
+		next_char(in);
 	}
-	seq = ft_substr(in->input, start, in->current_position - start);
-	if (!seq)
-		return ;
-	if (ft_strlen(seq))
+	else
 	{
-		if (in->current_char == '=')
-			init_token(next_token, in, seq, VARIABLE);
+		token = new_token(">", REDIRECT_OUT);
+		next_char(in);
+	}
+	return (token);
+}
+
+t_token	*get_input_redir_token(t_input *in)
+{
+	t_token	*token;
+
+	if (in->current_char == REDIRECT_IN && peek_char(in) == REDIRECT_IN)
+	{
+		token = new_token("<<", REDIRECT_IN_IN);
+		next_char(in);
+		next_char(in);
+	}
+	else
+	{
+		token = new_token("<", REDIRECT_IN);
+		next_char(in);
+	}
+	return (token);
+}
+
+t_token	*get_ampersand_token(t_input *in)
+{
+	t_token	*token;
+
+	if (in->current_char == AMPERSAND)
+	{
+		if (peek_char(in) == AMPERSAND)
+		{
+			token = new_token("&&", AND);
+			next_char(in);
+			next_char(in);
+		}
 		else
-			init_token(next_token, in, seq, match_builtin(seq));
+			token = get_literal_token(in);
 	}
+	return (token);
 }
 
-void	get_quotation_tokens(t_input *in, t_token *next_token)
+t_token	*get_pipe_token(t_input *in)
 {
-	int		start;
-	char	*seq;
+	t_token	*token;
 
-	start = in->current_position;
-	if (in->quotations == 1)
+	if (in->current_char == PIPE)
 	{
-		while (in->current_char != '\'')
-			get_next_char(in);
+		if (peek_char(in) == PIPE)
+		{
+			token = new_token("||", OR);
+			next_char(in);
+			next_char(in);
+		}
+		else
+		{
+			token = new_token("|", PIPE);
+			next_char(in);
+		}
 	}
-	if (in->quotations == 2)
-	{
-		while (in->current_char != '$' && in->current_char != '\"')
-			get_next_char(in);
-	}
-	seq = ft_substr(in->input, start, in->current_position - start);
-	if (ft_strlen(seq))
-		init_token(next_token, in, seq, LITERAL);
+	return (token);
 }
 
-// goget, gather, extract,
+void	next_char(t_input *in)
+{
+	in->current_position += 1;
+	if (in->current_position > (int)ft_strlen(in->input))
+		in->current_char = '\0';
+	else
+		in->current_char = in->input[in->current_position];
+}
+
+void	skip_spaces(t_input *in)
+{
+	while (ft_isspace(in->current_char))
+	{
+		in->current_position++;
+		in->current_char = in->input[in->current_position];
+	}
+}
+
+char	peek_char(t_input *in)
+{
+	if (in->current_position + 1 >= (int)ft_strlen(in->input))
+		return ('\0');
+	else
+		return (in->input[in->current_position + 1]);
+}
+
+t_token	*new_token(char *value, int type)
+{
+	t_token *new_token;
+
+	new_token = malloc(sizeof(t_token));
+	if (!new_token)
+		return (NULL);
+	new_token->token_type = type;
+	new_token->value = value;
+	return (new_token);
+}
