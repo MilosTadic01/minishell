@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:35 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/16 15:48:55 by daria            ###   ########.fr       */
+/*   Updated: 2024/04/17 14:30:14 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ typedef struct s_input
 	char	current_char;
 	int		current_position;
 	int		quotations;
-	int		token_initialized;
 }	t_input;
 
 
@@ -38,5 +37,8 @@ void	skip_spaces(t_input *in);
 t_token	*new_token(char *value, int type);
 char	peek_char(t_input *in);
 int	is_control_char(t_input *in);
+char	*get_quotation_sequence(t_input *in);
+void	extract_tokens(char *input_string);
+t_input	*new_input(char *input_string);
 
 #endif

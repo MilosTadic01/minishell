@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 15:07:22 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/10 11:43:47 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/17 13:51:48 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,6 @@
 # define LITERAL 200
 # define VARIABLE 201
 # define FLAG 202
+
 
 #endif

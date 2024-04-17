@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:40 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/12 12:22:28 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/17 13:51:56 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,8 @@
 
 # define DEFAULT 0
 # define SUCCESS 0
+
+# define UNDERSCORE 95
+# define QUESTION_MARK 63
 
 #endif

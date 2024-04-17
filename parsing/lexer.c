@@ -3,29 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:32 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/16 21:29:56 by daria            ###   ########.fr       */
+/*   Updated: 2024/04/17 15:06:06 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//echo -n "&& and here 'aaa' $HOME '"
+//EXIT STATUS?
 
-/*t_token	*extract_tokens(char *input_string)
+void	extract_tokens(char *input_string)
 {
-	//initializes a t_input data stucture with input string
-	//iterates on the string till the end
-	//when gets a token, returns it
-	//if gets NULL, throws an invalid syntax error
-}*/
+	t_input	*in;
+	t_token	*token;
+
+	in = new_input(input_string);
+	token = NULL;
+	if (!in)
+	{
+		ft_putstr_fd("ERROR: failed to initialize input\n", 2);
+		return ;
+	}
+	//here it's gonna pass tokens to parser instead of printing them
+	while ((token = create_token(in)))
+		printf("%s\n", token->value);
+}
+
+t_input	*new_input(char *input_string)
+{
+	t_input	*in;
+
+	in = malloc(sizeof(t_input));
+	if (!in)
+		return (NULL);
+	in->current_position = 0;
+	in->input = ft_strdup(input_string);
+	in->current_char = in->input[in->current_position];
+	in->quotations = DEFAULT;
+	return (in);
+}
 
 int	quotation_status(t_input *in)
 {
 	if (in->quotations == DEFAULT && unclosed_quotations_check(in))
 		return (UNCLOSED_QUOTATIONS);
+	if (in->current_char == SINGLE_QUOTE && in->quotations == DOUBLE_QUOTE)
+		return (SUCCESS);
+	if (in->current_char == DOUBLE_QUOTE && in->quotations == SINGLE_QUOTE)
+		return (SUCCESS);
 	if (in->current_char == DOUBLE_QUOTE)
 	{
 		if (in->quotations == DOUBLE_QUOTE)
@@ -99,7 +126,6 @@ t_token	*get_literal_token(t_input *in)
 	{
 		if (ft_isspace(in->current_char) && in->quotations == DEFAULT)
 			break ;
-		skip_spaces(in);
 		if (in->current_char == SINGLE_QUOTE || in->current_char == DOUBLE_QUOTE)
 		{
 			if (quotation_status(in))
@@ -130,23 +156,8 @@ char	*get_literal_part(t_input *in)
 	int		start;
 
 	start = in->current_position;
-	if (in->quotations == SINGLE_QUOTE)
-	{
-		while (in->current_char && in->current_char != SINGLE_QUOTE)
-			next_char(in);
-		seq = ft_substr(in->input, start, in->current_position - start);
-	}
-	else if (in->quotations == DOUBLE_QUOTE)
-	{
-		if (in->current_char == DOLLAR)
-			seq = expand_variable(in, DOUBLE_QUOTE);
-		else
-		{
-			while (in->current_char && in->current_char != DOLLAR && in->current_char != DOUBLE_QUOTE)
-				next_char(in);
-			seq = ft_substr(in->input, start, in->current_position - start);
-		}
-	}
+	if (in->quotations == SINGLE_QUOTE || in->quotations == DOUBLE_QUOTE)
+		seq = get_quotation_sequence(in);
 	else
 	{
 		if (in->current_char == DOLLAR)
@@ -168,6 +179,33 @@ char	*get_literal_part(t_input *in)
 	return (seq);
 }
 
+char	*get_quotation_sequence(t_input *in)
+{
+	char	*seq;
+	int		start;
+
+	start = in->current_position;
+	seq = NULL;
+	if (in->quotations == SINGLE_QUOTE)
+	{
+		while (in->current_char && in->current_char != SINGLE_QUOTE)
+			next_char(in);
+		seq = ft_substr(in->input, start, in->current_position - start);
+	}
+	else if (in->quotations == DOUBLE_QUOTE)
+	{
+		if (in->current_char == DOLLAR)
+			seq = expand_variable(in, DOUBLE_QUOTE);
+		else
+		{
+			while (in->current_char && in->current_char != DOLLAR && in->current_char != DOUBLE_QUOTE)
+				next_char(in);
+			seq = ft_substr(in->input, start, in->current_position - start);
+		}
+	}
+	return (seq);
+}
+
 char	*expand_variable(t_input *in, int state)
 {
 	char	*tmp_value;
@@ -176,7 +214,7 @@ char	*expand_variable(t_input *in, int state)
 
 	next_char(in);
 	start = in->current_position;
-	while (ft_isalnum(in->current_char) || in->current_char == '_')
+	while (ft_isalnum(in->current_char) || in->current_char == UNDERSCORE || in->current_char == QUESTION_MARK)
 		next_char(in);
 	var_name = ft_substr(in->input, start, in->current_position - start);
 	tmp_value = getenv(var_name);
