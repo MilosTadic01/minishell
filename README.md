@@ -21,6 +21,25 @@ let's break it
   * `compgen -v` - list the builtin vars of this shell
   * `compgen -a` - list the aliases of this shell
 
+## Control flow
+parsing, execution
+
+### Parsing
+extract_tokens(char ***input_string**)
+ * `in` is a struct meant to blow up to hold **input_string** as well as other info:
+ * ```C
+   in->current_position = 0;
+   in->input = input_string;
+   in->current_char = in->input[in->current_position]; // i.e. 0?
+   in->quotations = DEFAULT; // i.e. 0
+   ```
+ * `token` is gonna get created one at a time:
+   * if | or ||
+   * else if & or &&
+   * else if < or <<
+   * else if > or >>
+   * else it's a literal
+
 ## Authorized functions
 
 man section | meaning
