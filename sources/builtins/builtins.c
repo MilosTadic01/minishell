@@ -10,6 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "builtins.h"
+
+// STDIN_FILENO: no. STDOUT_FILENO: yes.
+char	*ft_pwd(void)
+{
+	char	buff[PATH_MAX];
+	char	*pwd;
+
+	pwd = getcwd(buff, PATH_MAX);
+	if (pwd == NULL)
+	{
+		ft_putstr_fd(strerror(errno), 2);
+		return ;
+	}
+	return (pwd);
+}
+
 // This assumes that the parser will store the only possible option -n in the 2nd column
 // Else if no option, then the argument will be in the 2nd column (strarr[1])?
 // STDIN_FILENO: no. STDOUT_FILENO: yes.
@@ -22,36 +39,46 @@ void	ft_echo(char **strarr)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 }
 
+static char *ft_cd_get_fullpath(char *dest)
+{
+	if (dest[0] == '.')
+		if (dest[1] == '/')
+			return (ft_strjoin(ft_pwd(), berta->tokens->&path[2]));
+	else if (dest[0] == '/')
+		;
+}
+
 // Inaccurate depiction, what we'd pass here is the row info of the Command Table,
 // so we'd use something like 'berta->tokens[2]->path', but my C-fu isn't fresh
 // STDIN_FILENO: no. STDOUT_FILENO: no.
-void	ft_cd(t_berta *berta)
+void	ft_cd(char *dest)
 {
-	if (!berta->tokens->path)
-		return ;
-	if (berta->tokens->path[0] == '.')
-		chdir(ft_strjoin(berta->envp->PWD, berta->tokens->&path[2]));
-	else
-		chdir(berta->tokens->path);
-}
+	char	*fullpath;
 
-
-// STDIN_FILENO: no. STDOUT_FILENO: yes.
-void	ft_pwd(char **envp)
-{
-	int	i;
-
-	i = -1;
-	while (envp[++i])
+	if (!dest)
 	{
-		if (!strncmp(envp[i], "PWD=", 4))
-			ft_putstr_fd(&envp[i][4], STDOUT_FILENO);
+		if (getenv(HOME) < 0)
+			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+		else if (chdir(getenv(HOME)) < 0)
+			ft_putstr_fd(strerror(errno), 2);
+		return ;
 	}
+	fullpath = ft_cd_get_fullpath(dest);
+	if (chdir(fullpath) < 0)
+		ft_putstr_fd(strerror(errno), 2);
 }
+
+
 
 // if u 'export PWD=<newpath>' shit goes a little haywire in bash
 // Authorized: getenv. Unauthorized: putenv, setenv, unsetenv.
 // STDIN_FILENO: no. STDOUT_FILENO: no.
 void	ft_export(void)
 {
+	;
+}
+
+int	main(void)
+{
+	ft_putstr_fd(ft_pwd(), 2);
 }
