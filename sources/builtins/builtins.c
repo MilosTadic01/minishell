@@ -39,35 +39,6 @@ void	ft_echo(char **strarr)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 }
 
-static char *ft_cd_get_fullpath(char *dest)
-{
-	if (dest[0] == '.')
-		if (dest[1] == '/')
-			return (ft_strjoin(ft_pwd(), berta->tokens->&path[2]));
-	else if (dest[0] == '/')
-		;
-}
-
-// Inaccurate depiction, what we'd pass here is the row info of the Command Table,
-// so we'd use something like 'berta->tokens[2]->path', but my C-fu isn't fresh
-// STDIN_FILENO: no. STDOUT_FILENO: no.
-void	ft_cd(char *dest)
-{
-	char	*fullpath;
-
-	if (!dest)
-	{
-		if (getenv(HOME) < 0)
-			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-		else if (chdir(getenv(HOME)) < 0)
-			ft_putstr_fd(strerror(errno), 2);
-		return ;
-	}
-	fullpath = ft_cd_get_fullpath(dest);
-	if (chdir(fullpath) < 0)
-		ft_putstr_fd(strerror(errno), 2);
-}
-
 
 
 // if u 'export PWD=<newpath>' shit goes a little haywire in bash
