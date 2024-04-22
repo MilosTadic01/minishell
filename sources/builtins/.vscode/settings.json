@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "builtins.h": "c",
+        "minishell.h": "c",
+        "string.h": "c",
+        "errno.h": "c"
+    }
+}

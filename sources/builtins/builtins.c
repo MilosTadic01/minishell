@@ -44,10 +44,10 @@ void	ft_echo(char **strarr)
 // if u 'export PWD=<newpath>' shit goes a little haywire in bash
 // Authorized: getenv. Unauthorized: putenv, setenv, unsetenv.
 // STDIN_FILENO: no. STDOUT_FILENO: no.
-void	ft_export(void)
-{
-	;
-}
+// void	ft_export(void)
+// {
+// 	;
+// }
 
 int	main(void)
 {
