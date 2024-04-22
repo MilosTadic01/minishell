@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 12:19:03 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/16 15:59:08 by daria            ###   ########.fr       */
+/*   Updated: 2024/04/22 17:08:05 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define MIN_INT -2147483648
 
 char		**ft_strappend(char **str_arr, char *str, int size);
-char        *ft_concat(char *str1, char *str2);
+char		*ft_concat(char *str1, char *str2);
 char		*ft_strnstr(const char *big, const char *little, size_t len);
 char		*ft_strchr(const char *s, int c);
 char		*ft_strrchr(const char *s, int c);
@@ -34,7 +34,7 @@ char		**ft_split(char const *s, char c);
 char		*ft_strchr(const char *s, int c);
 char		*ft_strdup(const char *s);
 char		*ft_strjoin(char const *s1, char const *s2);
-char	    *ft_rm_consec_spaces(char *src);
+char		*ft_rm_consec_spaces(char *src);
 char		*ft_itoa(int n);
 int			ft_atoi(const char *nptr);
 int			ft_isdigit(int c);
@@ -54,7 +54,6 @@ size_t		ft_strlcat(char *dst, const char *src, size_t size);
 size_t		ft_strlcpy(char *dst, const char *src, size_t size);
 size_t		ft_strlen(const char *s);
 t_list		*ft_lstlast(t_list *lst);
-//t_list	*ft_lstnew(t_token *new_token);
 t_list		*ft_lstnew(t_type *data, int type);
 void		*ft_memchr(const void *s, int c, size_t n);
 void		*ft_memmove(void *dest, const void *src, size_t n);

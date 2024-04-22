@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:37 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/22 14:30:14 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:10:06 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ enum e_binop
 
 typedef struct s_command
 {
-	char	**args;
-	int		size;
+	char	**args; //cat file3
+	int		size; //1
 
-	t_list	*ins;
-	t_list	*outs;
+	t_list	*ins; //item->type = smth, item->file = file1; item->type = smth, item = file2
+	t_list	*outs; // NULL
 }	t_command;
 
 typedef struct s_ast

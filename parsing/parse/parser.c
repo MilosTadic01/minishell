@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:33 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/22 14:32:21 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:36:56 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ t_ast	*parse_statement(t_input *input)
 	if (input->current_token->token_type == PIPE)
 	{
 		advance_token(input);
+		if (!input->current_token)
+		{
+			ft_putstr_fd("PARSING ERROR\n", 2);
+			exit (1);
+		}
 		rest = parse_statement(input);
 		ast = new_binop(PIPE, &ast, &rest);
 	}

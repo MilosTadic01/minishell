@@ -6,15 +6,15 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/22 13:40:48 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:37:19 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	print_ast(t_ast *s);
+static void print_ast(t_ast *s);
 
-int	main(void)
+int main(void)
 {
 	char *i;
 	t_ast *ast;
@@ -26,7 +26,7 @@ int	main(void)
 	return (0);
 }
 
-static void	print_ast(t_ast *s)
+static void print_ast(t_ast *s)
 {
 	if (s->tag == COMMAND)
 		printf("COMMAND\n");
@@ -46,12 +46,12 @@ static void	print_ast(t_ast *s)
 	}
 	while (s->command->ins)
 	{
-		printf("input redirections %d to: %s\n", s->command->ins->as_item->type,  s->command->ins->as_item->filename);
+		printf("input redirections %d to: %s\n", s->command->ins->as_item->type, s->command->ins->as_item->filename);
 		s->command->ins = s->command->ins->next;
 	}
 	while (s->command->outs)
 	{
-		printf("output redirections %d to: %s\n", s->command->outs->as_item->type,  s->command->outs->as_item->filename);
+		printf("output redirections %d to: %s\n", s->command->outs->as_item->type, s->command->outs->as_item->filename);
 		s->command->outs = s->command->outs->next;
 	}
 	if (s->left)
