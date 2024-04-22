@@ -3,16 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: daria <daria@student.42.fr>                +#+  +:+       +#+         #
+#    By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/27 12:28:47 by dzubkova          #+#    #+#              #
-#    Updated: 2024/04/16 12:17:09 by daria            ###   ########.fr        #
+#    Updated: 2024/04/22 14:18:19 by dzubkova         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FILES = main.c lexer.c
+FILES = lex/lexer.c lex/lexer_utils.c lex/literal_tokens.c lex/quotation_status.c \
+		lex/special_char_tokens.c main.c parse/parser.c parse/new_branches.c parse/parser_utils.c
 OFILES = $(FILES:.c=.o)
-HFILES = tokens.h minishell.h parser.h structs.h
+HFILES = minishell.h lex/lexer.h parse/parser.h
 
 NAME = minishell
 

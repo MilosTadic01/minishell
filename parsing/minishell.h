@@ -6,15 +6,19 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:40 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/17 13:51:56 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:13:27 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <sys/wait.h>
+# include <unistd.h>
+# include <errno.h>
 # include "libft/libft.h"
-# include "lexer.h"
+# include "lex/lexer.h"
+# include "parse/parser.h"
 # include "errors.h"
 
 # define PIPE 124
@@ -24,7 +28,6 @@
 # define REDIRECT_IN 60
 # define REDIRECT_OUT 62
 # define DOLLAR 36
-# define EQUALS 5
 
 # define REDIRECT_OUT_OUT 6262
 # define REDIRECT_IN_IN 6060
