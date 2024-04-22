@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:16:56 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/19 11:12:09 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:52:40 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	exit_loop_conditions(t_input *in)
 		if (quotation_status(in))
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
-			return (UNCLOSED_QUOTATIONS);
+			exit (UNCLOSED_QUOTATIONS);
 		}
 		if (!in->current_char)
 			return (1);
@@ -69,14 +69,15 @@ char	*get_literal_part(t_input *in)
 		seq = get_quotation_sequence(in);
 	else
 	{
-		if (in->current_char == DOLLAR)
+		if (in->current_char == DOLLAR && !ft_isspace(peek_char(in)))
 			seq = expand_variable(in, DEFAULT);
 		else
 		{
 			while (in->current_char && in->current_char != SINGLE_QUOTE
-				&& in->current_char != DOUBLE_QUOTE
-				&& in->current_char != DOLLAR)
+				&& in->current_char != DOUBLE_QUOTE)
 			{
+				if (in->current_char == DOLLAR && !ft_isspace(peek_char(in)))
+					break ;
 				if (ft_isspace(in->current_char) || is_control_char(in))
 					break ;
 				next_char(in);
@@ -102,12 +103,12 @@ char	*get_quotation_sequence(t_input *in)
 	}
 	else if (in->quotations == DOUBLE_QUOTE)
 	{
-		if (in->current_char == DOLLAR)
+		if (in->current_char == DOLLAR && !ft_isspace(peek_char(in)))
 			seq = expand_variable(in, DOUBLE_QUOTE);
 		else
 		{
-			while (in->current_char && in->current_char != DOLLAR
-				&& in->current_char != DOUBLE_QUOTE)
+			while (in->current_char && in->current_char != DOUBLE_QUOTE
+				&& !(in->current_char == DOLLAR && !ft_isspace(peek_char(in))))
 				next_char(in);
 			seq = ft_substr(in->input, start, in->current_position - start);
 		}
