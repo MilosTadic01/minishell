@@ -45,7 +45,7 @@ char    *ft_getenv(t_list *env, char *key)
     while (env)
     {
         if (ft_strncmp(*(char *)env->content, key, len) == 0 && \
-            (*(char *)env->content)[len] == '=')
+            *(char *)(env->content)[len] == '=')
             return (&(char *)(env->content)[len + 1]); // return string, i.e. char*, not char, huh?
         env = env->next;
     }
@@ -90,6 +90,7 @@ void    ft_export(t_data *data, char **kv_pairs)
             else
                 ft_lstadd_back(&data->env, ft_lstnew(kv_pairs[i]));
         }
+    }
 }
 
 void    ft_unset(t_data *data, char *str)
