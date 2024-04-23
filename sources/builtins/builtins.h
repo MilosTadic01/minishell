@@ -29,6 +29,7 @@ char	*ft_pwd(void);
 void	ft_cd(char *dest);
 void	ft_echo(char **strarr);
 
+void    env_init(char *line, char **envp);
 void    extract_entire_env(t_data *data, char **envp);
 void    ft_env(t_list *env);
 char    *ft_getenv(t_list *env, char *key);

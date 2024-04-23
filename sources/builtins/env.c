@@ -13,6 +13,9 @@
 #include "builtins.h"
 
 void    env_init(char *line, char **envp)
+{
+    ;
+}
 
 // All this sh** needs some serious t_list dereferencing review.
 
