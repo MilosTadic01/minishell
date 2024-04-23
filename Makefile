@@ -37,7 +37,7 @@ all: $(NAME)
 
 $(NAME): $(OFILES) $(HFILES)
 	$(MAKE) bonus -C $(LIBFTD)
-	cc $(CFLAGS) $(OFILES) $(LIBFTD)libft.a -o $(NAME)
+	cc $(CFLAGS) $(OFILES) $(LIBFTD)libft.a -lreadline -lhistory -o $(NAME)
 
 %.o: %.c $(HFILES)
 	cc -c $(CFLAGS) -g $< -o $@

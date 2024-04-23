@@ -14,15 +14,22 @@
 
 static void print_ast(t_ast *s);
 
-int main(void)
+int main(char **envp)
 {
-	char *i;
+	char *line;
 	t_ast *ast;
-	i = malloc(100);
-	fgets(i, 100, stdin);
-	i = ft_strtrim(i, " ");
-	ast = parse(i);
-	print_ast(ast);
+	char ***env;
+
+	env = init_env(envp);
+	while (1)
+	{
+		line = readline("minishell> ");
+		line = ft_strtrim(line, " ");
+		ast = parse(line);
+		print_ast(ast);
+		add_history(line);
+		// free;
+	}
 	return (0);
 }
 
