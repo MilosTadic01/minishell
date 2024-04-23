@@ -20,16 +20,18 @@
 # include <stdlib.h>
 # include "../../libft/libft.h"
 
-typedef struct s_data
+typedef struct  s_lst
 {
-    char    **env;
-}       t_data;
+    struct s_lst   *next;
+    void    *content;
+}               t_lst;
+
 
 char	*ft_pwd(void);
 void	ft_cd(char *dest);
 void	ft_echo(char **strarr);
 
-void    env_init(char *line, char **envp);
+char    **env_init(char **envp);
 void    extract_entire_env(t_data *data, char **envp);
 void    ft_env(t_list *env);
 char    *ft_getenv(t_list *env, char *key);
