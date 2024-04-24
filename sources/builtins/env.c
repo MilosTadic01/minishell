@@ -12,25 +12,34 @@
 
 #include "builtins.h"
 
-void    env_init(char *line, char **envp)
+char    **env_init(char **envp)
 {
-    ;
+    char    **my_env;
+    int     i;
+    
+    i = -1;
+    while(envp[++i])
+        ;
+    my_env = malloc(i * sizeof(char *));
+    while(--i >= 0)
+        my_env[i] = ft_strdup(envp[i]);
+    return (my_env);
 }
 
 // All this sh** needs some serious t_list dereferencing review.
 
 // Which data bus to use? data->env is placeholder
-void    extract_entire_env(t_data *data, char **envp)
-{
-    int i;
-    t_list *head;
+// void    extract_entire_env(t_data *data, char **envp)
+// {
+//     int i;
+//     t_lst *head;
 
-    i = -1;
-    while(envp[++i])
-        ft_lstadd_back(&head, ft_lstnew(envp[i]));
-    //
-    data->env = head;
-}
+//     i = -1;
+//     while(envp[++i])
+//         ft_lstadd_back(&head, ft_lstnew(envp[i]));
+//     //
+//     data->env = head;
+// }
 
 void    ft_env(t_list *env)
 {

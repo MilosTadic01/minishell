@@ -18,9 +18,9 @@ int main(char **envp)
 {
 	char *line;
 	t_ast *ast;
-	char ***env;
+	char **my_env;
 
-	env = init_env(envp);
+	my_env = init_env(envp);
 	while (1)
 	{
 		line = readline("minishell> ");
