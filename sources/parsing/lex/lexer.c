@@ -6,57 +6,40 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:32 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/22 12:17:45 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/24 14:59:00 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-t_token	*create_token(t_input *in)
+int	create_token(t_input *in)
 {
-	t_token	*token;
-
-	token = NULL;
 	skip_spaces(in);
 	if (in->current_char == PIPE)
-		token = get_pipe_token(in);
+		return (get_pipe_token(in));
 	else if (in->current_char == AMPERSAND)
-		token = get_ampersand_token(in);
+		return (get_ampersand_token(in));
 	else if (in->current_char == REDIRECT_IN)
-		token = get_input_redir_token(in);
+		return (get_input_redir_token(in));
 	else if (in->current_char == REDIRECT_OUT)
-		token = get_output_redir_token(in);
+		return (get_output_redir_token(in));
 	else
-		token = get_literal_token(in);
-	return (token);
+		return (get_literal_token(in));
+	return (-1);
 }
 
-t_input	*new_input(char *input_string)
+void	init_input(t_input *in, char *input_string)
 {
-	t_input	*in;
-
-	in = malloc(sizeof(t_input));
-	if (!in)
-		return (NULL);
-	in->current_token = malloc(sizeof(t_token));
-	if (!in->current_token)
-		return (NULL);
 	in->current_position = 0;
 	in->input = ft_strdup(input_string);
-	in->current_char = in->input[in->current_position];
+	in->current_char = in->input[0];
 	in->quotations = DEFAULT;
-	in->current_token = NULL;
-	return (in);
+	in->current_token.token_type = FINAL_TOKEN;
+	in->current_token.value = NULL;
 }
 
-t_token	*new_token(char *value, int type)
+void	init_token(t_token *new_token, char *value, int type)
 {
-	t_token	*new_token;
-
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
-		return (NULL);
 	new_token->token_type = type;
 	new_token->value = value;
-	return (new_token);
 }

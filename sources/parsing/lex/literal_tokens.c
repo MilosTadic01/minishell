@@ -6,32 +6,38 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:16:56 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/22 14:52:40 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:43:43 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-//$ as LITERAL
-t_token	*get_literal_token(t_input *in)
+//TODO $ as literal
+
+int	get_literal_token(t_input *in)
 {
 	char	*seq;
 	char	*res;
-	t_token	*token;
+	char	*tmp;
 
-	token = NULL;
 	res = NULL;
 	if (!in->current_char)
-		return (token);
+	{
+		init_token(&in->current_token, "", FINAL_TOKEN);
+		return (SUCCESS);
+	}
 	while (in->current_char)
 	{
 		if (exit_loop_conditions(in))
 			break ;
 		seq = get_literal_part(in);
-		res = ft_concat(res, seq);
+		tmp = ft_concat(res, seq);
+		free(res);
+		free(seq);
+		res = tmp;
 	}
-	token = new_token(res, LITERAL);
-	return (token);
+	init_token(&in->current_token, res, LITERAL);
+	return (0);
 }
 
 int	exit_loop_conditions(t_input *in)
@@ -61,16 +67,15 @@ int	exit_loop_conditions(t_input *in)
 
 char	*get_literal_part(t_input *in)
 {
-	char	*seq;
 	int		start;
 
 	start = in->current_position;
 	if (in->quotations == SINGLE_QUOTE || in->quotations == DOUBLE_QUOTE)
-		seq = get_quotation_sequence(in);
+		return (get_quotation_sequence(in));
 	else
 	{
-		if (in->current_char == DOLLAR && !ft_isspace(peek_char(in)))
-			seq = expand_variable(in, DEFAULT);
+		if (in->current_char == DOLLAR && ft_isalnum(peek_char(in)))
+			return (expand_variable(in, DEFAULT));
 		else
 		{
 			while (in->current_char && in->current_char != SINGLE_QUOTE
@@ -82,59 +87,59 @@ char	*get_literal_part(t_input *in)
 					break ;
 				next_char(in);
 			}
-			seq = ft_substr(in->input, start, in->current_position - start);
+			return (ft_substr(in->input, start, in->current_position - start));
 		}
 	}
-	return (seq);
 }
 
 char	*get_quotation_sequence(t_input *in)
 {
-	char	*seq;
 	int		start;
 
 	start = in->current_position;
-	seq = NULL;
 	if (in->quotations == SINGLE_QUOTE)
 	{
 		while (in->current_char && in->current_char != SINGLE_QUOTE)
 			next_char(in);
-		seq = ft_substr(in->input, start, in->current_position - start);
+		return (ft_substr(in->input, start, in->current_position - start));
 	}
-	else if (in->quotations == DOUBLE_QUOTE)
+	else
 	{
-		if (in->current_char == DOLLAR && !ft_isspace(peek_char(in)))
-			seq = expand_variable(in, DOUBLE_QUOTE);
+		if (in->current_char == DOLLAR && ft_isalnum(peek_char(in)))
+			return (expand_variable(in, DOUBLE_QUOTE));
 		else
 		{
 			while (in->current_char && in->current_char != DOUBLE_QUOTE
 				&& !(in->current_char == DOLLAR && !ft_isspace(peek_char(in))))
 				next_char(in);
-			seq = ft_substr(in->input, start, in->current_position - start);
+			return (ft_substr(in->input, start, in->current_position - start));
 		}
 	}
-	return (seq);
 }
 
 char	*expand_variable(t_input *in, int state)
 {
 	char	*tmp_value;
 	char	*var_name;
+	char	*var_value;
 	int		start;
 
 	next_char(in);
 	start = in->current_position;
+	tmp_value = NULL;
 	if (in->current_char == QUESTION_MARK)
 	{
-		tmp_value = ft_itoa(errno);
 		next_char(in);
-		return (tmp_value);
+		return (ft_itoa(errno));
 	}
 	while (ft_isalnum(in->current_char) || in->current_char == UNDERSCORE)
 		next_char(in);
 	var_name = ft_substr(in->input, start, in->current_position - start);
-	tmp_value = getenv(var_name);
-	if (tmp_value && !state)
-		tmp_value = ft_rm_consec_spaces(tmp_value);
-	return (tmp_value);
+	var_value = getenv(var_name);
+	if (var_value && !state)
+		var_value = ft_rm_consec_spaces(var_value);
+	else if (var_value && state)
+		var_value = ft_strdup(var_value);
+	free(var_name);
+	return (var_value);
 }

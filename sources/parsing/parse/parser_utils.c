@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:17:07 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/22 14:31:48 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/24 17:20:55 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,35 +31,22 @@ char	*redir_filename(t_input *in)
 {
 	char	*filename;
 
-	if (!peek_token(in) || peek_token(in)->token_type != LITERAL)
+	advance_token(in);
+	if (is_final(in) || in->current_token.token_type != LITERAL)
 	{
-		filename = NULL;
 		ft_putstr_fd("PARSING ERROR\n", 2);
 		exit (1);
 	}
 	else
-	{
-		advance_token(in);
-		filename = ft_strdup(in->current_token->value);
-	}
+		filename = ft_strdup(in->current_token.value);
 	return (filename);
 }
 
-t_token	*peek_token(t_input *in)
+int	is_final(t_input *input)
 {
-	t_input	*copy;
-
-	if (!in->current_token)
-		return (NULL);
-	copy = malloc(sizeof(t_input));
-	if (!copy)
-		return (NULL);
-	copy->current_char = in->current_char;
-	copy->current_position = in->current_position;
-	copy->input = ft_strdup(in->input);
-	copy->current_token = in->current_token;
-	advance_token(copy);
-	return (copy->current_token);
+	if (input->current_token.token_type != FINAL_TOKEN)
+		return (0);
+	return (1);
 }
 
 int	is_redirection(int type)
@@ -72,5 +59,10 @@ int	is_redirection(int type)
 
 void	advance_token(t_input *in)
 {
-	in->current_token = create_token(in);
+	if (in->current_token.token_type == LITERAL)
+	{
+		free(in->current_token.value);
+		in->current_token.token_type = FINAL_TOKEN;
+	}
+	create_token(in);
 }

@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:15:20 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/18 11:32:13 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/24 11:26:10 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	unclosed_quotations_check(t_input *in)
 	int		q;
 	char	*copy;
 
-	copy = ft_strdup(in->input);
+	copy = in->input;
 	copy += in->current_position;
 	q = *copy;
 	if (*(copy + 1))

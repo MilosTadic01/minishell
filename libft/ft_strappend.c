@@ -6,11 +6,13 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 11:37:57 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/22 17:10:09 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:12:52 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+void	free_str_arr(char **str_arr);
 
 char	**ft_strappend(char **str_arr, char *str, int size)
 {
@@ -34,4 +36,14 @@ char	**ft_strappend(char **str_arr, char *str, int size)
 		return (NULL);
 	ft_strlcpy(new_str_arr[idx], str, ft_strlen(str) + 1);
 	return (new_str_arr);
+}
+
+void	free_str_arr(char **str_arr)
+{
+	while (str_arr)
+	{
+		free(*str_arr);
+		str_arr++;
+	}
+	free(str_arr);
 }
