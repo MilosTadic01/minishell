@@ -6,22 +6,25 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/25 11:27:16 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:04:17 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
 static void print_ast(t_ast *s);
+t_list  *init_env(char **envp);
 
-int main()
+int main(int argc, char **argv, char **envp)
 {
 	char *line;
 	char	*copy;
 	t_ast *ast;
-	//char **my_env;
+	t_list *my_env;
 
-	//my_env = init_env(envp);
+	(void)argc;
+	(void)argv;
+	my_env = init_env(envp);
 	//while (1)
 	//{
 		line = readline("minishell> ");
@@ -30,10 +33,11 @@ int main()
 		free(copy);
 		ast = parse(line);
 		print_ast(ast);
+		//exec(ast, &my_env);
 		add_history(line);
 		free(line);
 		free_ast(ast);
-		// free;
+		//free;
 	//}
 	return (0);
 }
@@ -76,4 +80,41 @@ static void print_ast(t_ast *s)
 		print_ast(s->left);
 	if (s->right)
 		print_ast(s->right);
+}
+
+/*t_list	*test(char **str, int size)
+{
+	int	i;
+	t_type	tmp;
+	t_list	*lst;
+
+	i = 0;
+	while (i < size)
+	{
+		tmp = (t_type){.as_str = str[i]};
+		ft_lstadd_back(&lst, ft_lstnew(&tmp, AS_STR));
+	}
+}*/
+
+t_list  *init_env(char **envp)
+{
+    t_list  *my_env;
+    t_type  tmp;
+    int     i;
+
+    i = -1;
+	my_env = NULL;
+    while(envp[++i])
+        ;
+    while(--i >= 0)
+    {
+        tmp = (t_type){.as_str = envp[i]};
+        ft_lstadd_back(&my_env, ft_lstnew(&tmp, AS_STR));
+    }
+    while(my_env)
+    {
+        printf("%s\n", my_env->as_str);
+        my_env = my_env->next;
+    }
+    return (my_env);
 }
