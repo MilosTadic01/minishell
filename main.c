@@ -21,6 +21,7 @@ int main(int argc, char **argv, char **envp)
 	char	*copy;
 	t_ast *ast;
 	t_list *my_env;
+	t_exe   exe_bus;
 
 	(void)argc;
 	(void)argv;
@@ -32,9 +33,10 @@ int main(int argc, char **argv, char **envp)
 		line = ft_strtrim(copy, " ");
 		free(copy);
 		ast = parse(line);
-		print_ast(ast);
-		//exec(ast, &my_env);
+		
+		//print_ast(ast);
 		add_history(line);
+		exec(exe_bus);
 		free(line);
 		free_ast(ast);
 		//free;

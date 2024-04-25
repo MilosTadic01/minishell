@@ -12,13 +12,7 @@
 
 #ifndef BUILTINS_H
 # define BUILTINS_H
-# include <unistd.h>
-# include <stdio.h>
-# include <errno.h>
-# include <string.h>
-# include <limits.h>
-# include <stdlib.h>
-# include "../../libft/libft.h"
+# include "../../includes/minishell.h"
 
 typedef struct  s_lst
 {
@@ -31,7 +25,7 @@ char	*ft_pwd(void);
 void	ft_cd(char *dest);
 void	ft_echo(char **strarr);
 
-char    **env_init(char **envp);
+t_list  *init_env(char **envp);
 void    extract_entire_env(t_data *data, char **envp);
 void    ft_env(t_list *env);
 char    *ft_getenv(t_list *env, char *key);
