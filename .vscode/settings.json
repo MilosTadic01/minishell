@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"minishell.h": "c",
+		"parser.h": "c",
+		"errors.h": "c",
+		"lexer.h": "c",
+		"libft.h": "c",
+		"structs.h": "c"
+	}
+}

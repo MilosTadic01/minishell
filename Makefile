@@ -6,7 +6,7 @@
 #    By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/27 12:28:47 by dzubkova          #+#    #+#              #
-#    Updated: 2024/04/22 14:18:19 by dzubkova         ###   ########.fr        #
+#    Updated: 2024/04/25 11:19:33 by dzubkova         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ FILES = $(LEXD)lexer.c \
 		$(PARSED)parser.c \
 		$(PARSED)new_branches.c \
 		$(PARSED)parser_utils.c \
+		$(PARSED)free_ast.c \
 		main.c
 
 NAME = minishell

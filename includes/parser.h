@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:37 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/22 16:10:06 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:20:04 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_ast
 }	t_ast;
 
 char			*redir_filename(t_input *in);
+int				is_final(t_input *input);
 int				is_redirection(int type);
 t_ast			*new_binop(int op, t_ast **left, t_ast **right);
 t_ast			*new_command(void);
@@ -53,6 +54,7 @@ t_ast			*parse(char *input_string);
 t_ast			*parse_command(t_input *in);
 t_ast			*parse_statement(t_input *input);
 t_redir_item	*new_item(int type, char *filename);
-t_token			*peek_token(t_input *in);
 void			advance_token(t_input *in);
 void			append_item(int type, char *filename, t_ast **ast);
+void			free_item_list(t_list **lst);
+void			free_ast(t_ast *s);

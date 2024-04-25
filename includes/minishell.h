@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:40 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/19 13:13:27 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/25 11:08:14 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@
 # define EXIT 106
 
 # define LITERAL 200
+# define FINAL_TOKEN 300
 
 # define DEFAULT 0
 # define SUCCESS 0
