@@ -12,17 +12,25 @@
 
 #include "builtins.h"
 
-char    **env_init(char **envp)
+t_list  *init_env(char **envp)
 {
-    char    **my_env;
+    t_list  *my_env;
+    t_type  tmp;
     int     i;
     
     i = -1;
     while(envp[++i])
         ;
-    my_env = malloc(i * sizeof(char *));
     while(--i >= 0)
-        my_env[i] = ft_strdup(envp[i]);
+    {
+        tmp = (t_type){.as_str = envp[i]};
+        ft_lstadd_back(&my_env, ft_lstnew(&tmp, AS_STR));
+    }
+    while(my_env)
+    {
+        printf("%s", my_env->as_str);
+        my_env = my_env->next;
+    }
     return (my_env);
 }
 
@@ -41,73 +49,73 @@ char    **env_init(char **envp)
 //     data->env = head;
 // }
 
-void    ft_env(t_list *env)
-{
-    while (env)
-    {
-        ft_putstr_fd((char *)env->content, STDOUT_FILENO);
-        ft_putstr_fd("\n", STDOUT_FILENO);
-        env = env->next;
-    }
-}
+// void    ft_env(t_list *env)
+// {
+//     while (env)
+//     {
+//         ft_putstr_fd((char *)env->content, STDOUT_FILENO);
+//         ft_putstr_fd("\n", STDOUT_FILENO);
+//         env = env->next;
+//     }
+// }
 
-char    *ft_getenv(t_list *env, char *key)
-{
-    int len;
+// char    *ft_getenv(t_list *env, char *key)
+// {
+//     int len;
 
-    len = ft_strlen(key);
-    while (env)
-    {
-        if (ft_strncmp(*(char *)env->content, key, len) == 0 && \
-            *(char *)(env->content)[len] == '=')
-            return (&(char *)(env->content)[len + 1]); // return string, i.e. char*, not char, huh?
-        env = env->next;
-    }
-    return (NULL);
-}
+//     len = ft_strlen(key);
+//     while (env)
+//     {
+//         if (ft_strncmp(*(char *)env->content, key, len) == 0 && \
+//             *(char *)(env->content)[len] == '=')
+//             return (&(char *)(env->content)[len + 1]); // return string, i.e. char*, not char, huh?
+//         env = env->next;
+//     }
+//     return (NULL);
+// }
 
-// for this I'm gonna need Darias [cmd] [arg] [arg] [arg]... But for now I'm just assuming it's a strarr
-void    ft_printenv(t_list *env, char **varkeys)
-{
-    int i;
-    char *varval;
-    int len;
+// // for this I'm gonna need Darias [cmd] [arg] [arg] [arg]... But for now I'm just assuming it's a strarr
+// void    ft_printenv(t_list *env, char **varkeys)
+// {
+//     int i;
+//     char *varval;
+//     int len;
 
-    i = 0;
-    while (varkeys[++i])
-    {
-        len = ft_strlen(varkeys[i]);
-        varval = ft_getenv(env, varkeys[i]);
-        if (varval)
-        {
-            ft_putstr_fd(&(env->content)[len], STDOUT_FILENO);
-            ft_putstr_fd("\n", STDOUT_FILENO);
-        }
-    }
-}
+//     i = 0;
+//     while (varkeys[++i])
+//     {
+//         len = ft_strlen(varkeys[i]);
+//         varval = ft_getenv(env, varkeys[i]);
+//         if (varval)
+//         {
+//             ft_putstr_fd(&(env->content)[len], STDOUT_FILENO);
+//             ft_putstr_fd("\n", STDOUT_FILENO);
+//         }
+//     }
+// }
 
-void    ft_export(t_data *data, char **kv_pairs)
-{
-    int i;
+// void    ft_export(t_data *data, char **kv_pairs)
+// {
+//     int i;
 
-    i = 0;
-    while (kv_pairs[++i])
-    {
-        if (ft_strchr(kv_pairs[i], '='))
-        {
-            if (kv_pairs[i][0] == '=')
-            {
-                ft_putstr_fd("minishell: export: ", STDERR_FILENO);
-                ft_putstr_fd(kv_pairs[i], STDERR_FILENO);
-                ft_putstr_fd(": not a valid identifier\n", STDERR_FILENO);
-            }
-            else
-                ft_lstadd_back(&data->env, ft_lstnew(kv_pairs[i]));
-        }
-    }
-}
+//     i = 0;
+//     while (kv_pairs[++i])
+//     {
+//         if (ft_strchr(kv_pairs[i], '='))
+//         {
+//             if (kv_pairs[i][0] == '=')
+//             {
+//                 ft_putstr_fd("minishell: export: ", STDERR_FILENO);
+//                 ft_putstr_fd(kv_pairs[i], STDERR_FILENO);
+//                 ft_putstr_fd(": not a valid identifier\n", STDERR_FILENO);
+//             }
+//             else
+//                 ft_lstadd_back(&data->env, ft_lstnew(kv_pairs[i]));
+//         }
+//     }
+// }
 
-void    ft_unset(t_data *data, char *str)
-{
+// void    ft_unset(t_data *data, char *str)
+// {
 
-}
+// }

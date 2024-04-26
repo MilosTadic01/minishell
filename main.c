@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/26 17:07:33 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:16:23 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int main(int argc, char **argv, char **envp)
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);	t_exe   exe_bus;
+
 	(void)argc;
 	(void)argv;
 	(void)envp;
@@ -42,9 +43,10 @@ int main(int argc, char **argv, char **envp)
 		line = ft_strtrim(copy, " ");
 		free(copy);
 		ast = parse(line);
-		print_ast(ast);
-		//exec(ast, &my_env);
+
+		//print_ast(ast);
 		add_history(line);
+		exec(exe_bus);
 		free(line);
 		free_ast(ast);
 		//free;

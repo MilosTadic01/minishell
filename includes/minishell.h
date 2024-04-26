@@ -28,6 +28,7 @@
 # include "lexer.h"
 # include "parser.h"
 # include "errors.h"
+# include "exec.h"
 
 # define PIPE 124
 # define SINGLE_QUOTE 39
