@@ -6,13 +6,11 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:16:56 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/24 17:43:43 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/25 15:29:39 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
-
-//TODO $ as literal
 
 int	get_literal_token(t_input *in)
 {
@@ -79,12 +77,14 @@ char	*get_literal_part(t_input *in)
 		else
 		{
 			while (in->current_char && in->current_char != SINGLE_QUOTE
-				&& in->current_char != DOUBLE_QUOTE)
+				&& in->current_char != DOUBLE_QUOTE
+				&& !ft_isspace(in->current_char) && !is_control_char(in))
 			{
-				if (in->current_char == DOLLAR && !ft_isspace(peek_char(in)))
+				if (in->current_char == DOLLAR && !ft_isalnum(peek_char(in)))
+				{
+					next_char(in);
 					break ;
-				if (ft_isspace(in->current_char) || is_control_char(in))
-					break ;
+				}
 				next_char(in);
 			}
 			return (ft_substr(in->input, start, in->current_position - start));
@@ -110,7 +110,7 @@ char	*get_quotation_sequence(t_input *in)
 		else
 		{
 			while (in->current_char && in->current_char != DOUBLE_QUOTE
-				&& !(in->current_char == DOLLAR && !ft_isspace(peek_char(in))))
+				&& !(in->current_char == DOLLAR && ft_isalnum(peek_char(in))))
 				next_char(in);
 			return (ft_substr(in->input, start, in->current_position - start));
 		}

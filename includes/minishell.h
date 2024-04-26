@@ -6,17 +6,22 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:40 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/25 11:08:14 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/25 15:46:37 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define _XOPEN_SOURCE 700
+# define _DEFAULT_SOURCE
+
 # include <sys/wait.h>
 # include <unistd.h>
 # include <errno.h>
 # include <stdio.h>
+# include <signal.h>
+# include <sys/types.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"

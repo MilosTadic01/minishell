@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/25 12:04:17 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:37:26 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,30 @@
 
 static void print_ast(t_ast *s);
 t_list  *init_env(char **envp);
+static void	sighandler(int signum);
 
 int main(int argc, char **argv, char **envp)
 {
-	char *line;
-	char	*copy;
-	t_ast *ast;
-	t_list *my_env;
+	char				*line;
+	char				*copy;
+	t_ast				*ast;
+	struct sigaction	sa;
 
+	//t_list *my_env;
+	sa.sa_handler = sighandler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
 	(void)argc;
 	(void)argv;
-	my_env = init_env(envp);
-	//while (1)
-	//{
+	(void)envp;
+	//my_env = init_env(envp);
+	while (1)
+	{
 		line = readline("minishell> ");
+		if (!line)
+			exit(errno);
 		copy = line;
 		line = ft_strtrim(copy, " ");
 		free(copy);
@@ -38,8 +48,27 @@ int main(int argc, char **argv, char **envp)
 		free(line);
 		free_ast(ast);
 		//free;
-	//}
+	}
 	return (0);
+}
+
+static void	sighandler(int signum)
+{
+	if (signum == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_on_new_line(); // Regenerate the prompt on a newline
+		rl_replace_line("", 0); // Clear the previous text
+		rl_redisplay();
+	}
+	else if (signum == SIGQUIT)
+	{
+		//printf("got a signal\n");
+		write(1, "\n", 1);
+		rl_on_new_line(); // Regenerate the prompt on a newline
+		rl_replace_line("", 0); // Clear the previous text
+		rl_redisplay();
+	}
 }
 
 static void print_ast(t_ast *s)
@@ -68,7 +97,6 @@ static void print_ast(t_ast *s)
 	}
 	else
 	{
-		printf("BINOP ");
 		if (s->op == PIPE)
 			printf("PIPE\n");
 		if (s->op == AND)
@@ -77,9 +105,15 @@ static void print_ast(t_ast *s)
 			printf("OR\n");
 	}
 	if (s->left)
+	{
+		printf("PRINTING LEFT BRANCH:\n");
 		print_ast(s->left);
+	}
 	if (s->right)
+	{
+		printf("PRINTING RIGHT BRANCH:\n");
 		print_ast(s->right);
+	}
 }
 
 /*t_list	*test(char **str, int size)
