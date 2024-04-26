@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/26 16:37:26 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:07:33 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,15 @@ static void print_ast(t_ast *s)
 		printf("PRINTING LEFT BRANCH:\n");
 		print_ast(s->left);
 	}
+	else
+		printf("\n");
 	if (s->right)
 	{
 		printf("PRINTING RIGHT BRANCH:\n");
 		print_ast(s->right);
 	}
+	else
+		printf("\n");
 }
 
 /*t_list	*test(char **str, int size)
