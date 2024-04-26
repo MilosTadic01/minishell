@@ -13,11 +13,13 @@
 OFILES = $(FILES:.c=.o)
 LEXD = ./sources/parsing/lex/
 PARSED = ./sources/parsing/parse/
+EXECD =	./sources/execution/
 INCLUDESD = ./includes/
 LIBFTD = ./libft/
 HFILES = $(INCLUDESD)minishell.h \
 		$(INCLUDESD)lexer.h \
-		$(INCLUDESD)parser.h
+		$(INCLUDESD)parser.h \
+		$(INCLUDESD)exec.h
 FILES = $(LEXD)lexer.c \
 		$(LEXD)lexer_utils.c \
 		$(LEXD)literal_tokens.c \
@@ -27,6 +29,8 @@ FILES = $(LEXD)lexer.c \
 		$(PARSED)new_branches.c \
 		$(PARSED)parser_utils.c \
 		$(PARSED)free_ast.c \
+		$(EXECD)exec.c \
+		$(EXECD)heredoc.c \
 		main.c
 
 NAME = minishell
