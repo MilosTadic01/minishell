@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:17:07 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/24 17:20:55 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:23:55 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*redir_filename(t_input *in)
 	char	*filename;
 
 	advance_token(in);
-	if (is_final(in) || in->current_token.token_type != LITERAL)
+	if (is_final_token(in) || in->current_token.token_type != LITERAL)
 	{
 		ft_putstr_fd("PARSING ERROR\n", 2);
 		exit (1);
@@ -42,7 +42,7 @@ char	*redir_filename(t_input *in)
 	return (filename);
 }
 
-int	is_final(t_input *input)
+int	is_final_token(t_input *input)
 {
 	if (input->current_token.token_type != FINAL_TOKEN)
 		return (0);

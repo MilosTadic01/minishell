@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:37 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/26 15:29:57 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:21:46 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_ast
 }	t_ast;
 
 char			*redir_filename(t_input *in);
-int				is_final(t_input *input);
+int				is_final_token(t_input *input);
 int				is_redirection(int type);
 t_ast			*new_binop(int op, t_ast **left, t_ast **right);
 t_ast			*new_command(void);
@@ -57,5 +57,6 @@ t_ast			*parse_statement(t_input *input);
 t_redir_item	*new_item(int type, char *filename);
 void			advance_token(t_input *in);
 void			append_item(int type, char *filename, t_ast **ast);
-void			free_item_list(t_list **lst);
 void			free_ast(t_ast *s);
+void			free_item_list(t_list **lst);
+void			free_str(char **str, int size);

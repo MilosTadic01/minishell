@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:40 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/25 15:46:37 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:29:36 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@
 # include "parser.h"
 # include "errors.h"
 # include "exec.h"
+
+void    receive_signals(void);
+void	sighandler(int signum);
 
 # define PIPE 124
 # define SINGLE_QUOTE 39

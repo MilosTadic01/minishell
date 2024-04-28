@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   literal_tokens.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:16:56 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/25 15:29:39 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:23:35 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,14 +119,12 @@ char	*get_quotation_sequence(t_input *in)
 
 char	*expand_variable(t_input *in, int state)
 {
-	char	*tmp_value;
 	char	*var_name;
 	char	*var_value;
 	int		start;
 
 	next_char(in);
 	start = in->current_position;
-	tmp_value = NULL;
 	if (in->current_char == QUESTION_MARK)
 	{
 		next_char(in);

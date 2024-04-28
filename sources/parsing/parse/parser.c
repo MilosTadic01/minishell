@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:33 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/26 16:36:42 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:23:46 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
-
-static void	free_str(char **str, int size);
 
 t_ast	*parse(char *input_string)
 {
@@ -33,13 +31,13 @@ t_ast	*parse_statement(t_input *input)
 	int		type;
 
 	ast = parse_pipe(input);
-	if (input->current_token.token_type == FINAL_TOKEN)
+	if (is_final_token(input))
 		return (ast);
 	type = input->current_token.token_type;
 	if (type == AND || type == OR)
 	{
 		advance_token(input);
-		if (input->current_token.token_type == FINAL_TOKEN)
+		if (is_final_token(input))
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
 			exit (1);
@@ -56,12 +54,12 @@ t_ast	*parse_pipe(t_input *input)
 	t_ast	*rest;
 
 	ast = parse_command(input);
-	if (input->current_token.token_type == FINAL_TOKEN)
+	if (is_final_token(input))
 		return (ast);
 	if (input->current_token.token_type == PIPE)
 	{
 		advance_token(input);
-		if (input->current_token.token_type == FINAL_TOKEN)
+		if (is_final_token(input))
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
 			exit (1);
@@ -80,7 +78,7 @@ t_ast	*parse_command(t_input *input)
 	t_ast		*ast;
 
 	ast = new_command();
-	while (!is_final(input) && input->current_token.token_type != PIPE
+	while (!is_final_token(input) && input->current_token.token_type != PIPE
 			&& input->current_token.token_type != AND
 			&& input->current_token.token_type != OR)
 	{
@@ -101,17 +99,4 @@ t_ast	*parse_command(t_input *input)
 		advance_token(input);
 	}
 	return (ast);
-}
-
-static void	free_str(char **str, int size)
-{
-	int	idx;
-
-	idx = 0;
-	while (idx < size)
-	{
-		free(str[idx]);
-		idx++;
-	}
-	free(str);
 }

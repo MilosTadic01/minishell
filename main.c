@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/26 17:16:23 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:30:27 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,19 @@
 
 static void print_ast(t_ast *s);
 t_list  *init_env(char **envp);
-static void	sighandler(int signum);
 
 int main(int argc, char **argv, char **envp)
 {
 	char				*line;
 	char				*copy;
 	t_ast				*ast;
-	struct sigaction	sa;
-
-	//t_list *my_env;
-	sa.sa_handler = sighandler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);	t_exe   exe_bus;
+	t_exe   exe_bus;
 
 	(void)argc;
 	(void)argv;
 	(void)envp;
 	//my_env = init_env(envp);
+	receive_signals();
 	while (1)
 	{
 		line = readline("minishell> ");
@@ -52,25 +45,6 @@ int main(int argc, char **argv, char **envp)
 		//free;
 	}
 	return (0);
-}
-
-static void	sighandler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		write(1, "\n", 1);
-		rl_on_new_line(); // Regenerate the prompt on a newline
-		rl_replace_line("", 0); // Clear the previous text
-		rl_redisplay();
-	}
-	else if (signum == SIGQUIT)
-	{
-		//printf("got a signal\n");
-		write(1, "\n", 1);
-		rl_on_new_line(); // Regenerate the prompt on a newline
-		rl_replace_line("", 0); // Clear the previous text
-		rl_redisplay();
-	}
 }
 
 static void print_ast(t_ast *s)

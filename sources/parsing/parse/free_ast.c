@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:08:20 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/24 17:22:40 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/04/28 19:18:48 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,17 @@ void	free_item_list(t_list **lst)
 		free(node->as_item);
 		free(node);
 	}
+}
+
+void	free_str(char **str, int size)
+{
+	int	idx;
+
+	idx = 0;
+	while (idx < size)
+	{
+		free(str[idx]);
+		idx++;
+	}
+	free(str);
 }

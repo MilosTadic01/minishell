@@ -20,7 +20,7 @@ enum e_bltn
     UNSET,
     ENV,
     EXIT
-}
+};
 
 void        exec(t_ast *s, t_list *env);
 void        exec_heredocs(t_exe *exe_bus);
