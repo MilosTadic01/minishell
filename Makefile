@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: daria <daria@student.42.fr>                +#+  +:+       +#+         #
+#    By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/27 12:28:47 by dzubkova          #+#    #+#              #
-#    Updated: 2024/04/28 19:24:39 by daria            ###   ########.fr        #
+#    Updated: 2024/04/29 12:58:45 by dzubkova         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,9 +29,11 @@ FILES = $(LEXD)lexer.c \
 		$(PARSED)new_branches.c \
 		$(PARSED)parser_utils.c \
 		$(PARSED)free_ast.c \
-		$(EXECD)exec.c \
-		$(EXECD)heredoc.c \
+		$(PARSED)signals.c \
 		main.c
+#		$(EXECD)exec.c \
+#		$(EXECD)heredoc.c \
+
 
 NAME = minishell
 

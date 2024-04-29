@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/28 19:30:27 by daria            ###   ########.fr       */
+/*   Updated: 2024/04/29 12:59:50 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int main(int argc, char **argv, char **envp)
 	char				*line;
 	char				*copy;
 	t_ast				*ast;
-	t_exe   exe_bus;
+	//t_exe   exe_bus;
 
 	(void)argc;
 	(void)argv;
@@ -37,9 +37,9 @@ int main(int argc, char **argv, char **envp)
 		free(copy);
 		ast = parse(line);
 
-		//print_ast(ast);
+		print_ast(ast);
 		add_history(line);
-		exec(exe_bus);
+		//exec(exe_bus);
 		free(line);
 		free_ast(ast);
 		//free;
@@ -95,20 +95,6 @@ static void print_ast(t_ast *s)
 	else
 		printf("\n");
 }
-
-/*t_list	*test(char **str, int size)
-{
-	int	i;
-	t_type	tmp;
-	t_list	*lst;
-
-	i = 0;
-	while (i < size)
-	{
-		tmp = (t_type){.as_str = str[i]};
-		ft_lstadd_back(&lst, ft_lstnew(&tmp, AS_STR));
-	}
-}*/
 
 t_list  *init_env(char **envp)
 {
