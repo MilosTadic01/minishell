@@ -20,12 +20,12 @@ int main(int argc, char **argv, char **envp)
 	char				*line;
 	char				*copy;
 	t_ast				*ast;
-	//t_exe   exe_bus;
+	t_list				*my_env;
 
 	(void)argc;
 	(void)argv;
-	(void)envp;
-	//my_env = init_env(envp);
+	//(void)envp;
+	my_env = init_env(envp);
 	receive_signals();
 	while (1)
 	{
@@ -39,7 +39,7 @@ int main(int argc, char **argv, char **envp)
 
 		print_ast(ast);
 		add_history(line);
-		//exec(exe_bus);
+		//exec(s, my_env);
 		free(line);
 		free_ast(ast);
 		//free;
@@ -96,25 +96,25 @@ static void print_ast(t_ast *s)
 		printf("\n");
 }
 
-t_list  *init_env(char **envp)
-{
-    t_list  *my_env;
-    t_type  tmp;
-    int     i;
+// t_list  *init_env(char **envp)
+// {
+//     t_list  *my_env;
+//     t_type  tmp;
+//     int     i;
 
-    i = -1;
-	my_env = NULL;
-    while(envp[++i])
-        ;
-    while(--i >= 0)
-    {
-        tmp = (t_type){.as_str = envp[i]};
-        ft_lstadd_back(&my_env, ft_lstnew(&tmp, AS_STR));
-    }
-    while(my_env)
-    {
-        printf("%s\n", my_env->as_str);
-        my_env = my_env->next;
-    }
-    return (my_env);
-}
+//     i = -1;
+// 	my_env = NULL;
+//     while(envp[++i])
+//         ;
+//     while(--i >= 0)
+//     {
+//         tmp = (t_type){.as_str = envp[i]};
+//         ft_lstadd_back(&my_env, ft_lstnew(&tmp, AS_STR));
+//     }
+//     while(my_env)
+//     {
+//         printf("%s\n", my_env->as_str);
+//         my_env = my_env->next;
+//     }
+//     return (my_env);
+// }

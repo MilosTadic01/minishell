@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../includes/minishell.h"
 
 t_list  *init_env(char **envp)
 {
@@ -19,6 +19,7 @@ t_list  *init_env(char **envp)
     int     i;
     
     i = -1;
+    my_env = NULL;
     while(envp[++i])
         ;
     while(--i >= 0)
@@ -28,9 +29,10 @@ t_list  *init_env(char **envp)
     }
     while(my_env)
     {
-        printf("%s", my_env->as_str);
+        printf("%s\n", my_env->as_str);
         my_env = my_env->next;
     }
+    set_specific_env(envp)
     return (my_env);
 }
 
@@ -94,7 +96,7 @@ t_list  *init_env(char **envp)
 //     }
 // }
 
-// void    ft_export(t_data *data, char **kv_pairs)
+// void    ft_export(t_list *data, char **kv_pairs)
 // {
 //     int i;
 
@@ -115,7 +117,7 @@ t_list  *init_env(char **envp)
 //     }
 // }
 
-// void    ft_unset(t_data *data, char *str)
+// void    ft_unset(t_list *data, char *str)
 // {
-
+//     ;
 // }

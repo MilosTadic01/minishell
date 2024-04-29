@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+#include "../../includes/minishell.h"
 
 // STDIN_FILENO: no. STDOUT_FILENO: yes.
 char	*ft_pwd(void)

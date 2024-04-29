@@ -14,6 +14,7 @@ OFILES = $(FILES:.c=.o)
 LEXD = ./sources/parsing/lex/
 PARSED = ./sources/parsing/parse/
 EXECD =	./sources/execution/
+BUILTINSD = ./sources/builtins/
 INCLUDESD = ./includes/
 LIBFTD = ./libft/
 HFILES = $(INCLUDESD)minishell.h \
@@ -30,6 +31,7 @@ FILES = $(LEXD)lexer.c \
 		$(PARSED)parser_utils.c \
 		$(PARSED)free_ast.c \
 		$(PARSED)signals.c \
+		$(BUILTINSD)env.c \
 		main.c
 #		$(EXECD)exec.c \
 #		$(EXECD)heredoc.c \

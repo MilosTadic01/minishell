@@ -16,7 +16,7 @@ void    exec(t_ast *s, t_list *env)
     init_exe_bus(&exe_bus, s, env);
     exec_heredocs(&exe_bus);
 	traverse_ast_to_exec(s, exe_bus);
-}
+}  
 
 static int  which_builtin(char *str)
 {

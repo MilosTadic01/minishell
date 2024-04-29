@@ -29,6 +29,7 @@
 # include "parser.h"
 # include "errors.h"
 # include "exec.h"
+# include "builtins.h"
 
 void    receive_signals(void);
 void	sighandler(int signum);
