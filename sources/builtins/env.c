@@ -12,48 +12,45 @@
 
 #include "../../includes/minishell.h"
 
-// static void    set_core_env(t_list **my_env)
-// {
-//     int     i;
-//     t_list  *pwd;
+static void    set_core_env(t_list **env)
+{
+    int     i;
+    t_list  *pwd;
 
-//     i = -1;
-//     pwd = NULL;
-//     while (*my_env)
-//     {
-//         if (strncmp(*my_env, "SHELL=", 6) == 0 && 
-//             strncmp(my_env[i][6], "minishell", 9) != 0)
-//         {
-//             ft_unset(my_env);
-//             ft_export(my_env, "SHELL=minishell")
-//         }
-//         else if (strncmp(my_env[i], "PWD=", 4))
-//             pwd = my_env[i];
-//     }
-//     if (!pwd)
-// }
+    ft_unset(env, "SHELL");
+    i = -1;
+    pwd = NULL;
+    while (*env)
+    {
+        if (strncmp(*env, "SHELL=", 6) == 0 && 
+            strncmp((*env)->as_str[6], "minishell", 9) != 0)
+        {
+            ft_unset(env);
+            ft_export(env, "SHELL=minishell")
+        }
+        else if (strncmp(env[i], "PWD=", 4))
+            pwd = env[i];
+    }
+    if (!pwd)
+}
 
 t_list  *init_env(char **envp)
 {
-    t_list  *my_env;
+    t_list  *env;
     t_type  tmp;
     int     i;
     
     i = -1;
-    my_env = NULL;
+    env = NULL;
     while(envp[++i])
         ;
     while(--i >= 0)
     {
         tmp = (t_type){.as_str = envp[i]};
-        ft_lstadd_back(&my_env, ft_lstnew(&tmp, AS_STR));
+        ft_lstadd_back(&env, ft_lstnew(&tmp, AS_STR));
     }
-    ft_printenv(my_env);
-    ft_unset(&my_env, "SHELL");
-    ft_putstr_fd("\n", 2);
-    ft_printenv(my_env);
-    // set_core_env(my_env);
-    return (my_env);
+    set_core_env(&env);
+    return (env);
 }
 
 // All this sh** needs some serious t_list dereferencing review.
@@ -81,20 +78,20 @@ void    ft_printenv(t_list *env)
     }
 }
 
-// char    *ft_getenv(t_list *env, char *key)
-// {
-//     int len;
+char    *ft_getenv(t_list *env, char *key)
+{
+    int len;
 
-//     len = ft_strlen(key);
-//     while (env)
-//     {
-//         if (ft_strncmp(*(char *)env->content, key, len) == 0 && 
-//             *(char *)(env->content)[len] == '=')
-//             return (&(char *)(env->content)[len + 1]); // return string, i.e. char*, not char, huh?
-//         env = env->next;
-//     }
-//     return (NULL);
-// }
+    len = ft_strlen(key);
+    while (env)
+    {
+        if (ft_strncmp(env->as_str, key, len) == 0 &&\
+            env->as_str[len] == '=')
+            return (&env->as_str[len + 1]); // return string, i.e. char*, not char, huh?
+        env = env->next;
+    }
+    return (NULL);
+}
 
 // // for this I'm gonna need Darias [cmd] [arg] [arg] [arg]... But for now I'm just assuming it's a strarr
 // void    ft_printenv(t_list *env, char **varkeys)
@@ -116,26 +113,61 @@ void    ft_printenv(t_list *env)
 //     }
 // }
 
-// void    ft_export(t_list *data, char **kv_pairs)
-// {
-//     int i;
+static int is_it_already_an_envvar(t_list *env, char *key)
+{
+    ;
+}
 
-//     i = 0;
-//     while (kv_pairs[++i])
-//     {
-//         if (ft_strchr(kv_pairs[i], '='))
-//         {
-//             if (kv_pairs[i][0] == '=')
-//             {
-//                 ft_putstr_fd("minishell: export: ", STDERR_FILENO);
-//                 ft_putstr_fd(kv_pairs[i], STDERR_FILENO);
-//                 ft_putstr_fd(": not a valid identifier\n", STDERR_FILENO);
-//             }
-//             else
-//                 ft_lstadd_back(&data->env, ft_lstnew(kv_pairs[i]));
-//         }
-//     }
-// }
+static char *extract_key(char *kv_str)
+{
+    int i;
+    
+    i = -1;
+    if (kv_str[0] == '=')
+    {
+        ft_putstr_fd("minishell: export: ", STDERR_FILENO);
+        ft_putstr_fd(kv_str, STDERR_FILENO);
+        ft_putstr_fd(": not a valid identifier\n", STDERR_FILENO);
+        return (NULL);
+    }
+    while (kv_str[++i])
+    {
+        if (i > 0 && kv_str[i] == '=')
+            return (&kv_str[i]);
+    }
+}
+
+void    ft_export(t_list **env, char *kv_str)
+{
+    t_list  *cpy;
+    int     len;
+    char    *key;
+
+    cpy = *env;
+    key = extract_key(kv_str);
+    if (!key)
+        return ;
+    len = ft_strlen(key);
+    while (cpy)
+    {
+        if (ft_strncmp(cpy->as_str, key, len) == 0)
+        {
+            ft_unset(env, kv_str)
+        }
+        cpy = cpy->next;
+    }
+    if (ft_strchr(cpy->as_str, '='))
+    {
+        if (kv_str[0] == '=')
+        {
+            ft_putstr_fd("minishell: export: ", STDERR_FILENO);
+            ft_putstr_fd(kv_str, STDERR_FILENO);
+            ft_putstr_fd(": not a valid identifier\n", STDERR_FILENO);
+        }
+        else
+            ft_lstadd_back((*env)->as_str, ft_lstnew(kv_str));
+    }
+}
 
 static void	ft_lstdeloneenv(t_list **envvar, t_list **prev)
 {
@@ -148,7 +180,7 @@ static void	ft_lstdeloneenv(t_list **envvar, t_list **prev)
 	return ;
 }
 
-void    ft_unset(t_list **my_env, char *str)
+void    ft_unset(t_list **env, char *str)
 {
     int     len;
     t_list  *current;
@@ -156,7 +188,7 @@ void    ft_unset(t_list **my_env, char *str)
 
     len = ft_strlen(str);
     prev = NULL;
-    current = *my_env;
+    current = *env;
     while (current)
     {
         if (strncmp(current->as_str, str, len) == 0 && \

@@ -26,10 +26,10 @@ void	ft_cd(char *dest);
 void	ft_echo(char **strarr);
 
 t_list  *init_env(char **envp);
-void    ft_unset(t_list **my_env, char *str);
+void    ft_unset(t_list **env, char *str);
 
 void    ft_printenv(t_list *env);
 char    *ft_getenv(t_list *env, char *key);
-void    ft_export(t_list *data, char **kv_pairs);
+void    ft_export(t_list **env, char *kv_str);
 
 #endif

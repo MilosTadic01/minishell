@@ -25,7 +25,9 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	my_env = init_env(envp);
-	(void)my_env;
+	// ft_printenv(my_env);
+	// ft_putstr_fd(ft_getenv(my_env, "SHLVL"), STDOUT_FILENO);
+	// ft_putstr_fd("\n", STDOUT_FILENO);
 	receive_signals();
 	while (1)
 	{

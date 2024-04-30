@@ -25,9 +25,6 @@ t_list	*ft_lstnew(t_type *data, int type)
 	else if (type == AS_ITEM)
 		new_node->as_item = data->as_item;
 	else if (type == AS_STR)
-	{
-		printf("%s\n", data->as_str);
 		new_node->as_str = ft_strdup(data->as_str);
-	}
 	return (new_node);
 }
