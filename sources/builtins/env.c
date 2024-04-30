@@ -12,6 +12,27 @@
 
 #include "../../includes/minishell.h"
 
+// static void    set_core_env(t_list **my_env)
+// {
+//     int     i;
+//     t_list  *pwd;
+
+//     i = -1;
+//     pwd = NULL;
+//     while (*my_env)
+//     {
+//         if (strncmp(*my_env, "SHELL=", 6) == 0 && 
+//             strncmp(my_env[i][6], "minishell", 9) != 0)
+//         {
+//             ft_unset(my_env);
+//             ft_export(my_env, "SHELL=minishell")
+//         }
+//         else if (strncmp(my_env[i], "PWD=", 4))
+//             pwd = my_env[i];
+//     }
+//     if (!pwd)
+// }
+
 t_list  *init_env(char **envp)
 {
     t_list  *my_env;
@@ -27,12 +48,11 @@ t_list  *init_env(char **envp)
         tmp = (t_type){.as_str = envp[i]};
         ft_lstadd_back(&my_env, ft_lstnew(&tmp, AS_STR));
     }
-    while(my_env)
-    {
-        printf("%s\n", my_env->as_str);
-        my_env = my_env->next;
-    }
-    set_specific_env(envp)
+    ft_printenv(my_env);
+    ft_unset(&my_env, "SHELL");
+    ft_putstr_fd("\n", 2);
+    ft_printenv(my_env);
+    // set_core_env(my_env);
     return (my_env);
 }
 
@@ -51,15 +71,15 @@ t_list  *init_env(char **envp)
 //     data->env = head;
 // }
 
-// void    ft_env(t_list *env)
-// {
-//     while (env)
-//     {
-//         ft_putstr_fd((char *)env->content, STDOUT_FILENO);
-//         ft_putstr_fd("\n", STDOUT_FILENO);
-//         env = env->next;
-//     }
-// }
+void    ft_printenv(t_list *env)
+{
+    while (env)
+    {
+        ft_putstr_fd(env->as_str, STDOUT_FILENO);
+        ft_putstr_fd("\n", STDOUT_FILENO);
+        env = env->next;
+    }
+}
 
 // char    *ft_getenv(t_list *env, char *key)
 // {
@@ -68,7 +88,7 @@ t_list  *init_env(char **envp)
 //     len = ft_strlen(key);
 //     while (env)
 //     {
-//         if (ft_strncmp(*(char *)env->content, key, len) == 0 && \
+//         if (ft_strncmp(*(char *)env->content, key, len) == 0 && 
 //             *(char *)(env->content)[len] == '=')
 //             return (&(char *)(env->content)[len + 1]); // return string, i.e. char*, not char, huh?
 //         env = env->next;
@@ -117,7 +137,35 @@ t_list  *init_env(char **envp)
 //     }
 // }
 
-// void    ft_unset(t_list *data, char *str)
-// {
-//     ;
-// }
+static void	ft_lstdeloneenv(t_list **envvar, t_list **prev)
+{
+	if (!envvar || !(*envvar))
+		return ;
+    if (*prev)
+        (*prev)->next = (*envvar)->next;
+    free (*envvar);
+	*envvar = NULL;
+	return ;
+}
+
+void    ft_unset(t_list **my_env, char *str)
+{
+    int     len;
+    t_list  *current;
+    t_list  *prev;
+
+    len = ft_strlen(str);
+    prev = NULL;
+    current = *my_env;
+    while (current)
+    {
+        if (strncmp(current->as_str, str, len) == 0 && \
+            current->as_str[len] == '=')
+        {
+            ft_lstdeloneenv(&current, &prev);
+            break ;
+        }
+        prev = current;
+        current = current->next;
+    }
+}

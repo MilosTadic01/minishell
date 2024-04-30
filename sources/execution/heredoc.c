@@ -4,8 +4,8 @@ static void open_files_for_heredocs(t_exe *exe_bus)
 {
     int i;
 
-    i = 0;
-    while (i < exe_bus->heredoc_count)
+    i = -1;
+    while (++i < exe_bus->heredoc_count)
     {
         exe_bus->heredoc_fds[i] = open("/tmp/", O_RDWR | O_TMPFILE | O_APPEND, 0644);
         if (exe_bus->heredoc_fds[i] < 0)
