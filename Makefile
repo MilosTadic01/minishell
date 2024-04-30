@@ -32,6 +32,8 @@ FILES = $(LEXD)lexer.c \
 		$(PARSED)free_ast.c \
 		$(PARSED)signals.c \
 		$(BUILTINSD)env.c \
+		$(BUILTINSD)export.c \
+		$(BUILTINSD)unset.c \
 		main.c
 #		$(EXECD)exec.c \
 #		$(EXECD)heredoc.c \

@@ -22,22 +22,22 @@ static char *ft_cd_get_fullpath(char *dest)
 			i++;
 		if (dest[i] == '.' && dest[i - 1] == '.')
 
-			return (ft_strjoin(ft_pwd(), dest));
+			return (ft_strjoin(getcwd(buff, PATH_MAX), dest));
 	else if (dest[0] == '/')
 		;
 }
 
 // Remember to, outside of the ft, check if more args than dest, then print error
 // STDIN_FILENO: no. STDOUT_FILENO: no.
-void	ft_cd(char *dest)
+void	ft_cd(t_list *env, char *dest)
 {
 	char	*fullpath;
 
 	if (!dest)
 	{
-		if (getenv("HOME") == NULL)
+		if (ft_getenv(env, "HOME") == NULL)
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-		else if (chdir(getenv("HOME")) < 0)
+		else if (chdir(ft_getenv(env, "HOME")) < 0)
 			ft_putstr_fd(strerror(errno), 2);
 		return ;
 	}

@@ -21,6 +21,7 @@
 # include <errno.h>
 # include <stdio.h>
 # include <signal.h>
+# include <limits.h>
 # include <sys/types.h>
 # include <readline/readline.h>
 # include <readline/history.h>

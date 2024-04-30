@@ -14,24 +14,26 @@
 
 static void    set_core_env(t_list **env)
 {
-    int     i;
-    t_list  *pwd;
+    char	buff[PATH_MAX];
+	char	*str;
+    // int     shlvl;
 
-    ft_unset(env, "SHELL");
-    i = -1;
-    pwd = NULL;
-    while (*env)
-    {
-        if (strncmp(*env, "SHELL=", 6) == 0 && 
-            strncmp((*env)->as_str[6], "minishell", 9) != 0)
-        {
-            ft_unset(env);
-            ft_export(env, "SHELL=minishell")
-        }
-        else if (strncmp(env[i], "PWD=", 4))
-            pwd = env[i];
-    }
-    if (!pwd)
+    if (ft_strcmp(ft_getenv(*env, "SHELL"), "minishell"))
+        ft_export(env, "SHELL=minishell");
+    str = NULL;
+    str = ft_strjoin("PWD=", getcwd(buff, PATH_MAX));
+    ft_export(env, str);
+    free(str);
+    // ADD FT_ITOA FOR THIS
+    // if (ft_getenv(*env, "SHLVL"))
+    // {
+    //     shlvl = ft_atoi(ft_getenv(*env, "SHLVL")) + 1;
+    //     str = ft_strjoin("SHLVL=", ft_itoa(shlvl));
+    //     ft_export(env, str);
+    //     free(str);
+    // }
+    // else
+    //     ft_export(env, "SHLVL=1");
 }
 
 t_list  *init_env(char **envp)
@@ -52,21 +54,6 @@ t_list  *init_env(char **envp)
     set_core_env(&env);
     return (env);
 }
-
-// All this sh** needs some serious t_list dereferencing review.
-
-// Which data bus to use? data->env is placeholder
-// void    extract_entire_env(t_data *data, char **envp)
-// {
-//     int i;
-//     t_lst *head;
-
-//     i = -1;
-//     while(envp[++i])
-//         ft_lstadd_back(&head, ft_lstnew(envp[i]));
-//     //
-//     data->env = head;
-// }
 
 void    ft_printenv(t_list *env)
 {
@@ -112,92 +99,3 @@ char    *ft_getenv(t_list *env, char *key)
 //         }
 //     }
 // }
-
-static int is_it_already_an_envvar(t_list *env, char *key)
-{
-    ;
-}
-
-static char *extract_key(char *kv_str)
-{
-    int i;
-    
-    i = -1;
-    if (kv_str[0] == '=')
-    {
-        ft_putstr_fd("minishell: export: ", STDERR_FILENO);
-        ft_putstr_fd(kv_str, STDERR_FILENO);
-        ft_putstr_fd(": not a valid identifier\n", STDERR_FILENO);
-        return (NULL);
-    }
-    while (kv_str[++i])
-    {
-        if (i > 0 && kv_str[i] == '=')
-            return (&kv_str[i]);
-    }
-}
-
-void    ft_export(t_list **env, char *kv_str)
-{
-    t_list  *cpy;
-    int     len;
-    char    *key;
-
-    cpy = *env;
-    key = extract_key(kv_str);
-    if (!key)
-        return ;
-    len = ft_strlen(key);
-    while (cpy)
-    {
-        if (ft_strncmp(cpy->as_str, key, len) == 0)
-        {
-            ft_unset(env, kv_str)
-        }
-        cpy = cpy->next;
-    }
-    if (ft_strchr(cpy->as_str, '='))
-    {
-        if (kv_str[0] == '=')
-        {
-            ft_putstr_fd("minishell: export: ", STDERR_FILENO);
-            ft_putstr_fd(kv_str, STDERR_FILENO);
-            ft_putstr_fd(": not a valid identifier\n", STDERR_FILENO);
-        }
-        else
-            ft_lstadd_back((*env)->as_str, ft_lstnew(kv_str));
-    }
-}
-
-static void	ft_lstdeloneenv(t_list **envvar, t_list **prev)
-{
-	if (!envvar || !(*envvar))
-		return ;
-    if (*prev)
-        (*prev)->next = (*envvar)->next;
-    free (*envvar);
-	*envvar = NULL;
-	return ;
-}
-
-void    ft_unset(t_list **env, char *str)
-{
-    int     len;
-    t_list  *current;
-    t_list  *prev;
-
-    len = ft_strlen(str);
-    prev = NULL;
-    current = *env;
-    while (current)
-    {
-        if (strncmp(current->as_str, str, len) == 0 && \
-            current->as_str[len] == '=')
-        {
-            ft_lstdeloneenv(&current, &prev);
-            break ;
-        }
-        prev = current;
-        current = current->next;
-    }
-}

@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.h                                         :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mitadic <mitadic@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/19 13:05:37 by mitadic           #+#    #+#             */
-/*   Updated: 2024/04/19 16:57:47 by mitadic          ###   ########.fr       */
+/*   Created: 2024/03/03 22:40:35 by mitadic           #+#    #+#             */
+/*   Updated: 2024/03/20 22:41:36 by mitadic          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTINS_H
-# define BUILTINS_H
-# include "minishell.h"
+#include "libft.h"
 
-char	*ft_pwd(void);
-void	ft_cd(t_list *env, char *dest);
-void	ft_echo(char **strarr);
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	size_t			i;
+	unsigned char	*str1;
+	unsigned char	*str2;
 
-t_list  *init_env(char **envp);
-
-void    ft_unset(t_list **env, char *str);
-
-void    ft_export(t_list **env, char *kv_str);
-
-void    ft_printenv(t_list *env);
-char    *ft_getenv(t_list *env, char *key);
-
-#endif
+	i = 0;
+	if (!s1 && !s2)
+		return (0);
+	str1 = (unsigned char *)s1;
+	str2 = (unsigned char *)s2;
+	while (str1[i] != 0 && str1[i] == str2[i])
+		i++;
+	return (str1[i] - str2[i]);
+}

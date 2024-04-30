@@ -17,7 +17,8 @@ SRCS = \
 		ft_split.c ft_strchr.c ft_strdup.c ft_striteri.c ft_strjoin.c ft_strlcat.c \
 		ft_strlcpy.c ft_strlen.c ft_strmapi.c ft_strncmp.c ft_strnstr.c ft_strrchr.c \
 		ft_strtrim.c ft_substr.c ft_tolower.c ft_toupper.c ft_memcpy.c ft_atoi_long.c \
-		ft_isspace.c ft_max.c ft_strappend.c ft_rm_consec_spaces.c ft_concat.c
+		ft_isspace.c ft_max.c ft_strappend.c ft_rm_consec_spaces.c ft_concat.c \
+		ft_strcmp.c
 
 BSRS = \
 		ft_lstnew.c ft_lstsize.c ft_lstadd_front.c ft_lstlast.c ft_lstadd_back.c \
