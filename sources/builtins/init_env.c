@@ -16,7 +16,8 @@ static void    set_core_env(t_list **env)
 {
     char	buff[PATH_MAX];
 	char	*str;
-    // int     shlvl;
+    int     shlvl;
+    char    *num;
 
     if (ft_strcmp(ft_getenv(*env, "SHELL"), "minishell"))
         ft_export(env, "SHELL=minishell");
@@ -24,16 +25,17 @@ static void    set_core_env(t_list **env)
     str = ft_strjoin("PWD=", getcwd(buff, PATH_MAX));
     ft_export(env, str);
     free(str);
-    // ADD FT_ITOA FOR THIS
-    // if (ft_getenv(*env, "SHLVL"))
-    // {
-    //     shlvl = ft_atoi(ft_getenv(*env, "SHLVL")) + 1;
-    //     str = ft_strjoin("SHLVL=", ft_itoa(shlvl));
-    //     ft_export(env, str);
-    //     free(str);
-    // }
-    // else
-    //     ft_export(env, "SHLVL=1");
+    if (ft_getenv(*env, "SHLVL"))
+    {
+        shlvl = ft_atoi(ft_getenv(*env, "SHLVL")) + 1;
+        num = ft_itoa(shlvl);
+        str = ft_strjoin("SHLVL=", num);
+        ft_export(env, str);
+        free(str);
+        free(num);
+    }
+    else
+        ft_export(env, "SHLVL=1");
 }
 
 t_list  *init_env(char **envp)
@@ -53,31 +55,6 @@ t_list  *init_env(char **envp)
     }
     set_core_env(&env);
     return (env);
-}
-
-void    ft_printenv(t_list *env)
-{
-    while (env)
-    {
-        ft_putstr_fd(env->as_str, STDOUT_FILENO);
-        ft_putstr_fd("\n", STDOUT_FILENO);
-        env = env->next;
-    }
-}
-
-char    *ft_getenv(t_list *env, char *key)
-{
-    int len;
-
-    len = ft_strlen(key);
-    while (env)
-    {
-        if (ft_strncmp(env->as_str, key, len) == 0 &&\
-            env->as_str[len] == '=')
-            return (&env->as_str[len + 1]); // return string, i.e. char*, not char, huh?
-        env = env->next;
-    }
-    return (NULL);
 }
 
 // // for this I'm gonna need Darias [cmd] [arg] [arg] [arg]... But for now I'm just assuming it's a strarr

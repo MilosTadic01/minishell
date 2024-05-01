@@ -20,6 +20,7 @@ LIBFTD = ./libft/
 HFILES = $(INCLUDESD)minishell.h \
 		$(INCLUDESD)lexer.h \
 		$(INCLUDESD)parser.h \
+		$(INCLUDESD)builtins.h \
 		$(INCLUDESD)exec.h
 FILES = $(LEXD)lexer.c \
 		$(LEXD)lexer_utils.c \
@@ -31,7 +32,9 @@ FILES = $(LEXD)lexer.c \
 		$(PARSED)parser_utils.c \
 		$(PARSED)free_ast.c \
 		$(PARSED)signals.c \
-		$(BUILTINSD)env.c \
+		$(BUILTINSD)init_env.c \
+		$(BUILTINSD)printnget_env.c \
+		$(BUILTINSD)prep_env4execve.c \
 		$(BUILTINSD)export.c \
 		$(BUILTINSD)unset.c \
 		main.c

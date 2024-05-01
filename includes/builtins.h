@@ -27,4 +27,6 @@ void    ft_export(t_list **env, char *kv_str);
 void    ft_printenv(t_list *env);
 char    *ft_getenv(t_list *env, char *key);
 
+char    **ft_prepenv(t_list *env);
+
 #endif

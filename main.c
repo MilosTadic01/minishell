@@ -26,7 +26,7 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 	my_env = init_env(envp);
 	ft_printenv(my_env);
-	// ft_putstr_fd(ft_getenv(my_env, "SHLVL"), STDOUT_FILENO);
+	// ft_putstr_fd(ft_getenv(my_env, "SHLVL"), STDOUT_FILENO); 
 	// ft_putstr_fd("\n", STDOUT_FILENO);
 	receive_signals();
 	while (1)
@@ -46,6 +46,7 @@ int main(int argc, char **argv, char **envp)
 		free_ast(ast);
 		//free;
 	}
+	ft_lstclear(&my_env);
 	return (0);
 }
 
