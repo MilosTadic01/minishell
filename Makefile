@@ -34,9 +34,11 @@ FILES = $(LEXD)lexer.c \
 		$(PARSED)signals.c \
 		$(BUILTINSD)init_env.c \
 		$(BUILTINSD)printnget_env.c \
-		$(BUILTINSD)prep_env4execve.c \
+		$(BUILTINSD)convert_env4execve.c \
 		$(BUILTINSD)export.c \
 		$(BUILTINSD)unset.c \
+		$(BUILTINSD)exit.c \
+		$(BUILTINSD)pwd.c \
 		main.c
 #		$(EXECD)exec.c \
 #		$(EXECD)heredoc.c \

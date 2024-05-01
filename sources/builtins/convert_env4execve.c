@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-char    **ft_prepenv(t_list *env)
+char    **convert_env(t_list *env)
 {
     char    **strarr;
     int     size;

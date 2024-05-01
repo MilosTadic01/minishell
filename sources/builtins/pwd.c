@@ -23,20 +23,24 @@
 // 		strerror(errno);
 // 		return ;
 // 	}
-// 	ft_printf("%s\n", buff);
-// }
+// 	ft_printf("%s\n", b
 
-void	ft_pwd(void)
+char	*ft_getcwd(void)
 {
 	char	buff[PATH_MAX];
 	char	*pwd;
 
 	pwd = getcwd(buff, PATH_MAX);
 	if (pwd == NULL)
-	{
-		ft_putstr_fd(strerror(errno), 2);
-		return ;
-	}
+		perror("minishell: getcwd: ");
+	return (pwd);
+}
+
+void	ft_pwd(void)
+{
+	char	*pwd;
+
+	pwd = ft_getcwd();
 	ft_putstr_fd(pwd, 1);
 	ft_putstr_fd("\n", 1);
 }

@@ -22,7 +22,7 @@ static char *ft_cd_get_fullpath(char *dest)
 			i++;
 		if (dest[i] == '.' && dest[i - 1] == '.')
 
-			return (ft_strjoin(getcwd(buff, PATH_MAX), dest));
+			return (ft_strjoin(ft_getcwd(), dest));
 	else if (dest[0] == '/')
 		;
 }

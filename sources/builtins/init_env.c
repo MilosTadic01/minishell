@@ -12,19 +12,12 @@
 
 #include "../../includes/minishell.h"
 
-static void    set_core_env(t_list **env)
+static void set_shlvl(t_list **env)
 {
-    char	buff[PATH_MAX];
-	char	*str;
     int     shlvl;
+    char	*str;
     char    *num;
 
-    if (ft_strcmp(ft_getenv(*env, "SHELL"), "minishell"))
-        ft_export(env, "SHELL=minishell");
-    str = NULL;
-    str = ft_strjoin("PWD=", getcwd(buff, PATH_MAX));
-    ft_export(env, str);
-    free(str);
     if (ft_getenv(*env, "SHLVL"))
     {
         shlvl = ft_atoi(ft_getenv(*env, "SHLVL")) + 1;
@@ -38,12 +31,36 @@ static void    set_core_env(t_list **env)
         ft_export(env, "SHLVL=1");
 }
 
+static void set_pwd(t_list **env)
+{
+    char    *str;
+
+    str = ft_strjoin("PWD=", ft_getcwd());
+    ft_export(env, str);
+    free(str);
+}
+
+static void set_shell(t_list **env)
+{
+    if (ft_strcmp(ft_getenv(*env, "SHELL"), "minishell") != 0)
+        ft_export(env, "SHELL=minishell");
+}
+
+static void    set_core_env(t_list **env)
+{
+    set_shell(env);
+    set_pwd(env);
+    set_shlvl(env);   
+}
+
 t_list  *init_env(char **envp)
 {
     t_list  *env;
     t_type  tmp;
     int     i;
     
+    // if (!envp) Q for Daria: can this ever be the case? the env can be empty, sure, but can the (...global...?) variable ever not exist?
+    //     ;
     i = -1;
     env = NULL;
     while(envp[++i])
@@ -56,23 +73,3 @@ t_list  *init_env(char **envp)
     set_core_env(&env);
     return (env);
 }
-
-// // for this I'm gonna need Darias [cmd] [arg] [arg] [arg]... But for now I'm just assuming it's a strarr
-// void    ft_printenv(t_list *env, char **varkeys)
-// {
-//     int i;
-//     char *varval;
-//     int len;
-
-//     i = 0;
-//     while (varkeys[++i])
-//     {
-//         len = ft_strlen(varkeys[i]);
-//         varval = ft_getenv(env, varkeys[i]);
-//         if (varval)
-//         {
-//             ft_putstr_fd(&(env->content)[len], STDOUT_FILENO);
-//             ft_putstr_fd("\n", STDOUT_FILENO);
-//         }
-//     }
-// }
