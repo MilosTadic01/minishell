@@ -48,7 +48,7 @@ void    traverse_ast_to_exec(t_ast *s, t_exe b)
 		for (int i = 0; i < s->command->size; i++)
 		{
 			// printf("%s\n", s->command->args[i]);
-            bultin = which_builtin(s->command->args[0]);
+            builtin = which_builtin(s->command->args[0]);
             if (builtin)
                 exec_builtin(s, &env);
             else

@@ -2,6 +2,8 @@
 
 void    ft_printenv(t_list *env)
 {
+    if (!env)
+        return ;
     while (env)
     {
         ft_putstr_fd(env->as_str, STDOUT_FILENO);
@@ -14,6 +16,8 @@ char    *ft_getenv(t_list *env, char *key)
 {
     int len;
 
+    if (!key || !env)
+        return (NULL);
     len = ft_strlen(key);
     while (env)
     {

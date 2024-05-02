@@ -2,7 +2,7 @@
 
 // if *prev then bypass nodecopy, else head->next becomes head.
 // then free the nodecopy.
-static void	ft_lstdeloneenv(t_list **envvar, t_list **prev)
+static void	deloneenv(t_list **envvar, t_list **prev)
 {
     t_list  *nodecopy;
 
@@ -17,14 +17,12 @@ static void	ft_lstdeloneenv(t_list **envvar, t_list **prev)
 	return ;
 }
 
-void    ft_unset(t_list **env, char *kv_str)
+static void unset_one_kvpair(t_list **env, char *kv_str)
 {
     int     len;
     t_list  *current;
     t_list  *prev;
 
-    if (!kv_str || !env || !(*env))
-        return ;
     len = ft_strlen(kv_str);
     prev = NULL;
     current = *env;
@@ -33,10 +31,24 @@ void    ft_unset(t_list **env, char *kv_str)
         if (strncmp(current->as_str, kv_str, len) == 0 && \
             current->as_str[len] == '=')
         {
-            ft_lstdeloneenv(&current, &prev);
+            deloneenv(&current, &prev);
             break ;
         }
         prev = current;
         current = current->next;
+    }
+}
+
+// cmdarr[0] == "unset"
+void    ft_unset(t_list **env, char **cmdarr)
+{
+    int     i;
+
+    if (!cmdarr || !(*cmdarr) || !env || !(*env))
+        return ;
+    i = 0;
+    while (cmdarr[++i])
+    {
+        unset_one_kvpair(env, cmdarr[i]);
     }
 }

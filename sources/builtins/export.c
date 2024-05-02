@@ -39,7 +39,7 @@ static int extract_keylen(char *kv_str)
     return (0);
 }
 
-void    ft_export(t_list **env, char *kv_str)
+static void    export_one_kvpair(t_list **env, char *kv_str)
 {
     t_type  tmp;
     int     keylen;
@@ -50,16 +50,17 @@ void    ft_export(t_list **env, char *kv_str)
     del_if_already_an_envvar(env, kv_str, keylen);
     tmp = (t_type){.as_str = kv_str};
     ft_lstadd_back(env, ft_lstnew(&tmp, AS_STR));
-    // cpy = *env;
-    // if (ft_strchr(cpy->as_str, '='))
-    // {
-    //     if (kv_str[0] == '=')
-    //     {
-    //         ft_putstr_fd("minishell: export: ", STDERR_FILENO);
-    //         ft_putstr_fd(kv_str, STDERR_FILENO);
-    //         ft_putstr_fd(": not a valid identifier\n", STDERR_FILENO);
-    //     }
-    //     else
-    //         ft_lstadd_back((*env)->as_str, ft_lstnew(kv_str));
-    // }
+}
+
+void    ft_export(t_list **env, char **cmdarr)
+{
+    int     i;
+
+    if (!cmdarr || !(*cmdarr) || !env || !(*env))
+        return ;
+    i = 0;
+    while (cmdarr[++i])
+    {
+        export_one_kvpair(env, cmdarr[i]);
+    }
 }
