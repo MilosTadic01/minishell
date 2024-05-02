@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:32 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/24 14:59:00 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/02 11:12:29 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	create_token(t_input *in)
 		return (get_input_redir_token(in));
 	else if (in->current_char == REDIRECT_OUT)
 		return (get_output_redir_token(in));
+	else if (in->current_char == OPEN_PARENTHESE)
+		return (get_subshell_token(in));
 	else
 		return (get_literal_token(in));
 	return (-1);

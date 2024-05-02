@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:35 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/25 11:14:01 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/02 11:13:00 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int			get_input_redir_token(t_input *in);
 int			get_literal_token(t_input *in);
 int			get_output_redir_token(t_input *in);
 int			get_pipe_token(t_input *in);
+int			get_subshell_token(t_input *in);
 void		init_token(t_token *new_token, char *value, int type);
 void		init_input(t_input *in, char *input_string);
 void		next_char(t_input *in);

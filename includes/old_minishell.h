@@ -16,4 +16,4 @@ typedef struct s_berta
 	char	**argv;
 	char	**envp;
 	t_tokens *tokens;
-}		t_berta
+}		t_berta;

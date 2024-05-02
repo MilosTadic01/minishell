@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:37 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/28 19:21:46 by daria            ###   ########.fr       */
+/*   Updated: 2024/05/02 11:13:28 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 enum e_tag
 {
 	COMMAND,
-	BINOP
+	BINOP,
+	SUBSHELL
 };
 
 enum e_binop
@@ -38,6 +39,8 @@ typedef struct s_ast
 {
 	enum e_tag			tag;
 
+	char	*subshell_cmd;
+
 	struct s_command	*command;
 
 	enum e_binop		op;
@@ -50,6 +53,7 @@ int				is_final_token(t_input *input);
 int				is_redirection(int type);
 t_ast			*new_binop(int op, t_ast **left, t_ast **right);
 t_ast			*new_command(void);
+t_ast			*new_subshell(char *value);
 t_ast			*parse(char *input_string);
 t_ast			*parse_command(t_input *in);
 t_ast			*parse_pipe(t_input *input);

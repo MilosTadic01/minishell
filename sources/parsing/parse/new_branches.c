@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:16:26 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/24 13:41:48 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/02 11:08:20 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,32 @@ t_ast	*new_binop(int op, t_ast **left, t_ast **right)
 
 t_ast	*new_command(void)
 {
-	t_ast		*new_ast;
+	t_ast		*ast;
 
-	new_ast = malloc(sizeof(t_ast));
-	new_ast->command = malloc(sizeof(t_command));
-	if (!new_ast || !new_ast->command)
+	ast = malloc(sizeof(t_ast));
+	ast->command = malloc(sizeof(t_command));
+	if (!ast || !ast->command)
 		return (NULL);
-	new_ast->tag = COMMAND;
-	new_ast->left = NULL;
-	new_ast->right = NULL;
-	new_ast->command->args = NULL;
-	new_ast->command->size = 0;
-	new_ast->command->ins = NULL;
-	new_ast->command->outs = NULL;
-	return (new_ast);
+	ast->tag = COMMAND;
+	ast->left = NULL;
+	ast->right = NULL;
+	ast->command->args = NULL;
+	ast->command->size = 0;
+	ast->command->ins = NULL;
+	ast->command->outs = NULL;
+	return (ast);
+}
+
+t_ast	*new_subshell(char *value)
+{
+	t_ast	*ast;
+
+	ast = malloc(sizeof(t_ast));
+	if (!ast)
+		return (NULL);
+	ast->tag = SUBSHELL;
+	ast->subshell_cmd = value;
+	ast->left = NULL;
+	ast->right = NULL;
+	return (ast);
 }

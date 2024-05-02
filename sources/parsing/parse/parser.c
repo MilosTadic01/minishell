@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:33 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/28 19:23:46 by daria            ###   ########.fr       */
+/*   Updated: 2024/05/02 11:11:53 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,12 @@ t_ast	*parse_command(t_input *input)
 	int			type;
 	t_ast		*ast;
 
+	if (input->current_token.token_type == SUBSHELL)
+	{
+		ast = new_subshell(input->current_token.value);
+		advance_token(input);
+		return (ast);
+	}
 	ast = new_command();
 	while (!is_final_token(input) && input->current_token.token_type != PIPE
 			&& input->current_token.token_type != AND

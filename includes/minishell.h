@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:40 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/28 19:29:36 by daria            ###   ########.fr       */
+/*   Updated: 2024/05/02 11:04:46 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,16 @@ void	sighandler(int signum);
 
 # define LITERAL 200
 # define FINAL_TOKEN 300
+# define SUBSHELL 4242
 
 # define DEFAULT 0
 # define SUCCESS 0
 
 # define UNDERSCORE 95
 # define QUESTION_MARK 63
+
+# define OPEN_PARENTHESE 40
+# define CLOSE_PARENTHESE 41
+
 
 #endif

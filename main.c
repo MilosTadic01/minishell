@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/29 12:59:50 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/02 11:16:27 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	my_env = init_env(envp);
-	ft_printenv(my_env);
-	// ft_putstr_fd(ft_getenv(my_env, "SHLVL"), STDOUT_FILENO); 
+	//ft_printenv(my_env);
+	// ft_putstr_fd(ft_getenv(my_env, "SHLVL"), STDOUT_FILENO);
 	// ft_putstr_fd("\n", STDOUT_FILENO);
 	receive_signals();
 	while (1)
@@ -73,6 +73,11 @@ static void print_ast(t_ast *s)
 			printf("output redirections %d to: %s\n",  tmp->as_item->type, tmp->as_item->filename);
 			tmp = tmp->next;
 		}
+	}
+	else if (s->tag == SUBSHELL)
+	{
+		printf("SUBSHELL\n");
+		printf("%s\n", s->subshell_cmd);
 	}
 	else
 	{
