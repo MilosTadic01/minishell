@@ -70,7 +70,7 @@ void    traverse_ast_to_exec(t_ast *s, t_exe b)
 void    exec_builtin(t_ast *s, t_list **env)
 {
     	t_list	*tmp;
-        e_bltin builtin_macros;
+        enum e_bltin builtin_macros;
 
     	tmp = s->command->ins;
 		while (tmp->next)
