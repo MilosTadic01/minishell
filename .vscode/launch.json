@@ -1,13 +1,13 @@
 {
   "version": "0.2.0",
   "configurations": [
-    {
-      "name": "C/C++ Runner: Debug Session",
-      "type": "lldb",
-      "request": "launch",
-      "args": [],
-      "cwd": "/Users/daria/minishell",
-      "program": "/Users/daria/minishell/build/Debug/outDebug"
-    }
+
+    {"name":"Launch",
+	"type":"cppdbg",
+	"program":"${workspaceFolder}/minishell",
+	"cwd":"${workspaceFolder}",
+	"args":[""],
+	"request":"launch",
+	"MIMode":"gdb"}
   ]
 }

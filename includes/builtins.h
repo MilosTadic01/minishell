@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mitadic <mitadic@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 13:05:37 by mitadic           #+#    #+#             */
-/*   Updated: 2024/04/19 16:57:47 by mitadic          ###   ########.fr       */
+/*   Updated: 2024/05/03 13:26:45 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void    ft_pwd(void);
 char	*ft_getcwd(void);
 
 // cd.c
-void	ft_cd(t_list *env, char *dest);
+void	ft_cd(t_list *env, char **cmdarr);
 
 // echo.c
 void	ft_echo(char **strarr);
@@ -28,9 +28,11 @@ void	ft_echo(char **strarr);
 t_list  *init_env(char **envp);
 
 // unset.c
-void    ft_unset(t_list **env, char *str);
+void    unset_cmdarr(t_list **env, char **cmdarr);
+void	ft_unset(t_list **env, char *kv_str);
 
 // export.c
+void	export_cmdarr(t_list **env, char **cmdarr);
 void    ft_export(t_list **env, char *kv_str);
 
 

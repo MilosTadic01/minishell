@@ -34,7 +34,7 @@ static void prompt_for_heredocs(t_exe *exe_bus)
             line = readline("> ");
             if (!line)
                 ft_putstr_fd("readline error\n", STDERR_FILENO);
-            ft_putstr_fd(line, exe_bus->heredoc_fds[i])
+            ft_putstr_fd(line, exe_bus->heredoc_fds[i]);
         }
         free(limiter);
         free(line);

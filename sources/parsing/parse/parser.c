@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:33 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/02 11:11:53 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:40:15 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,18 @@
 
 t_ast	*parse(char *input_string)
 {
+	int 	type;
 	t_input	in;
 	t_ast	*final_ast;
 
 	init_input(&in, input_string);
 	advance_token(&in);
+	type = in.current_token.token_type;
+	if (type == PIPE || type == AND || type == OR)
+	{
+		ft_putstr_fd("PARSING ERROR\n", 2);
+		prompt();
+	}
 	final_ast = parse_statement(&in);
 	free(in.input);
 	return (final_ast);
@@ -40,7 +47,7 @@ t_ast	*parse_statement(t_input *input)
 		if (is_final_token(input))
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
-			exit (1);
+			prompt();
 		}
 		rest = parse_statement(input);
 		ast = new_binop(type, &ast, &rest);
@@ -62,7 +69,7 @@ t_ast	*parse_pipe(t_input *input)
 		if (is_final_token(input))
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
-			exit (1);
+			prompt();
 		}
 		rest = parse_pipe(input);
 		ast = new_binop(PIPE, &ast, &rest);
@@ -79,8 +86,12 @@ t_ast	*parse_command(t_input *input)
 
 	if (input->current_token.token_type == SUBSHELL)
 	{
-		ast = new_subshell(input->current_token.value);
-		advance_token(input);
+		ast = parse_subshell(input);
+		if (!ast)
+		{
+			ft_putstr_fd("PARSING ERROR\n", 2);
+			prompt();
+		}
 		return (ast);
 	}
 	ast = new_command();
@@ -104,5 +115,18 @@ t_ast	*parse_command(t_input *input)
 		}
 		advance_token(input);
 	}
+	return (ast);
+}
+
+t_ast	*parse_subshell(t_input *input)
+{
+	t_ast		*ast;
+
+	ast = new_subshell(input->current_token.value);
+	advance_token(input);
+	if (input->current_token.token_type != AND
+		&& input->current_token.token_type != OR
+		&& input->current_token.token_type != FINAL_TOKEN)
+		return (NULL);
 	return (ast);
 }

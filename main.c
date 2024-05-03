@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/02 11:16:27 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/03 13:04:53 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,42 @@ t_list  *init_env(char **envp);
 
 int main(int argc, char **argv, char **envp)
 {
-	char				*line;
-	char				*copy;
-	t_ast				*ast;
 	t_list				*my_env;
 
 	(void)argc;
 	(void)argv;
-	my_env = init_env(envp);
+	(void)envp;
+	// my_env = init_env(envp);
 	//ft_printenv(my_env);
+	// ft_putstr_fd(ft_getenv(my_env, "SHLVL"), STDOUT_FILENO);
+	// ft_putstr_fd("\n", STDOUT_FILENO);
 	receive_signals();
 	while (1)
 	{
-		line = readline("minishell@ ");
-		if (!line)
-			exit(errno);
-		copy = line;
-		line = ft_strtrim(copy, " ");
-		free(copy);
-		ast = parse(line);
-
-		print_ast(ast);
-		add_history(line);
-		//exec(s, my_env);
-		free(line);
-		free_ast(ast);
+		prompt();
+		//free;
 	}
 	ft_lstclear(&my_env);
 	return (0);
+}
+
+void	prompt(void)
+{
+	char				*line;
+	char				*copy;
+	t_ast				*ast;
+
+	line = readline("minishell> ");
+	if (!line)
+		exit(errno);
+	copy = line;
+	line = ft_strtrim(copy, " ");
+	free(copy);
+	ast = parse(line);
+	print_ast(ast);
+	add_history(line);
+	free(line);
+	free_ast(ast);
 }
 
 static void print_ast(t_ast *s)

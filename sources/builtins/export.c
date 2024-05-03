@@ -22,7 +22,7 @@ static void del_if_already_an_envvar(t_list **env, char *kv_str, int keylen)
 static int extract_keylen(char *kv_str)
 {
     int i;
-    
+
     i = -1;
     if (kv_str[0] == '=')
     {
@@ -39,7 +39,7 @@ static int extract_keylen(char *kv_str)
     return (0);
 }
 
-static void    export_one_kvpair(t_list **env, char *kv_str)
+void    ft_export(t_list **env, char *kv_str)
 {
     t_type  tmp;
     int     keylen;
@@ -52,7 +52,7 @@ static void    export_one_kvpair(t_list **env, char *kv_str)
     ft_lstadd_back(env, ft_lstnew(&tmp, AS_STR));
 }
 
-void    ft_export(t_list **env, char **cmdarr)
+void    export_cmdarr(t_list **env, char **cmdarr)
 {
     int     i;
 
@@ -61,6 +61,6 @@ void    ft_export(t_list **env, char **cmdarr)
     i = 0;
     while (cmdarr[++i])
     {
-        export_one_kvpair(env, cmdarr[i]);
+        ft_export(env, cmdarr[i]);
     }
 }

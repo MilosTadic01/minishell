@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mitadic <mitadic@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 01:14:34 by mitadic           #+#    #+#             */
-/*   Updated: 2024/04/21 01:15:51 by mitadic          ###   ########.fr       */
+/*   Updated: 2024/05/03 13:24:41 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void    set_core_env(t_list **env)
 {
     set_shell(env);
     set_pwd(env);
-    set_shlvl(env);   
+    set_shlvl(env);
 }
 
 t_list  *init_env(char **envp)
@@ -58,7 +58,7 @@ t_list  *init_env(char **envp)
     t_list  *env;
     t_type  tmp;
     int     i;
-    
+
     // if (!envp) Q for Daria: can this ever be the case? the env can be empty, sure, but can the (...global...?) variable ever not exist?
     //     ;
     i = -1;
