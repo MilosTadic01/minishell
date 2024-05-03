@@ -13,6 +13,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+extern int g_exit;
+
 # define _XOPEN_SOURCE 700
 # define _DEFAULT_SOURCE
 
@@ -34,6 +36,8 @@
 
 void    receive_signals(void);
 void	sighandler(int signum);
+
+int     minishell(char *cmd, t_list **my_env);
 
 # define PIPE 124
 # define SINGLE_QUOTE 39

@@ -1,21 +1,21 @@
 #include "../../includes/minishell.h"
 
-static void init_exe_bus(t_exe *exe_bus, t_ast *s, t_list *env)
+static void init_exe_bus(t_exe *exe_bus, t_list **env)
 {
-    exe_bus->s = s;
     exe_bus->env = env;
     exe_bus->heredoc_fds = NULL;
     exe_bus->heredoc_count = 0;
     exe_bus->pids = NULL;
+    exe_bus->log_op = 0;
 }
 
-void    exec(t_ast *s, t_list *env)
+void    exec(t_ast *s, t_list **env)
 {
     t_exe   exe_bus;
 
-    init_exe_bus(&exe_bus, s, env);
+    init_exe_bus(&exe_bus, env);
     exec_heredocs(&exe_bus);
-	traverse_ast_to_exec(s, exe_bus);
+	traverse_ast_to_exec(s, &exe_bus);
 }  
 
 static int  which_builtin(char *str)
@@ -37,30 +37,43 @@ static int  which_builtin(char *str)
     return (0);
 }
 
-void    traverse_ast_to_exec(t_ast *s, t_exe b)
+int    traverse_ast_to_exec(t_ast *s, t_exe *b)
 {
     int builtin;
 
     builtin = 0;
     if (s->tag == COMMAND)
 	{
-		// printf("COMMAND\n");
 		for (int i = 0; i < s->command->size; i++)
 		{
-			// printf("%s\n", s->command->args[i]);
             builtin = which_builtin(s->command->args[0]);
             if (builtin)
-                exec_builtin(s, &env);
+                exec_builtin(s, b->env);
             else
-                exec_bin(s, &env);
+                exec_bin(s, b->env);
 		}
 	}
-	// else
-	// {
-	// 	// printf("BINOP ");
-	// 	// if (s->op == PIPE)
-	// 	// 	printf("PIPE\n");
-	// }
+    else if (s->tag == SUBSHELL)
+        g_exit = minishell(s->subshell_cmd, b->env);
+    else
+    {
+        if (!b->log_op || (b->log_op == AND && g_exit == 0) || \
+            (b->log_op == OR && g_exit == 1))
+        {
+            if (s->left)
+		        g_exit = traverse_ast_to_exec(s->left, b);
+        }
+        b->log_op = s->op; // assign / update log_op before going right
+        if ((b->log_op == AND && g_exit == 0) || \
+            (b->log_op == OR && g_exit == 1))
+        {
+            if (s->right)
+		        g_exit = traverse_ast_to_exec(s->right, b);
+        }
+        // count pipes
+        if (s->op == PIPE)
+            ;
+    }
 	if (s->left)
 		traverse_ast_to_exec(s->left, b);
 	if (s->right)
@@ -70,21 +83,17 @@ void    traverse_ast_to_exec(t_ast *s, t_exe b)
 void    exec_builtin(t_ast *s, t_list **env)
 {
     	t_list	*tmp;
-        enum e_bltin builtin_macros;
+        enum e_bltn builtin_macros;
 
     	tmp = s->command->ins;
 		while (tmp->next)
-		{
-			// printf("input redirections %d to: %s\n", tmp->as_item->type, tmp->as_item->filename);
 			tmp = tmp->next;
-		}
 		tmp = s->command->outs;
 		while (tmp->next)
-		{
-			// printf("output redirections %d to: %s\n",  tmp->as_item->type, tmp->as_item->filename);
 			tmp = tmp->next;
-		}
 }
 
 void    exec_bin(t_ast *ast, t_list **env)
-{}
+{
+    ;
+}
