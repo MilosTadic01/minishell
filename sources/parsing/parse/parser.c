@@ -12,7 +12,7 @@
 
 #include "../../../includes/minishell.h"
 
-t_ast	*parse(char *input_string)
+t_ast	*parse(char *input_string, t_list **env)
 {
 	int 	type;
 	t_input	in;
@@ -24,20 +24,20 @@ t_ast	*parse(char *input_string)
 	if (type == PIPE || type == AND || type == OR)
 	{
 		ft_putstr_fd("PARSING ERROR\n", 2);
-		prompt();
+		prompt(NULL, env);
 	}
-	final_ast = parse_statement(&in);
+	final_ast = parse_statement(&in, env);
 	free(in.input);
 	return (final_ast);
 }
 
-t_ast	*parse_statement(t_input *input)
+t_ast	*parse_statement(t_input *input, t_list **env)
 {
 	t_ast	*ast;
 	t_ast	*rest;
 	int		type;
 
-	ast = parse_pipe(input);
+	ast = parse_pipe(input, env);
 	if (is_final_token(input))
 		return (ast);
 	type = input->current_token.token_type;
@@ -47,20 +47,20 @@ t_ast	*parse_statement(t_input *input)
 		if (is_final_token(input))
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
-			prompt();
+			prompt(NULL, env);
 		}
-		rest = parse_statement(input);
+		rest = parse_statement(input, env);
 		ast = new_binop(type, &ast, &rest);
 	}
 	return (ast);
 }
 
-t_ast	*parse_pipe(t_input *input)
+t_ast	*parse_pipe(t_input *input, t_list **env)
 {
 	t_ast	*ast;
 	t_ast	*rest;
 
-	ast = parse_command(input);
+	ast = parse_command(input, env);
 	if (is_final_token(input))
 		return (ast);
 	if (input->current_token.token_type == PIPE)
@@ -69,15 +69,15 @@ t_ast	*parse_pipe(t_input *input)
 		if (is_final_token(input))
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
-			prompt();
+			prompt(NULL, env);
 		}
-		rest = parse_pipe(input);
+		rest = parse_pipe(input, env);
 		ast = new_binop(PIPE, &ast, &rest);
 	}
 	return (ast);
 }
 
-t_ast	*parse_command(t_input *input)
+t_ast	*parse_command(t_input *input, t_list **env)
 {
 	char		**tmp;
 	char		*filename;
@@ -90,7 +90,7 @@ t_ast	*parse_command(t_input *input)
 		if (!ast)
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
-			prompt();
+			prompt(NULL, env);
 		}
 		return (ast);
 	}

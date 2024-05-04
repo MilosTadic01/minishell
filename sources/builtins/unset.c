@@ -17,7 +17,7 @@ static void	deloneenv(t_list **envvar, t_list **prev)
 	return ;
 }
 
-void    ft_unset(t_list **env, char *kv_str)
+void    ft_unset(char *kv_str, t_list **env)
 {
     int     len;
     t_list  *current;
@@ -40,15 +40,16 @@ void    ft_unset(t_list **env, char *kv_str)
 }
 
 // cmdarr[0] == "unset"
-void    unset_cmdarr(t_list **env, char **cmdarr)
+int unset_cmdarr(int size, char **cmdarr, t_list **env)
 {
     int     i;
 
     if (!cmdarr || !(*cmdarr) || !env || !(*env))
-        return ;
+        return (1);
     i = 0;
-    while (cmdarr[++i])
+    while (++i < size)
     {
-        ft_unset(env, cmdarr[i]);
+        ft_unset(cmdarr[i], env);
     }
+    return (SUCCESS);
 }

@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-static void del_if_already_an_envvar(t_list **env, char *kv_str, int keylen)
+static void del_if_already_an_envvar(int keylen, char *kv_str, t_list **env)
 {
     t_list  *cpy;
 
@@ -12,7 +12,7 @@ static void del_if_already_an_envvar(t_list **env, char *kv_str, int keylen)
         if (ft_strncmp(cpy->as_str, kv_str, keylen) == 0 && \
             cpy->as_str[keylen] == '=')
         {
-            ft_unset(env, kv_str);
+            ft_unset(kv_str, env);
             break ;
         }
         cpy = cpy->next;
@@ -39,7 +39,7 @@ static int extract_keylen(char *kv_str)
     return (0);
 }
 
-void    ft_export(t_list **env, char *kv_str)
+void    ft_export(char *kv_str, t_list **env)
 {
     t_type  tmp;
     int     keylen;
@@ -47,20 +47,21 @@ void    ft_export(t_list **env, char *kv_str)
     keylen = extract_keylen(kv_str);
     if (keylen == 0 || !env) // not checking for !(*env) in case the env is empty I guess? lst_addback takes care of that.
         return ;
-    del_if_already_an_envvar(env, kv_str, keylen);
+    del_if_already_an_envvar(keylen, kv_str, env);
     tmp = (t_type){.as_str = kv_str};
     ft_lstadd_back(env, ft_lstnew(&tmp, AS_STR));
 }
 
-void    export_cmdarr(t_list **env, char **cmdarr)
+int export_cmdarr(int size, char **cmdarr, t_list **env)
 {
     int     i;
 
     if (!cmdarr || !(*cmdarr) || !env || !(*env))
-        return ;
+        return (1);
     i = 0;
-    while (cmdarr[++i])
+    while (++i < size)
     {
-        ft_export(env, cmdarr[i]);
+        ft_export(cmdarr[i], env);
     }
+    return (SUCCESS);
 }

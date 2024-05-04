@@ -18,17 +18,17 @@ static void set_shlvl(t_list **env)
     char	*str;
     char    *num;
 
-    if (ft_getenv(*env, "SHLVL"))
+    if (ft_getenv("SHLVL", *env))
     {
-        shlvl = ft_atoi(ft_getenv(*env, "SHLVL")) + 1;
+        shlvl = ft_atoi(ft_getenv("SHLVL", *env)) + 1;
         num = ft_itoa(shlvl);
         str = ft_strjoin("SHLVL=", num);
-        ft_export(env, str);
+        ft_export(str, env);
         free(str);
         free(num);
     }
     else
-        ft_export(env, "SHLVL=1");
+        ft_export("SHLVL=1", env);
 }
 
 static void set_pwd(t_list **env)
@@ -36,14 +36,14 @@ static void set_pwd(t_list **env)
     char    *str;
 
     str = ft_strjoin("PWD=", ft_getcwd());
-    ft_export(env, str);
+    ft_export(str, env);
     free(str);
 }
 
 static void set_shell(t_list **env)
 {
-    if (ft_strcmp(ft_getenv(*env, "SHELL"), "minishell") != 0)
-        ft_export(env, "SHELL=minishell");
+    if (ft_strcmp(ft_getenv("SHELL", *env), "minishell") != 0)
+        ft_export("SHELL=minishell", env);
 }
 
 static void    set_core_env(t_list **env)

@@ -12,9 +12,9 @@
 
 #include "../../includes/minishell.h"
 
-static int  too_many_args(char **strarr)
+static int  too_many_args(int size)
 {
-    if (strarr[1] && strarr[2])
+    if (size > 2)
     {
         ft_putstr_fd("minishell: cd: too many arguments\n", 2);
         return (1);
@@ -26,12 +26,12 @@ static int	try_to_go_home_if_no_args(t_list *env, char **cmdarr)
 {
 	if (cmdarr[1])
 		return (1);
-	if (ft_getenv(env, "HOME") == NULL)
+	if (ft_getenv("HOME", env) == NULL)
 	{
 		ft_putstr_fd("minishell: cd: HOME not set\n", 2);
 		return (-1);
 	}
-	else if (chdir(ft_getenv(env, "HOME")) < 0)
+	else if (chdir(ft_getenv("HOME", env)) < 0)
 	{
 		perror("minishell: cd: ");
 		return (-1);
@@ -39,8 +39,9 @@ static int	try_to_go_home_if_no_args(t_list *env, char **cmdarr)
 	return (0);
 }
 
-static void	try_to_go_to_path(t_list *env, char **cmdarr)
+static void	try_to_go_to_path(char **cmdarr, t_list *env)
 {
+	(void)env;
 	if (ft_strcmp(cmdarr[1], "~") == 0)
 	{
 		ft_putstr_fd("minishell: cd: home not specified other than the \
@@ -54,13 +55,14 @@ static void	try_to_go_to_path(t_list *env, char **cmdarr)
 // Remember to, outside of the ft, check if more args than dest, then print error
 // UPDATE: No, this ft is doing the check and printing error
 // STDIN_FILENO: no. STDOUT_FILENO: no.
-void	ft_cd(t_list *env, char **cmdarr)
+int	ft_cd(int size, char **cmdarr, t_list *env)
 {
 	if (!cmdarr && !(*cmdarr))
-		return ;
-	if (too_many_args(cmdarr))
-		return ;
+		return (1);
+	if (too_many_args(size))
+		return (1);
 	if (try_to_go_home_if_no_args(env, cmdarr) < 1)
-		return ;
-	try_to_go_to_path(env, cmdarr);
+		return (1);
+	try_to_go_to_path(cmdarr, env);
+	return (SUCCESS);
 }
