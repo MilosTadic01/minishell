@@ -64,6 +64,7 @@ static int	try_to_go_to_path(char **cmdarr, t_list **env)
 int	ft_cd(int size, char **cmdarr, t_list **env)
 {
 	char	*newpwd;
+	char	*cwd;
 
 	if (!cmdarr && !(*cmdarr))
 		return (1);
@@ -73,8 +74,10 @@ int	ft_cd(int size, char **cmdarr, t_list **env)
 		return (1);
 	if (try_to_go_to_path(cmdarr, env) != SUCCESS)
 		return (1);
-	newpwd = ft_strjoin("PWD=", ft_getcwd());
+	cwd = ft_getcwd();
+	newpwd = ft_strjoin("PWD=", cwd);
 	ft_export(newpwd, env);
+	free(cwd);
 	free(newpwd);
 	return (SUCCESS);
 }

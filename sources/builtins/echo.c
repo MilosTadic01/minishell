@@ -40,7 +40,7 @@ int ft_echo(int size, char **cmdarr)
         if (i == 1 && n_flag == 1)
             continue ;
         echo_one_arg(cmdarr[i]);
-        if (cmdarr[i + 1])
+        if (i + 1 != size)
             ft_putstr_fd(" ", STDOUT_FILENO);
     }
     if (!n_flag)

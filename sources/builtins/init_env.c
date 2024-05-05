@@ -33,11 +33,14 @@ static void set_shlvl(t_list **env)
 
 static void set_pwd(t_list **env)
 {
-    char    *str;
+    char    *newpwd;
+    char    *cwd;
 
-    str = ft_strjoin("PWD=", ft_getcwd());
-    ft_export(str, env);
-    free(str);
+    cwd = ft_getcwd();
+    newpwd = ft_strjoin("PWD=", cwd);
+    ft_export(newpwd, env);
+    free(cwd);
+    free(newpwd);
 }
 
 static void set_shell(t_list **env)

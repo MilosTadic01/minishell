@@ -14,9 +14,10 @@
 
 char	*ft_getcwd(void)
 {
-	char	buff[PATH_MAX];
+	char	*buff;
 	char	*pwd;
 
+	buff = malloc(PATH_MAX * sizeof(char));
 	pwd = getcwd(buff, PATH_MAX);
 	if (pwd == NULL)
 		perror("minishell: getcwd: ");
@@ -30,5 +31,6 @@ int	ft_pwd(void)
 	pwd = ft_getcwd();
 	ft_putstr_fd(pwd, 1);
 	ft_putstr_fd("\n", 1);
+	free(pwd);
 	return (SUCCESS);
 }

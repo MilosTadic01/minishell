@@ -35,12 +35,12 @@ int    ft_exit(int size, char **cmdarr)
     if (!cmdarr && !cmdarr[0])
         return (1);
     ft_putstr_fd("exit\n", 2); //but not when in ()? How?
-    if (!cmdarr[1]) // segfault? nah, should be NULL terminated
+    if (size == 1)
         exit(errno); // if just 'exit' it doesn't use errno, it just exits clean, right? Nope, actually carries the errno when no arguments. See: bbbb || exit
     if (too_many_args(size)) // hold on, if this is the case it WILL NOT EXIT?? but will still print 'exit', wth?
         return (1);
     if (!is_numeric_arg(cmdarr))
         exit(2);
     exit((unsigned char)ft_atoi(cmdarr[1]));
-    return (SUCCESS);
+    return (SUCCESS); // futile?
 }

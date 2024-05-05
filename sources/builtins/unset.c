@@ -31,15 +31,16 @@ void    ft_unset(char *key, t_list **env)
     current = *env;
     while (current)
     {
-        if (strncmp((*env)->as_str, key, len) == 0 && \
-            (*env)->as_str[len] == '=')
+        if (strncmp(current->as_str, key, len) == 0 && \
+            current->as_str[len] == '=')
         {
             deloneenv(env, current, headcopy);
-            break ;
+            return ;
         }
         *env = current;
         current = current->next;
     }
+    *env = headcopy;
 }
 
 // cmdarr[0] == "unset"
