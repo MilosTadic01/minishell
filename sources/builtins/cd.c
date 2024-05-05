@@ -22,16 +22,16 @@ static int  too_many_args(int size)
     return (0);
 }
 
-static int	try_to_go_home_if_no_args(t_list *env, char **cmdarr)
+static int	try_to_go_home_if_no_args(char **cmdarr, t_list **env)
 {
 	if (cmdarr[1])
 		return (1);
-	if (ft_getenv("HOME", env) == NULL)
+	if (ft_getenv("HOME", *env) == NULL)
 	{
 		ft_putstr_fd("minishell: cd: HOME not set\n", 2);
 		return (-1);
 	}
-	else if (chdir(ft_getenv("HOME", env)) < 0)
+	else if (chdir(ft_getenv("HOME", *env)) < 0)
 	{
 		perror("minishell: cd: ");
 		return (-1);
@@ -39,30 +39,42 @@ static int	try_to_go_home_if_no_args(t_list *env, char **cmdarr)
 	return (0);
 }
 
-static void	try_to_go_to_path(char **cmdarr, t_list *env)
+static int	try_to_go_to_path(char **cmdarr, t_list **env)
 {
 	(void)env;
 	if (ft_strcmp(cmdarr[1], "~") == 0)
 	{
 		ft_putstr_fd("minishell: cd: home not specified other than the \
 		env var HOME, which isn't what Bash accesses for cd ~\n", 2);
-		return ;
+		return (1);
 	}
 	if (chdir(cmdarr[1]) < 0)
-		perror("minishell: cd: ");
+	{
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd(cmdarr[1], STDERR_FILENO);
+		strerror(errno);
+		return (errno);
+	}
+	return (0);
 }
 
 // Remember to, outside of the ft, check if more args than dest, then print error
 // UPDATE: No, this ft is doing the check and printing error
 // STDIN_FILENO: no. STDOUT_FILENO: no.
-int	ft_cd(int size, char **cmdarr, t_list *env)
+int	ft_cd(int size, char **cmdarr, t_list **env)
 {
+	char	*newpwd;
+
 	if (!cmdarr && !(*cmdarr))
 		return (1);
 	if (too_many_args(size))
 		return (1);
-	if (try_to_go_home_if_no_args(env, cmdarr) < 1)
+	if (try_to_go_home_if_no_args(cmdarr, env) < 0)
 		return (1);
-	try_to_go_to_path(cmdarr, env);
+	if (try_to_go_to_path(cmdarr, env) != SUCCESS)
+		return (1);
+	newpwd = ft_strjoin("PWD=", ft_getcwd());
+	ft_export(newpwd, env);
+	free(newpwd);
 	return (SUCCESS);
 }

@@ -2,6 +2,20 @@
 
 // if *prev then bypass nodecopy, else head->next becomes head.
 // then free the nodecopy.
+
+static int extract_keylen(char *kv_str)
+{
+    int i;
+
+    i = -1;
+    while (kv_str[++i])
+    {
+        if (kv_str[i] == '=')
+            return (i);
+    }
+    return (0);
+}
+
 static void	deloneenv(t_list **envvar, t_list **prev)
 {
     t_list  *nodecopy;
@@ -23,7 +37,7 @@ void    ft_unset(char *kv_str, t_list **env)
     t_list  *current;
     t_list  *prev;
 
-    len = ft_strlen(kv_str);
+    len = extract_keylen(kv_str);
     prev = NULL;
     current = *env;
     while (current)

@@ -44,7 +44,7 @@ int	get_input_redir_token(t_input *in)
 	return (SUCCESS);
 }
 
-int	get_ampersand_token(t_input *in)
+int	get_ampersand_token(t_input *in, t_list **env)
 {
 	if (in->current_char == AMPERSAND)
 	{
@@ -55,7 +55,7 @@ int	get_ampersand_token(t_input *in)
 			next_char(in);
 		}
 		else
-			return (get_literal_token(in));
+			return (get_literal_token(in, env));
 	}
 	return (SUCCESS);
 }

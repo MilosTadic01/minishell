@@ -19,7 +19,7 @@ t_ast	*parse(char *input_string, t_list **env)
 	t_ast	*final_ast;
 
 	init_input(&in, input_string);
-	advance_token(&in);
+	advance_token(&in, env);
 	type = in.current_token.token_type;
 	if (type == PIPE || type == AND || type == OR)
 	{
@@ -43,7 +43,7 @@ t_ast	*parse_statement(t_input *input, t_list **env)
 	type = input->current_token.token_type;
 	if (type == AND || type == OR)
 	{
-		advance_token(input);
+		advance_token(input, env);
 		if (is_final_token(input))
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
@@ -65,7 +65,7 @@ t_ast	*parse_pipe(t_input *input, t_list **env)
 		return (ast);
 	if (input->current_token.token_type == PIPE)
 	{
-		advance_token(input);
+		advance_token(input, env);
 		if (is_final_token(input))
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
@@ -86,7 +86,7 @@ t_ast	*parse_command(t_input *input, t_list **env)
 
 	if (input->current_token.token_type == SUBSHELL)
 	{
-		ast = parse_subshell(input);
+		ast = parse_subshell(input, env);
 		if (!ast)
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
@@ -102,7 +102,7 @@ t_ast	*parse_command(t_input *input, t_list **env)
 		type = input->current_token.token_type;
 		if (is_redirection(type))
 		{
-			filename = redir_filename(input);
+			filename = redir_filename(input, env);
 			append_item(type, filename, &ast);
 		}
 		else
@@ -113,17 +113,17 @@ t_ast	*parse_command(t_input *input, t_list **env)
 			free_str(tmp, ast->command->size);
 			ast->command->size++;
 		}
-		advance_token(input);
+		advance_token(input, env);
 	}
 	return (ast);
 }
 
-t_ast	*parse_subshell(t_input *input)
+t_ast	*parse_subshell(t_input *input, t_list **env)
 {
 	t_ast		*ast;
 
 	ast = new_subshell(input->current_token.value);
-	advance_token(input);
+	advance_token(input, env);
 	if (input->current_token.token_type != AND
 		&& input->current_token.token_type != OR
 		&& input->current_token.token_type != FINAL_TOKEN)

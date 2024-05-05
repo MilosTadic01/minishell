@@ -12,13 +12,13 @@
 
 #include "../../../includes/minishell.h"
 
-int	create_token(t_input *in)
+int	create_token(t_input *in, t_list **env)
 {
 	skip_spaces(in);
 	if (in->current_char == PIPE)
 		return (get_pipe_token(in));
 	else if (in->current_char == AMPERSAND)
-		return (get_ampersand_token(in));
+		return (get_ampersand_token(in, env));
 	else if (in->current_char == REDIRECT_IN)
 		return (get_input_redir_token(in));
 	else if (in->current_char == REDIRECT_OUT)
@@ -26,7 +26,7 @@ int	create_token(t_input *in)
 	else if (in->current_char == OPEN_PARENTHESE)
 		return (get_subshell_token(in));
 	else
-		return (get_literal_token(in));
+		return (get_literal_token(in, env));
 	return (-1);
 }
 

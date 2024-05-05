@@ -12,7 +12,7 @@
 
 #include "../../../includes/minishell.h"
 
-int	get_literal_token(t_input *in)
+int	get_literal_token(t_input *in, t_list **env)
 {
 	char	*seq;
 	char	*res;
@@ -28,7 +28,7 @@ int	get_literal_token(t_input *in)
 	{
 		if (exit_loop_conditions(in))
 			break ;
-		seq = get_literal_part(in);
+		seq = get_literal_part(in, env);
 		tmp = ft_concat(res, seq);
 		free(res);
 		free(seq);
@@ -63,17 +63,17 @@ int	exit_loop_conditions(t_input *in)
 	return (0);
 }
 
-char	*get_literal_part(t_input *in)
+char	*get_literal_part(t_input *in, t_list **env)
 {
 	int		start;
 
 	start = in->current_position;
 	if (in->quotations == SINGLE_QUOTE || in->quotations == DOUBLE_QUOTE)
-		return (get_quotation_sequence(in));
+		return (get_quotation_sequence(in, env));
 	else
 	{
 		if (in->current_char == DOLLAR && ft_isalnum(peek_char(in)))
-			return (expand_variable(in, DEFAULT));
+			return (expand_variable(in, DEFAULT, env));
 		else
 		{
 			while (in->current_char && in->current_char != SINGLE_QUOTE
@@ -92,7 +92,7 @@ char	*get_literal_part(t_input *in)
 	}
 }
 
-char	*get_quotation_sequence(t_input *in)
+char	*get_quotation_sequence(t_input *in, t_list **env)
 {
 	int		start;
 
@@ -106,7 +106,7 @@ char	*get_quotation_sequence(t_input *in)
 	else
 	{
 		if (in->current_char == DOLLAR && ft_isalnum(peek_char(in)))
-			return (expand_variable(in, DOUBLE_QUOTE));
+			return (expand_variable(in, DOUBLE_QUOTE, env));
 		else
 		{
 			while (in->current_char && in->current_char != DOUBLE_QUOTE
@@ -117,7 +117,7 @@ char	*get_quotation_sequence(t_input *in)
 	}
 }
 
-char	*expand_variable(t_input *in, int state)
+char	*expand_variable(t_input *in, int state, t_list **env)
 {
 	char	*var_name;
 	char	*var_value;
@@ -133,7 +133,7 @@ char	*expand_variable(t_input *in, int state)
 	while (ft_isalnum(in->current_char) || in->current_char == UNDERSCORE)
 		next_char(in);
 	var_name = ft_substr(in->input, start, in->current_position - start);
-	var_value = getenv(var_name);
+	var_value = ft_getenv(var_name, *env);
 	if (var_value && !state)
 		var_value = ft_rm_consec_spaces(var_value);
 	else if (var_value && state)

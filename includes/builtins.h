@@ -19,7 +19,7 @@ int ft_pwd(void);
 char	*ft_getcwd(void);
 
 // cd.c
-int ft_cd(int size, char **cmdarr, t_list *env);
+int ft_cd(int size, char **cmdarr, t_list **env);
 
 // echo.c
 int ft_echo(int size, char **cmdarr);
@@ -33,7 +33,7 @@ void	ft_unset(char *kv_str, t_list **env);
 
 // export.c
 int export_cmdarr(int size, char **cmdarr, t_list **env);
-void    ft_export(char *kv_str, t_list **env);
+int ft_export(char *kv_str, t_list **env);
 
 
 // printnget_env.c
