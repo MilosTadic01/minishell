@@ -29,7 +29,7 @@ t_list  *init_env(char **envp);
 
 // unset.c
 int unset_cmdarr(int size, char **cmdarr, t_list **env);
-void	ft_unset(char *kv_str, t_list **env);
+void	ft_unset(char *key, t_list **env);
 
 // export.c
 int export_cmdarr(int size, char **cmdarr, t_list **env);

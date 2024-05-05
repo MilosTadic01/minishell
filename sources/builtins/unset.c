@@ -2,53 +2,42 @@
 
 // if *prev then bypass nodecopy, else head->next becomes head.
 // then free the nodecopy.
-
-static int extract_keylen(char *kv_str)
+static void	deloneenv(t_list **last, t_list *current, t_list *headcopy)
 {
-    int i;
-
-    i = -1;
-    while (kv_str[++i])
-    {
-        if (kv_str[i] == '=')
-            return (i);
-    }
-    return (0);
-}
-
-static void	deloneenv(t_list **envvar, t_list **prev)
-{
-    t_list  *nodecopy;
-
-	if (!envvar || !(*envvar))
+	if (!last || !(*last) || !current)
 		return ;
-    nodecopy = *envvar;
-    if (prev && *prev)
-        (*prev)->next = (*envvar)->next;
+    if (*last != current)
+    {
+        (*last)->next = current->next;
+        *last = headcopy;
+    }
     else
-        *envvar = (*envvar)->next;
-    free (nodecopy);
+        *last = current->next;
+    free(current->as_str);
+    ft_lstdelone(current);
 	return ;
 }
 
-void    ft_unset(char *kv_str, t_list **env)
+void    ft_unset(char *key, t_list **env)
 {
     int     len;
+    t_list  *headcopy;
     t_list  *current;
-    t_list  *prev;
 
-    len = extract_keylen(kv_str);
-    prev = NULL;
+    if (!key || !env || !(*env))
+        return ;
+    len = ft_strlen(key);
+    headcopy = *env;
     current = *env;
     while (current)
     {
-        if (strncmp(current->as_str, kv_str, len) == 0 && \
-            current->as_str[len] == '=')
+        if (strncmp((*env)->as_str, key, len) == 0 && \
+            (*env)->as_str[len] == '=')
         {
-            deloneenv(&current, &prev);
+            deloneenv(env, current, headcopy);
             break ;
         }
-        prev = current;
+        *env = current;
         current = current->next;
     }
 }

@@ -1,5 +1,16 @@
 #include "../../includes/minishell.h"
 
+static void del_if_already_an_envvar(int keylen, char *kv_str, t_list **env)
+{
+    char    *key;
+
+    if (!env || !(*env) || !kv_str)
+        return ;
+    key = ft_substr(kv_str, 0, keylen);
+    ft_unset(key, env);
+    free(key);
+}
+
 static int  is_invalid_key(int keylen, char *kv_str)
 {
     int i;
@@ -16,25 +27,6 @@ static int  is_invalid_key(int keylen, char *kv_str)
         }
     }
     return (0);
-}
-
-static void del_if_already_an_envvar(int keylen, char *kv_str, t_list **env)
-{
-    t_list  *cpy;
-
-    if (!env || !(*env) || !kv_str)
-        return ;
-    cpy = *env;
-    while (cpy)
-    {
-        if (ft_strncmp(cpy->as_str, kv_str, keylen) == 0 && \
-            cpy->as_str[keylen] == '=')
-        {
-            ft_unset(kv_str, env);
-            break ;
-        }
-        cpy = cpy->next;
-    }
 }
 
 static int extract_keylen(char *kv_str)
@@ -65,9 +57,9 @@ int ft_export(char *kv_str, t_list **env)
     if (!kv_str || !env) // not checking for !(*env) in case the env is empty I guess? lst_addback takes care of that.
         return (SUCCESS);
     keylen = extract_keylen(kv_str);
-    del_if_already_an_envvar(keylen, kv_str, env);
     if (is_invalid_key(keylen, kv_str))
         return (1);
+    del_if_already_an_envvar(keylen, kv_str, env);
     tmp = (t_type){.as_str = kv_str};
     ft_lstadd_back(env, ft_lstnew(&tmp, AS_STR));
     return (SUCCESS);
