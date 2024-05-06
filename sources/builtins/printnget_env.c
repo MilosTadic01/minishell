@@ -1,18 +1,19 @@
 #include "../../includes/minishell.h"
 
-void    ft_printenv(t_list *env)
+int    ft_printenv(t_list *env)
 {
     if (!env)
-        return ;
+        return (1);
     while (env)
     {
         ft_putstr_fd(env->as_str, STDOUT_FILENO);
         ft_putstr_fd("\n", STDOUT_FILENO);
         env = env->next;
     }
+    return (SUCCESS);
 }
 
-char    *ft_getenv(t_list *env, char *key)
+char    *ft_getenv(char *key, t_list *env)
 {
     int len;
 

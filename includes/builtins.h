@@ -15,35 +15,35 @@
 # include "minishell.h"
 
 // pwd.c
-void    ft_pwd(void);
+int ft_pwd(void);
 char	*ft_getcwd(void);
 
 // cd.c
-void	ft_cd(t_list *env, char **cmdarr);
+int ft_cd(int size, char **cmdarr, t_list **env);
 
 // echo.c
-void	ft_echo(char **strarr);
+int ft_echo(int size, char **cmdarr);
 
 // init_env.c
 t_list  *init_env(char **envp);
 
 // unset.c
-void    unset_cmdarr(t_list **env, char **cmdarr);
-void	ft_unset(t_list **env, char *kv_str);
+int unset_cmdarr(int size, char **cmdarr, t_list **env);
+void	ft_unset(char *key, t_list **env);
 
 // export.c
-void	export_cmdarr(t_list **env, char **cmdarr);
-void    ft_export(t_list **env, char *kv_str);
+int export_cmdarr(int size, char **cmdarr, t_list **env);
+int ft_export(char *kv_str, t_list **env);
 
 
 // printnget_env.c
-void    ft_printenv(t_list *env);
-char    *ft_getenv(t_list *env, char *key);
+int ft_printenv(t_list *env);
+char    *ft_getenv(char *key, t_list *env);
 
 // convert_env4execve.c
 char    **convert_env(t_list *env);
 
 // exit.c
-void    ft_exit(char **strarr);
+int ft_exit(int size, char **cmdarr);
 
 #endif

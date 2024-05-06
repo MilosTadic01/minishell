@@ -2,53 +2,58 @@
 
 // if *prev then bypass nodecopy, else head->next becomes head.
 // then free the nodecopy.
-static void	deloneenv(t_list **envvar, t_list **prev)
+static void	deloneenv(t_list **last, t_list *current, t_list *headcopy)
 {
-    t_list  *nodecopy;
-
-	if (!envvar || !(*envvar))
+	if (!last || !(*last) || !current)
 		return ;
-    nodecopy = *envvar;
-    if (prev && *prev)
-        (*prev)->next = (*envvar)->next;
+    if (*last != current)
+    {
+        (*last)->next = current->next;
+        *last = headcopy;
+    }
     else
-        *envvar = (*envvar)->next;
-    free (nodecopy);
+        *last = current->next;
+    free(current->as_str);
+    ft_lstdelone(current);
 	return ;
 }
 
-void    ft_unset(t_list **env, char *kv_str)
+void    ft_unset(char *key, t_list **env)
 {
     int     len;
+    t_list  *headcopy;
     t_list  *current;
-    t_list  *prev;
 
-    len = ft_strlen(kv_str);
-    prev = NULL;
+    if (!key || !env || !(*env))
+        return ;
+    len = ft_strlen(key);
+    headcopy = *env;
     current = *env;
     while (current)
     {
-        if (strncmp(current->as_str, kv_str, len) == 0 && \
+        if (strncmp(current->as_str, key, len) == 0 && \
             current->as_str[len] == '=')
         {
-            deloneenv(&current, &prev);
-            break ;
+            deloneenv(env, current, headcopy);
+            return ;
         }
-        prev = current;
+        *env = current;
         current = current->next;
     }
+    *env = headcopy;
 }
 
 // cmdarr[0] == "unset"
-void    unset_cmdarr(t_list **env, char **cmdarr)
+int unset_cmdarr(int size, char **cmdarr, t_list **env)
 {
     int     i;
 
     if (!cmdarr || !(*cmdarr) || !env || !(*env))
-        return ;
+        return (1);
     i = 0;
-    while (cmdarr[++i])
+    while (++i < size)
     {
-        ft_unset(env, cmdarr[i]);
+        ft_unset(cmdarr[i], env);
     }
+    return (SUCCESS);
 }

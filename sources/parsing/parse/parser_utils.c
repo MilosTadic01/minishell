@@ -27,11 +27,11 @@ void	append_item(int type, char *filename, t_ast **ast)
 		ft_lstadd_back(&(*ast)->command->outs, redir_node);
 }
 
-char	*redir_filename(t_input *in)
+char	*redir_filename(t_input *in, t_list **env)
 {
 	char	*filename;
 
-	advance_token(in);
+	advance_token(in, env);
 	if (is_final_token(in) || in->current_token.token_type != LITERAL)
 	{
 		ft_putstr_fd("PARSING ERROR\n", 2);
@@ -57,12 +57,12 @@ int	is_redirection(int type)
 	return (0);
 }
 
-void	advance_token(t_input *in)
+void	advance_token(t_input *in, t_list **env)
 {
 	if (in->current_token.token_type == LITERAL)
 	{
 		free(in->current_token.value);
 		in->current_token.token_type = FINAL_TOKEN;
 	}
-	create_token(in);
+	create_token(in, env);
 }

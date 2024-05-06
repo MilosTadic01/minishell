@@ -48,21 +48,21 @@ typedef struct s_ast
 	struct s_ast		*right;
 }	t_ast;
 
-void	prompt(void);
+void	prompt(char *cmd, t_list **env);
 
-char			*redir_filename(t_input *in);
+char			*redir_filename(t_input *in, t_list **env);
 int				is_final_token(t_input *input);
 int				is_redirection(int type);
 t_ast			*new_binop(int op, t_ast **left, t_ast **right);
 t_ast			*new_command(void);
 t_ast			*new_subshell(char *value);
-t_ast			*parse(char *input_string);
-t_ast			*parse_command(t_input *in);
-t_ast			*parse_pipe(t_input *input);
-t_ast			*parse_statement(t_input *input);
-t_ast			*parse_subshell(t_input *input);
+t_ast			*parse(char *input_string, t_list **env);
+t_ast			*parse_command(t_input *in, t_list **env);
+t_ast			*parse_pipe(t_input *input, t_list **env);
+t_ast			*parse_statement(t_input *input, t_list **env);
+t_ast			*parse_subshell(t_input *input, t_list **env);
 t_redir_item	*new_item(int type, char *filename);
-void			advance_token(t_input *in);
+void			advance_token(t_input *in, t_list **env);
 void			append_item(int type, char *filename, t_ast **ast);
 void			free_ast(t_ast *s);
 void			free_item_list(t_list **lst);

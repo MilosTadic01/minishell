@@ -13,8 +13,8 @@
 OFILES = $(FILES:.c=.o)
 LEXD = ./sources/parsing/lex/
 PARSED = ./sources/parsing/parse/
-EXECD =	./sources/execution/
 BUILTINSD = ./sources/builtins/
+EXECD =	./sources/execution/
 INCLUDESD = ./includes/
 LIBFTD = ./libft/
 HFILES = $(INCLUDESD)minishell.h \
@@ -33,16 +33,18 @@ FILES = $(LEXD)lexer.c \
 		$(PARSED)free_ast.c \
 		$(PARSED)signals.c \
 		$(BUILTINSD)init_env.c \
-		$(BUILTINSD)printnget_env.c \
 		$(BUILTINSD)convert_env4execve.c \
+		$(BUILTINSD)echo.c \
+		$(BUILTINSD)cd.c \
+		$(BUILTINSD)pwd.c \
 		$(BUILTINSD)export.c \
 		$(BUILTINSD)unset.c \
+		$(BUILTINSD)printnget_env.c \
 		$(BUILTINSD)exit.c \
-		$(BUILTINSD)pwd.c \
+		$(EXECD)exec.c \
+		$(EXECD)traversal.c \
+		$(EXECD)exec_builtin.c \
 		main.c
-#		$(EXECD)exec.c \
-#		$(EXECD)heredoc.c \
-
 
 NAME = minishell
 

@@ -12,72 +12,72 @@
 
 #include "../../../includes/minishell.h"
 
-t_ast	*parse(char *input_string)
+t_ast	*parse(char *input_string, t_list **env)
 {
 	int 	type;
 	t_input	in;
 	t_ast	*final_ast;
 
 	init_input(&in, input_string);
-	advance_token(&in);
+	advance_token(&in, env);
 	type = in.current_token.token_type;
 	if (type == PIPE || type == AND || type == OR)
 	{
 		ft_putstr_fd("PARSING ERROR\n", 2);
-		prompt();
+		prompt(NULL, env);
 	}
-	final_ast = parse_statement(&in);
+	final_ast = parse_statement(&in, env);
 	free(in.input);
 	return (final_ast);
 }
 
-t_ast	*parse_statement(t_input *input)
+t_ast	*parse_statement(t_input *input, t_list **env)
 {
 	t_ast	*ast;
 	t_ast	*rest;
 	int		type;
 
-	ast = parse_pipe(input);
+	ast = parse_pipe(input, env);
 	if (is_final_token(input))
 		return (ast);
 	type = input->current_token.token_type;
 	if (type == AND || type == OR)
 	{
-		advance_token(input);
+		advance_token(input, env);
 		if (is_final_token(input))
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
-			prompt();
+			prompt(NULL, env);
 		}
-		rest = parse_statement(input);
+		rest = parse_statement(input, env);
 		ast = new_binop(type, &ast, &rest);
 	}
 	return (ast);
 }
 
-t_ast	*parse_pipe(t_input *input)
+t_ast	*parse_pipe(t_input *input, t_list **env)
 {
 	t_ast	*ast;
 	t_ast	*rest;
 
-	ast = parse_command(input);
+	ast = parse_command(input, env);
 	if (is_final_token(input))
 		return (ast);
 	if (input->current_token.token_type == PIPE)
 	{
-		advance_token(input);
+		advance_token(input, env);
 		if (is_final_token(input))
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
-			prompt();
+			prompt(NULL, env);
 		}
-		rest = parse_pipe(input);
+		rest = parse_pipe(input, env);
 		ast = new_binop(PIPE, &ast, &rest);
 	}
 	return (ast);
 }
 
-t_ast	*parse_command(t_input *input)
+t_ast	*parse_command(t_input *input, t_list **env)
 {
 	char		**tmp;
 	char		*filename;
@@ -86,11 +86,11 @@ t_ast	*parse_command(t_input *input)
 
 	if (input->current_token.token_type == SUBSHELL)
 	{
-		ast = parse_subshell(input);
+		ast = parse_subshell(input, env);
 		if (!ast)
 		{
 			ft_putstr_fd("PARSING ERROR\n", 2);
-			prompt();
+			prompt(NULL, env);
 		}
 		return (ast);
 	}
@@ -102,7 +102,7 @@ t_ast	*parse_command(t_input *input)
 		type = input->current_token.token_type;
 		if (is_redirection(type))
 		{
-			filename = redir_filename(input);
+			filename = redir_filename(input, env);
 			append_item(type, filename, &ast);
 		}
 		else
@@ -113,17 +113,17 @@ t_ast	*parse_command(t_input *input)
 			free_str(tmp, ast->command->size);
 			ast->command->size++;
 		}
-		advance_token(input);
+		advance_token(input, env);
 	}
 	return (ast);
 }
 
-t_ast	*parse_subshell(t_input *input)
+t_ast	*parse_subshell(t_input *input, t_list **env)
 {
 	t_ast		*ast;
 
 	ast = new_subshell(input->current_token.value);
-	advance_token(input);
+	advance_token(input, env);
 	if (input->current_token.token_type != AND
 		&& input->current_token.token_type != OR
 		&& input->current_token.token_type != FINAL_TOKEN)
