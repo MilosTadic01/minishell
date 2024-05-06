@@ -42,8 +42,9 @@ static void update_pipe_info(t_ast *s, t_exe *b)
     b->is_pipeline = 1;
     if (s->tag == PIPE)
     {
-        (b->cmds_in_ppline)++;
-        update_pipe_info(s->right, b);
+        b->cmds_in_ppline++;
+        if (s->right)
+            update_pipe_info(s->right, b);
     }
 }
 

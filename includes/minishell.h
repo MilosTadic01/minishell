@@ -24,9 +24,11 @@ extern int g_exit;
 # include <stdio.h>
 # include <signal.h>
 # include <limits.h>
-# include <sys/types.h>
+# include <sys/types.h> // readline, open
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/stat.h> // open
+# include <fcntl.h> // open: O_TMPFILE
 # include "../libft/libft.h"
 # include "lexer.h"
 # include "parser.h"

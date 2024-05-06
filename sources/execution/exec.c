@@ -16,7 +16,7 @@ void    exec(t_ast *s, t_list **env)
     t_exe   exe_bus;
 
     init_exe_bus(&exe_bus, env);
-    // exec_heredocs(&exe_bus);
+    exec_heredocs(&exe_bus);
 	traverse_ast_to_exec(s, &exe_bus);
 }  
 

@@ -44,6 +44,7 @@ FILES = $(LEXD)lexer.c \
 		$(EXECD)exec.c \
 		$(EXECD)traversal.c \
 		$(EXECD)exec_builtin.c \
+		$(EXECD)heredoc.c \
 		main.c
 
 NAME = minishell

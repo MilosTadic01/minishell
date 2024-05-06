@@ -1,5 +1,26 @@
 #include "../../includes/minishell.h"
 
+static void count_heredocs(t_ast *s, t_exe *b)
+{
+    t_ast   *subsh_ast;
+
+    subsh_ast = NULL;
+    if (s->tag == REDIRECT_IN_IN)
+        b->heredoc_count++;
+    else if (s->tag == SUBSHELL)
+    {
+        subsh_ast = parse(s->subshell_cmd, b->env);
+        if (subsh_ast->left)
+            count_heredocs(subsh_ast->left, b);
+        if (subsh_ast->right)
+            count_heredocs(subsh_ast->right, b);
+    }
+    if (s->left)
+        count_heredocs(s->left, b);
+    if (s->right)
+        count_heredocs(s->right, b);
+}
+
 static void open_files_for_heredocs(t_exe *exe_bus)
 {
     int i;
@@ -7,7 +28,7 @@ static void open_files_for_heredocs(t_exe *exe_bus)
     i = -1;
     while (++i < exe_bus->heredoc_count)
     {
-        exe_bus->heredoc_fds[i] = open("/tmp/", O_RDWR | O_TMPFILE | O_APPEND, 0644);
+        exe_bus->heredoc_fds[i] = open(".", O_RDWR | O_TMPFILE | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
         if (exe_bus->heredoc_fds[i] < 0)
             perror("heredoc: ");
     }
@@ -47,6 +68,7 @@ void    exec_heredocs(t_exe *exe_bus)
 
     tmp = exe_bus->s->command->ins;
     // count heredocs
+    count_heredocs(exe_bus->s, exe_bus);
     while (tmp)
     {
         if (tmp->as_item->type == REDIRECT_IN_IN)
