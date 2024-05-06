@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 19:26:52 by daria             #+#    #+#             */
-/*   Updated: 2024/05/02 11:10:40 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:35:49 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	sighandler(int signum)
 	if (signum == SIGINT)
 	{
 		write(1, "\n", 1);
+		g_exit = 130;
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -35,6 +36,7 @@ void	sighandler(int signum)
 	else if (signum == SIGQUIT)
 	{
 		write(1, "\n", 1);
+		g_exit = 131;
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();

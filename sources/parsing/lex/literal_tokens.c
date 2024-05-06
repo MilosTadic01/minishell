@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:16:56 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/02 13:17:39 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/06 12:55:57 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*get_literal_part(t_input *in, t_list **env)
 		return (get_quotation_sequence(in, env));
 	else
 	{
-		if (in->current_char == DOLLAR && ft_isalnum(peek_char(in)))
+		if (in->current_char == DOLLAR && (ft_isalnum(peek_char(in)) || peek_char(in) == QUESTION_MARK))
 			return (expand_variable(in, DEFAULT, env));
 		else
 		{
@@ -80,9 +80,10 @@ char	*get_literal_part(t_input *in, t_list **env)
 				&& in->current_char != DOUBLE_QUOTE
 				&& !ft_isspace(in->current_char) && !is_control_char(in))
 			{
-				if (in->current_char == DOLLAR && !ft_isalnum(peek_char(in)))
+				if (in->current_char == DOLLAR)
 				{
-					next_char(in);
+					if (!ft_isalnum(peek_char(in)) && peek_char(in) != QUESTION_MARK)
+						next_char(in);
 					break ;
 				}
 				next_char(in);
@@ -128,7 +129,7 @@ char	*expand_variable(t_input *in, int state, t_list **env)
 	if (in->current_char == QUESTION_MARK)
 	{
 		next_char(in);
-		return (ft_itoa(errno));
+		return (ft_itoa(g_exit));
 	}
 	while (ft_isalnum(in->current_char) || in->current_char == UNDERSCORE)
 		next_char(in);
