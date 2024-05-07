@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/03 13:04:53 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:33:00 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,14 @@ void	prompt(char *cmd, t_list **my_env)
 	line = ft_strtrim(copy, " ");
 	free(copy);
 	ast = parse(line, my_env);
+	if (!ast)
+	{
+		ft_putendl_fd("Error: bad syntax", 2);
+		g_exit = 2;
+		add_history(line);
+		free(line);
+		return ;
+	}
 	// print_ast(ast);
 	exec(ast, my_env);
 	add_history(line);
@@ -60,7 +68,7 @@ void	prompt(char *cmd, t_list **my_env)
 	free_ast(ast);
 }
 
-// static void print_ast(t_ast *s)
+//static void print_ast(t_ast *s)
 // {
 // 	t_list	*tmp;
 

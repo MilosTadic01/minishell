@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 11:31:41 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/18 11:29:04 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/07 12:18:06 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,12 @@ int	is_control_char(t_input *in)
 	if (in->current_char == AMPERSAND && peek_char(in) == AMPERSAND)
 		return (1);
 	return (0);
+}
+
+int	is_literal_end(t_input *in)
+{
+	return (in->current_char == SINGLE_QUOTE
+		|| in->current_char == DOUBLE_QUOTE
+		|| ft_isspace(in->current_char)
+		|| is_control_char(in));
 }

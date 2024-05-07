@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:17:07 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/28 19:23:55 by daria            ###   ########.fr       */
+/*   Updated: 2024/05/07 17:30:45 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,9 @@ char	*redir_filename(t_input *in, t_list **env)
 	char	*filename;
 
 	advance_token(in, env);
+	filename = NULL;
 	if (is_final_token(in) || in->current_token.token_type != LITERAL)
-	{
-		ft_putstr_fd("PARSING ERROR\n", 2);
-		exit (1);
-	}
+		return (filename);
 	else
 		filename = ft_strdup(in->current_token.value);
 	return (filename);
@@ -57,12 +55,16 @@ int	is_redirection(int type)
 	return (0);
 }
 
-void	advance_token(t_input *in, t_list **env)
+int	advance_token(t_input *in, t_list **env)
 {
 	if (in->current_token.token_type == LITERAL)
 	{
 		free(in->current_token.value);
 		in->current_token.token_type = FINAL_TOKEN;
 	}
-	create_token(in, env);
+	if (create_token(in, env))
+	{
+		return (PARSING_ERROR);
+	}
+	return (SUCCESS);
 }
