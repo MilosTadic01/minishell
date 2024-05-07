@@ -24,6 +24,8 @@ static int  command_exec(t_ast *s, t_exe *b)
     int builtin;
 
     builtin = 0;
+    if (!s || !s->command || !s->command->args)
+        return (g_exit);
     if (!b->log_op || b->log_op == PIPE || \
         (b->log_op == AND && g_exit == 0) || \
         (b->log_op == OR && g_exit == 1))
@@ -66,4 +68,4 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
             g_exit = traverse_ast_to_exec(s->right, b);
     }
     return (g_exit); // right?
-}
+} 

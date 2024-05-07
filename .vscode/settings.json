@@ -60,6 +60,9 @@
     "minishell.h": "c",
     "exec.h": "c",
     "fcntl.h": "c",
-    "libft.h": "c"
+    "libft.h": "c",
+    "lexer.h": "c",
+    "types.h": "c",
+    "readline.h": "c"
   }
 }

@@ -31,7 +31,7 @@ typedef struct s_command
 	char	**args; //cat file3
 	int		size; //1
 
-	t_list	*ins; //item->type = smth, item->file = file1; item->type = smth, item = file2
+	t_list	*ins; //item->type = smth, item->filename = file1; item->type = smth, item = file2
 	t_list	*outs; // NULL
 }	t_command;
 
