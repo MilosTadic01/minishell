@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 10:47:31 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/06 11:01:16 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:51:05 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,7 @@ int	get_subshell_token(t_input *in)
 		next_char(in);
 	}
 	if (!in->current_char)
-	{
-		ft_putstr_fd("PARSING ERROR\n", 2);
 		return (UNCLOSED_PARENTHESIS);
-	}
 	value = ft_substr(in->input, start, in->current_position - start);
 	init_token(&in->current_token, value, SUBSHELL);
 	next_char(in);

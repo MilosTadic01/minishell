@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:08:20 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/02 13:37:29 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:12:01 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	free_ast(t_ast *s)
 {
 	int	idx;
 
+	if (!s)
+		return ;
 	if (s->tag == COMMAND)
 	{
 		idx = 0;

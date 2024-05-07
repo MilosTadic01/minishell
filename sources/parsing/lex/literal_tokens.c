@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:16:56 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/06 12:55:57 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:13:16 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ int	get_literal_token(t_input *in, t_list **env)
 	}
 	while (in->current_char)
 	{
-		if (exit_loop_conditions(in))
+		if (exit_loop_conditions(in) == UNCLOSED_QUOTATIONS)
+			return (UNCLOSED_QUOTATIONS);
+		else if (exit_loop_conditions(in))
 			break ;
 		seq = get_literal_part(in, env);
 		tmp = ft_concat(res, seq);
@@ -35,7 +37,7 @@ int	get_literal_token(t_input *in, t_list **env)
 		res = tmp;
 	}
 	init_token(&in->current_token, res, LITERAL);
-	return (0);
+	return (SUCCESS);
 }
 
 int	exit_loop_conditions(t_input *in)
@@ -46,10 +48,7 @@ int	exit_loop_conditions(t_input *in)
 		|| in->current_char == DOUBLE_QUOTE)
 	{
 		if (quotation_status(in))
-		{
-			ft_putstr_fd("PARSING ERROR\n", 2);
-			exit (UNCLOSED_QUOTATIONS);
-		}
+			return (UNCLOSED_QUOTATIONS);
 		if (!in->current_char)
 			return (1);
 	}
@@ -70,27 +69,17 @@ char	*get_literal_part(t_input *in, t_list **env)
 	start = in->current_position;
 	if (in->quotations == SINGLE_QUOTE || in->quotations == DOUBLE_QUOTE)
 		return (get_quotation_sequence(in, env));
-	else
+	if (in->current_char == DOLLAR && (ft_isalnum(peek_char(in))
+			|| peek_char(in) == QUESTION_MARK))
+		return (expand_variable(in, DEFAULT, env));
+	while (in->current_char && !is_literal_end(in))
 	{
-		if (in->current_char == DOLLAR && (ft_isalnum(peek_char(in)) || peek_char(in) == QUESTION_MARK))
-			return (expand_variable(in, DEFAULT, env));
-		else
-		{
-			while (in->current_char && in->current_char != SINGLE_QUOTE
-				&& in->current_char != DOUBLE_QUOTE
-				&& !ft_isspace(in->current_char) && !is_control_char(in))
-			{
-				if (in->current_char == DOLLAR)
-				{
-					if (!ft_isalnum(peek_char(in)) && peek_char(in) != QUESTION_MARK)
-						next_char(in);
-					break ;
-				}
-				next_char(in);
-			}
-			return (ft_substr(in->input, start, in->current_position - start));
-		}
+		if (in->current_char == DOLLAR
+			&& (ft_isalnum(peek_char(in)) || peek_char(in) == QUESTION_MARK))
+			break ;
+		next_char(in);
 	}
+	return (ft_substr(in->input, start, in->current_position - start));
 }
 
 char	*get_quotation_sequence(t_input *in, t_list **env)

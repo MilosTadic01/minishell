@@ -68,4 +68,4 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
             g_exit = traverse_ast_to_exec(s->right, b);
     }
     return (g_exit); // right?
-} 
+}

@@ -6,7 +6,7 @@
 #    By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/27 12:28:47 by dzubkova          #+#    #+#              #
-#    Updated: 2024/05/03 13:06:28 by dzubkova         ###   ########.fr        #
+#    Updated: 2024/05/07 11:45:10 by dzubkova         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ FILES = $(LEXD)lexer.c \
 		$(PARSED)parser_utils.c \
 		$(PARSED)free_ast.c \
 		$(PARSED)signals.c \
+		$(PARSED)parse_command_utils.c \
 		$(BUILTINSD)init_env.c \
 		$(BUILTINSD)convert_env4execve.c \
 		$(BUILTINSD)echo.c \

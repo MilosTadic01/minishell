@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/03 13:04:53 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:33:00 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,39 +28,51 @@ int main(int argc, char **argv, char **envp)
 	return (0);
 }
 
-int	minishell(char *cmd, t_list **my_env)
+int	minishell(char *subcmd, t_list **my_env)
 {
 	receive_signals();
-	while (1)
+	if (!subcmd)
 	{
-		prompt(cmd, my_env);
+		while (1)
+			prompt(subcmd, my_env);
 	}
+	else
+		prompt(subcmd, my_env);
+	return (g_exit);
 }
 
-void	prompt(char *cmd, t_list **my_env)
+void	prompt(char *subcmd, t_list **my_env)
 {
 	char				*line;
 	char				*copy;
 	t_ast				*ast;
 
-	if (!cmd)
+	if (!subcmd)
 		line = readline("minishell> ");
 	else
-		line = cmd;
+		line = subcmd;
 	if (!line)
 		exit(g_exit);
 	copy = line;
 	line = ft_strtrim(copy, " ");
 	free(copy);
 	ast = parse(line, my_env);
+	if (!ast)
+	{
+		ft_putendl_fd("Error: bad syntax", 2);
+		g_exit = 2;
+		add_history(line);
+		free(line);
+		return ;
+	}
 	// print_ast(ast);
-	exec(ast, my_env);
+	exec(ast, subcmd, my_env);
 	add_history(line);
 	free(line);
 	free_ast(ast);
 }
 
-// static void print_ast(t_ast *s)
+//static void print_ast(t_ast *s)
 // {
 // 	t_list	*tmp;
 

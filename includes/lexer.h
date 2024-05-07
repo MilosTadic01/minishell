@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:35 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/02 11:13:00 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:13:52 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ char		*get_literal_part(t_input *in, t_list **env);
 char		*get_quotation_sequence(t_input *in, t_list **env);
 int			exit_loop_conditions(t_input *in);
 int			is_control_char(t_input *in);
+int			is_literal_end(t_input *in);
 int			quotation_status(t_input *in);
 int			unclosed_quotations_check(t_input *in);
 int			create_token(t_input *in, t_list **env);

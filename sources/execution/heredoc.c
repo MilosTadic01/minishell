@@ -43,7 +43,7 @@ static void fetch_hd_delimiters(t_ast *s, t_exe *b)
         while (ins_cpy)
         {
             if (ins_cpy->as_item->type == REDIRECT_IN_IN)
-                b->hd_delimiters[++(b->i)] = s->command->ins->as_item->filename;
+                b->hd_delimiters[++(b->i)] = ft_strdup(ins_cpy->as_item->filename);
             ins_cpy = ins_cpy->next;
         }
     }
@@ -135,22 +135,21 @@ static void prompt_for_all_heredocs(t_exe *exe_bus)
 
 void    exec_heredocs(t_exe *exe_bus)
 {
-    // t_list	*tmp;
-
-    // tmp = exe_bus->s->command->ins;
     // count heredocs
     count_heredocs(exe_bus->s, exe_bus);
     if (exe_bus->hd_count == 0)
         return ;
     // malloc
-    exe_bus->hd_delimiters = malloc((exe_bus->hd_count + 1) * sizeof(char *));
+    exe_bus->hd_delimiters = malloc((exe_bus->hd_count) * sizeof(char *));
     fetch_hd_delimiters(exe_bus->s, exe_bus);
-    exe_bus->hd_delimiters[exe_bus->hd_count] = NULL; // should I? or just use hd_count for size?
+    // exe_bus->hd_delimiters[exe_bus->hd_count] = NULL; changed my mind, no need to NULL-terminate
     exe_bus->hd_fds = malloc(exe_bus->hd_count * sizeof(int));
     // open files
     open_files_for_heredocs(exe_bus);
     // run prompts
     prompt_for_all_heredocs(exe_bus);
+    // free
+    free_heredocs(exe_bus); // just for leak control now, will actually be needed in redir
 }
 
 void    free_heredocs(t_exe *exe_bus)
@@ -168,6 +167,7 @@ void    free_heredocs(t_exe *exe_bus)
         close(exe_bus->hd_fds[i]);
         unlink(path);
         free(path);
+        free(exe_bus->hd_delimiters[i]);
     }
     free(exe_bus->hd_fds);
     free(exe_bus->hd_delimiters);

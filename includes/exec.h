@@ -27,7 +27,7 @@ enum    e_bltn
     EXIT
 }   ;
 
-void        exec(t_ast *s, t_list **env);
+void        exec(t_ast *s, char *subcmd, t_list **env);
 int         traverse_ast_to_exec(t_ast *s, t_exe *b);
 void        exec_heredocs(t_exe *exe_bus);
 void        free_heredocs(t_exe *exe_bus);
