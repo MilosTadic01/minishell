@@ -32,11 +32,9 @@ static int	try_to_go_home_if_no_args(char **cmdarr, t_list **env)
 		return (-1);
 	}
 	else if (chdir(ft_getenv("HOME", *env)) < 0)
-	{
 		perror("minishell: cd: ");
-		return (-1);
-	}
-	return (0);
+	g_exit = errno;
+	return (g_exit);
 }
 
 static int	try_to_go_to_path(char **cmdarr, t_list **env)
@@ -53,9 +51,9 @@ static int	try_to_go_to_path(char **cmdarr, t_list **env)
 		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
 		ft_putstr_fd(cmdarr[1], STDERR_FILENO);
 		strerror(errno);
-		return (errno);
 	}
-	return (0);
+	g_exit = errno;
+	return (g_exit);
 }
 
 // Remember to, outside of the ft, check if more args than dest, then print error
@@ -70,7 +68,7 @@ int	ft_cd(int size, char **cmdarr, t_list **env)
 		return (1);
 	if (too_many_args(size))
 		return (1);
-	if (try_to_go_home_if_no_args(cmdarr, env) < 0)
+	if (try_to_go_home_if_no_args(cmdarr, env) != SUCCESS)
 		return (1);
 	if (try_to_go_to_path(cmdarr, env) != SUCCESS)
 		return (1);

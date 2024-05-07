@@ -19,7 +19,7 @@ static int  is_numeric_arg(char **cmdarr)
         ++i;
     while (cmdarr[1][++i])
     {
-        if (!ft_isdigit(cmdarr[1][i]))
+        if (!ft_isdigit(cmdarr[1][i]) || i > 9)
         {
             ft_putstr_fd("minishell: exit: ", 2);
             ft_putstr_fd(cmdarr[1], 2);
