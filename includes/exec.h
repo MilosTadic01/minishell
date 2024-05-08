@@ -11,8 +11,9 @@ typedef struct  s_exe {
     int     *hd_fds;
     char    **hd_delimiters;
     int     is_pipeline;
-    int     cmds_in_ppline;
-    pid_t   *pids;
+    int     ppl_cmd_count;
+    int     *ppl_fds;
+    pid_t   *ppl_pids;
     int     log_op;
 }               t_exe;
 
