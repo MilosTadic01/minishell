@@ -42,9 +42,10 @@ static int  command_exec(t_ast *s, t_exe *b)
 static void update_pipe_info(t_ast *s, t_exe *b)
 {
     b->is_pipeline = 1;
+    b->i = -1;
     if (s->tag == PIPE)
     {
-        b->cmds_in_ppline++;
+        b->ppl_cmd_count++;
         if (s->right)
             update_pipe_info(s->right, b);
     }
@@ -60,12 +61,16 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
     {
         // count pipes, set is_pipeline to True
         if (s->op == PIPE && b->is_pipeline == 0)
+        {
             update_pipe_info(s, b);
+            // set up the pipeline
+        }
         if (s->left)
             g_exit = traverse_ast_to_exec(s->left, b);
         b->log_op = s->op; // assign / update log_op before going right
         if (s->right)
             g_exit = traverse_ast_to_exec(s->right, b);
+        b->is_pipeline = 0;
     }
     return (g_exit); // right?
 }

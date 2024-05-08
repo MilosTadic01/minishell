@@ -1,5 +1,9 @@
 #include "../../includes/minishell.h"
 
+/*
+ppl_cmd_count = 1 bc we traverse the ast recursively and if s->tag == PIPE, cmd_count++
+i = -1 bc that's a ++i type counter. To reset it intelligently or to add another one?
+*/
 static void init_exe_bus(t_exe *exe_bus, t_ast *s, t_list **env)
 {
     exe_bus->s = s;
@@ -8,8 +12,9 @@ static void init_exe_bus(t_exe *exe_bus, t_ast *s, t_list **env)
     exe_bus->hd_fds = NULL;
     exe_bus->hd_count = 0;
     exe_bus->is_pipeline = 0;
-    exe_bus->cmds_in_ppline = 1;
-    exe_bus->pids = NULL;
+    exe_bus->ppl_cmd_count = 1;
+    exe_bus->ppl_fds = NULL;
+    exe_bus->ppl_pids = NULL;
     exe_bus->log_op = 0;
 }
 
