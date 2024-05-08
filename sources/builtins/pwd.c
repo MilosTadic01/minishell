@@ -17,11 +17,18 @@ char	*ft_getcwd(void)
 	char	*buff;
 	char	*pwd;
 
+	buff = NULL;
+	pwd = NULL;
 	buff = malloc(PATH_MAX * sizeof(char));
-	pwd = getcwd(buff, PATH_MAX);
-	g_exit = errno;
-	if (pwd == NULL)
-		perror("minishell: getcwd: ");
+	if (!buff)
+		ft_putstr_fd("minishell: pwd: malloc fail\n", STDERR_FILENO);
+	else
+	{
+		pwd = getcwd(buff, PATH_MAX);
+		g_exit = errno;
+		if (pwd == NULL)
+			perror("minishell: getcwd: ");
+	}
 	return (pwd);
 }
 
@@ -30,8 +37,9 @@ int	ft_pwd(void)
 	char	*pwd;
 
 	pwd = ft_getcwd();
-	ft_putstr_fd(pwd, 1);
-	ft_putstr_fd("\n", 1);
-	free(pwd);
+	ft_putstr_fd(pwd, STDOUT_FILENO);
+	ft_putstr_fd("\n", STDOUT_FILENO);
+	if (pwd)
+		free(pwd);
 	return (g_exit);
 }

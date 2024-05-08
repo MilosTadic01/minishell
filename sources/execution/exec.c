@@ -26,7 +26,7 @@ void    exec(t_ast *s, char *subcmd, t_list **env)
     if (!subcmd)
         exec_heredocs(&exe_bus);
     traverse_ast_to_exec(s, &exe_bus);
-}  
+}
 
 int    exec_bin(t_ast *ast, t_list **env)
 {

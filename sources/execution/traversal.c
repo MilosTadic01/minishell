@@ -28,7 +28,7 @@ static int  command_exec(t_ast *s, t_exe *b)
         return (g_exit);
     if (!b->log_op || b->log_op == PIPE || \
         (b->log_op == AND && g_exit == 0) || \
-        (b->log_op == OR && g_exit == 1))
+        (b->log_op == OR && g_exit > 0))
     {
         builtin = which_builtin(s->command->args[0]);
         if (builtin)
@@ -36,7 +36,7 @@ static int  command_exec(t_ast *s, t_exe *b)
         else
             return (exec_bin(s, b->env));
     }
-    return (g_exit); // retain the value of g_exit
+    return (g_exit); // retain the value of g_exit if not executing
 }
 
 static void update_pipe_info(t_ast *s, t_exe *b)
