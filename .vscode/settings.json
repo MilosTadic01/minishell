@@ -63,6 +63,7 @@
     "libft.h": "c",
     "lexer.h": "c",
     "types.h": "c",
-    "readline.h": "c"
+    "readline.h": "c",
+    "errors.h": "c"
   }
 }

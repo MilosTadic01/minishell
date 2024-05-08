@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:16:56 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/07 15:13:16 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/08 15:22:50 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	get_literal_token(t_input *in, t_list **env)
 		else if (exit_loop_conditions(in))
 			break ;
 		seq = get_literal_part(in, env);
+		if (!seq)
+			return (MISSING_OPEN_PARENTHESE);
 		tmp = ft_concat(res, seq);
 		free(res);
 		free(seq);
@@ -77,6 +79,8 @@ char	*get_literal_part(t_input *in, t_list **env)
 		if (in->current_char == DOLLAR
 			&& (ft_isalnum(peek_char(in)) || peek_char(in) == QUESTION_MARK))
 			break ;
+		if (in->current_char == CLOSE_PARENTHESE)
+			return (NULL);
 		next_char(in);
 	}
 	return (ft_substr(in->input, start, in->current_position - start));

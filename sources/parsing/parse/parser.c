@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:33 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 13:28:12 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/08 18:01:01 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,13 @@
 t_ast	*parse(char *input_string, t_list **env)
 {
 	int		type;
+	//char	*copy;
 	t_ast	*final_ast;
 	t_input	in;
 
+	//copy = input_string;
+	//input_string = preprocess_env(copy, env);
+	//free(copy);
 	init_input(&in, input_string);
 	if (advance_token(&in, env))
 		return (NULL);
@@ -31,6 +35,15 @@ t_ast	*parse(char *input_string, t_list **env)
 	free(in.input);
 	return (final_ast);
 }
+
+/*char	*preprocess_env(char *in, t_list **env)
+{
+	int 	idx;
+	int		start;
+	char	*before;
+	char	*expanded;
+	char	*after;
+}*/
 
 t_ast	*parse_statement(t_input *input, t_list **env)
 {
