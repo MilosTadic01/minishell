@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:40 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/07 11:07:04 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/08 12:41:31 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int	minishell(char *subcmd, t_list **my_env);
 # define LITERAL 200
 # define FINAL_TOKEN 300
 # define SUBSHELL 4242
+# define RECCALL 4224
 
 # define DEFAULT 0
 # define SUCCESS 0

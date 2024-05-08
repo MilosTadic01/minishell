@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:33 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/07 17:30:05 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/08 13:28:12 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,10 @@ t_ast	*parse_command(t_input *input, t_list **env)
 {
 	t_ast		*ast;
 
-	if (input->current_token.token_type == SUBSHELL)
+	if (input->current_token.token_type == SUBSHELL
+		|| input->current_token.token_type == RECCALL)
 	{
-		ast = parse_subshell(input, env);
+		ast = parse_recursive_tokens(input, env);
 		return (ast);
 	}
 	ast = new_command();
@@ -117,11 +118,14 @@ t_ast	*parse_command(t_input *input, t_list **env)
 	return (ast);
 }
 
-t_ast	*parse_subshell(t_input *input, t_list **env)
+t_ast	*parse_recursive_tokens(t_input *input, t_list **env)
 {
 	t_ast		*ast;
 
-	ast = new_subshell(input->current_token.value);
+	if (input->current_token.token_type == SUBSHELL)
+		ast = new_subshell(input->current_token.value);
+	else
+		ast = new_recursive_call(input->current_token.value);
 	if (advance_token(input, env))
 	{
 		free_ast(ast);
@@ -129,7 +133,8 @@ t_ast	*parse_subshell(t_input *input, t_list **env)
 	}
 	if (input->current_token.token_type != AND
 		&& input->current_token.token_type != OR
-		&& input->current_token.token_type != FINAL_TOKEN)
+		&& input->current_token.token_type != FINAL_TOKEN
+		&& input->current_token.token_type != PIPE)
 		return (NULL);
 	return (ast);
 }

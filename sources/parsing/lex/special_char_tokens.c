@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 10:47:31 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/07 15:51:05 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/08 12:53:29 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,31 +76,5 @@ int	get_pipe_token(t_input *in)
 			next_char(in);
 		}
 	}
-	return (SUCCESS);
-}
-
-int	get_subshell_token(t_input *in)
-{
-	char	*value;
-	int		start;
-	int		nested_count;
-
-	next_char(in);
-	nested_count = 0;
-	start = in->current_position;
-	while (in->current_char && (in->current_char != CLOSE_PARENTHESE
-			|| nested_count > 0))
-	{
-		if (in->current_char == OPEN_PARENTHESE)
-			nested_count++;
-		else if (in->current_char == CLOSE_PARENTHESE)
-			nested_count--;
-		next_char(in);
-	}
-	if (!in->current_char)
-		return (UNCLOSED_PARENTHESIS);
-	value = ft_substr(in->input, start, in->current_position - start);
-	init_token(&in->current_token, value, SUBSHELL);
-	next_char(in);
 	return (SUCCESS);
 }

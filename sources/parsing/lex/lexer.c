@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:32 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/07 15:09:55 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/08 12:50:54 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 int	create_token(t_input *in, t_list **env)
 {
 	skip_spaces(in);
-	if (in->current_char == PIPE)
+	if (in->current_token.token_type == AND
+		|| in->current_token.token_type == OR)
+		return (get_recursive_token(in));
+	else if (in->current_char == PIPE)
 		return (get_pipe_token(in));
 	else if (in->current_char == AMPERSAND)
 		return (get_ampersand_token(in, env));
