@@ -40,6 +40,9 @@
 
 static void update_pipe_info(t_ast *s, t_exe *b)
 {
+	t_ast   *subsh_ast;
+
+	subsh_ast = NULL;
     b->is_pipeline = 1;
     if (s->tag == PIPE)
     {
@@ -47,6 +50,14 @@ static void update_pipe_info(t_ast *s, t_exe *b)
         if (s->right)
             update_pipe_info(s->right, b);
     }
+	else if (s->tag == SUBSHELL)
+	{
+		subsh_ast = parse(s->subshell_cmd, b->env);
+		if (!subsh_ast)
+			ft_putstr_fd("pipe counter: failed to parse subshell\n", 2);
+		else if (subsh_ast->right)
+			update_pipe_info(s, b);
+	}
 }
 
 static void	prep_pipes_n_pids(t_exe *b)
@@ -54,9 +65,15 @@ static void	prep_pipes_n_pids(t_exe *b)
 	b->i = -1;
 	b->ppl_pids = (pid_t *)malloc(b->ppl_cmd_count * sizeof(pid_t));
 	if (!(b->ppl_pids))
-		; // fail "malloc"
+		// fail "malloc"
+		ft_putstr_fd("ppl_pids: malloc fail\n", 2);
+	b->ppl_wstatuses = malloc(b->ppl_cmd_count * sizeof(int));
+	if (!(b->ppl_wstatuses))
+		// fail "malloc"
+		ft_putstr_fd("ppl_wstatuses: malloc fail\n", 2);
 	if (pipe(b->pp_fds[0]) < 0 || pipe(b->pp_fds[1]) < 0)
-		; // fail "open pipes"
+		// fail "open pipes"
+		ft_putstr_fd("prep_pipes: pipe() fail\n", 2);
 }
 
 void	set_up_pipeline(t_ast *s, t_exe *b)

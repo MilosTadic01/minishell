@@ -13,7 +13,11 @@ static void init_exe_bus(t_exe *exe_bus, t_ast *s, t_list **env)
     exe_bus->hd_count = 0;
     exe_bus->is_pipeline = 0;
     exe_bus->ppl_cmd_count = 1;
+    exe_bus->smpl_cmd_pid = -1;
     exe_bus->ppl_pids = NULL;
+    exe_bus->smpl_wstatus = -1;
+    exe_bus->ppl_wstatuses = NULL;
+    exe_bus->my_paths = NULL;
     exe_bus->execve_path = NULL;
     exe_bus->execve_argv = NULL;
     exe_bus->execve_envp = NULL;

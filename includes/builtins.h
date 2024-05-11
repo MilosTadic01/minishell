@@ -40,9 +40,6 @@ int ft_export(char *kv_str, t_list **env);
 int ft_printenv(t_list *env);
 char    *ft_getenv(char *key, t_list *env);
 
-// convert_env4execve.c
-char    **convert_env(t_list *env);
-
 // exit.c
 int ft_exit(int size, char **cmdarr);
 

@@ -34,7 +34,7 @@ static int  command_exec(t_ast *s, t_exe *b)
         if (builtin)
             return (exec_builtin(builtin, s, b)); // TODO: ditch return bc pipeline exit
         else
-            return (exec_bin(s, b->env));
+            return (exec_bin(s, b));
     }
     return (g_exit); // retain the value of g_exit if not executing
 }
@@ -53,11 +53,12 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
         if (s->left)
             g_exit = traverse_ast_to_exec(s->left, b);
         b->log_op = s->op; // assign / update log_op before going right
+        if (b->is_pipeline == 1 && ((!s->left && !s->right) || \
+            (s->right->tag == AND || s->right->tag == OR))) // bottom of ast
+            go_wait(b);
         if (s->right)
             g_exit = traverse_ast_to_exec(s->right, b);
         b->is_pipeline = 0;
-        if (!s->left && !s->right) // bottom of ast
-            ; //go_wait
     }
     return (g_exit); // right?
 }

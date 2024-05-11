@@ -35,7 +35,6 @@ FILES = $(LEXD)lexer.c \
 		$(PARSED)signals.c \
 		$(PARSED)parse_command_utils.c \
 		$(BUILTINSD)init_env.c \
-		$(BUILTINSD)convert_env4execve.c \
 		$(BUILTINSD)echo.c \
 		$(BUILTINSD)cd.c \
 		$(BUILTINSD)pwd.c \
@@ -47,9 +46,12 @@ FILES = $(LEXD)lexer.c \
 		$(EXECD)traversal.c \
 		$(EXECD)exec_builtin.c \
 		$(EXECD)exec_bin.c \
+		$(EXECD)bin_prep_execve_args.c \
+		$(EXECD)bin_path_setup.c \
 		$(EXECD)exec_utils.c \
 		$(EXECD)pipeline_setup.c \
 		$(EXECD)pipe_switching.c \
+		$(EXECD)wait_pipeline.c \
 		$(EXECD)heredoc.c \
 		main.c
 

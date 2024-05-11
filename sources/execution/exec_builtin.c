@@ -26,7 +26,7 @@ int    exec_builtin(int builtin, t_ast *s, t_exe *b)
     {
         ++(b->i);
         reuse_pipe_in_parent(b);
-        fork_one(b);
+        fork_one_in_ppl(b);
         if (b->ppl_pids[b->i] == 0)
         {
             lay_child_pipes(b);
@@ -34,6 +34,7 @@ int    exec_builtin(int builtin, t_ast *s, t_exe *b)
             g_exit = call_builtin(builtin, s, b);
             exit(g_exit);
         }
+        return (0); // had to add some return value here, doesn't seem right, but neither does error value
     }
     else
         return (call_builtin(builtin, s, b));
