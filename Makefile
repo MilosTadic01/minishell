@@ -43,9 +43,13 @@ FILES = $(LEXD)lexer.c \
 		$(BUILTINSD)unset.c \
 		$(BUILTINSD)printnget_env.c \
 		$(BUILTINSD)exit.c \
-		$(EXECD)exec.c \
+		$(EXECD)exec_main.c \
 		$(EXECD)traversal.c \
 		$(EXECD)exec_builtin.c \
+		$(EXECD)exec_bin.c \
+		$(EXECD)exec_utils.c \
+		$(EXECD)pipeline_setup.c \
+		$(EXECD)pipe_switching.c \
 		$(EXECD)heredoc.c \
 		main.c
 

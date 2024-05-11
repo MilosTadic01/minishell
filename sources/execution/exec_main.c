@@ -13,8 +13,10 @@ static void init_exe_bus(t_exe *exe_bus, t_ast *s, t_list **env)
     exe_bus->hd_count = 0;
     exe_bus->is_pipeline = 0;
     exe_bus->ppl_cmd_count = 1;
-    exe_bus->ppl_fds = NULL;
     exe_bus->ppl_pids = NULL;
+    exe_bus->execve_path = NULL;
+    exe_bus->execve_argv = NULL;
+    exe_bus->execve_envp = NULL;
     exe_bus->log_op = 0;
 }
 
@@ -31,11 +33,4 @@ void    exec(t_ast *s, char *subcmd, t_list **env)
     if (!subcmd)
         exec_heredocs(&exe_bus);
     traverse_ast_to_exec(s, &exe_bus);
-}
-
-int    exec_bin(t_ast *ast, t_list **env)
-{
-    (void)ast;
-    (void)env;
-    return (0);
 }

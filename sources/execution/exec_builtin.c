@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-static int ft_call_builtin(int builtin, t_ast *s, t_exe *b)
+static int call_builtin(int builtin, t_ast *s, t_exe *b)
 {
     if (builtin == ECHO)
         return (ft_echo(s->command->size, s->command->args));
@@ -19,17 +19,22 @@ static int ft_call_builtin(int builtin, t_ast *s, t_exe *b)
     return (1);
 }
 
+// TODO: slap on redirs
 int    exec_builtin(int builtin, t_ast *s, t_exe *b)
 {
-    	// t_list	*tmp;
-
-    	// tmp = s->command->ins;
-		// while (tmp->next) segfault when no redir
-		// 	tmp = tmp->next;
-        // // redir in, use tmp
-		// tmp = s->command->outs;
-		// while (tmp->next)
-		// 	tmp = tmp->next; segfault when no redir
-        // redir out, use tmp
-        return (ft_call_builtin(builtin, s, b));
+    if (b->is_pipeline)
+    {
+        ++(b->i);
+        reuse_pipe_in_parent(b);
+        fork_one(b);
+        if (b->ppl_pids[b->i] == 0)
+        {
+            lay_child_pipes(b);
+            // slap_on_redirs(s, b);
+            g_exit = call_builtin(builtin, s, b);
+            exit(g_exit);
+        }
+    }
+    else
+        return (call_builtin(builtin, s, b));
 }
