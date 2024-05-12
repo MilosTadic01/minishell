@@ -64,6 +64,7 @@
     "lexer.h": "c",
     "types.h": "c",
     "readline.h": "c",
-    "errors.h": "c"
+    "errors.h": "c",
+    "algorithm": "c"
   }
 }
