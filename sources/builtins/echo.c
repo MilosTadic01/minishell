@@ -34,7 +34,10 @@ int ft_echo(int size, char **cmdarr)
     if (!cmdarr && !*cmdarr)
         return (1);
     i = 0;
-    n_flag = is_n_flag(cmdarr[1]);
+    if (size > 1)
+        n_flag = is_n_flag(cmdarr[1]);
+    else
+        n_flag = 0;
     while (++i < size)
     {
         if (i == 1 && n_flag == 1)

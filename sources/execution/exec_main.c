@@ -9,10 +9,14 @@ static void init_exe_bus(t_exe *exe_bus, t_ast *s, t_list **env)
     exe_bus->s = s;
     exe_bus->env = env;
     exe_bus->i = -1;
-    exe_bus->hd_fds = NULL;
     exe_bus->hd_count = 0;
+    exe_bus->hd_fds = NULL;
     exe_bus->is_pipeline = 0;
     exe_bus->ppl_cmd_count = 1;
+    exe_bus->pp_fds[0][0] = 0;
+    exe_bus->pp_fds[0][1] = 0;
+    exe_bus->pp_fds[1][0] = 0;
+    exe_bus->pp_fds[1][1] = 0;
     exe_bus->smpl_cmd_pid = -1;
     exe_bus->ppl_pids = NULL;
     exe_bus->smpl_wstatus = -1;
