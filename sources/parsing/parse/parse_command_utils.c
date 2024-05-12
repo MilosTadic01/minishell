@@ -6,19 +6,19 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:43:47 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/07 17:31:20 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/12 14:07:06 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-int	handle_redirection(t_input *input, t_list **env, t_ast **ast)
+int	handle_redirection(t_input *input, t_ast **ast)
 {
 	char	*filename;
 	int		type;
 
 	type = input->current_token.token_type;
-	filename = redir_filename(input, env);
+	filename = redir_filename(input);
 	if (!filename)
 	{
 		free_ast(*ast);
@@ -28,7 +28,7 @@ int	handle_redirection(t_input *input, t_list **env, t_ast **ast)
 	return (SUCCESS);
 }
 
-void	handle_command_argument(t_input *input, t_ast **ast)
+int	handle_command_argument(t_input *input, t_ast **ast)
 {
 	char	**tmp;
 
@@ -37,6 +37,7 @@ void	handle_command_argument(t_input *input, t_ast **ast)
 			input->current_token.value, (*ast)->command->size);
 	free_str(tmp, (*ast)->command->size);
 	(*ast)->command->size++;
+	return (SUCCESS);
 }
 
 int	is_command_separator(t_input *input)

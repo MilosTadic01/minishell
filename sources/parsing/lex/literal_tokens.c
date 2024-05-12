@@ -6,13 +6,13 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:16:56 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 15:22:50 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/12 14:01:09 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-int	get_literal_token(t_input *in, t_list **env)
+int	get_literal_token(t_input *in)
 {
 	char	*seq;
 	char	*res;
@@ -20,17 +20,14 @@ int	get_literal_token(t_input *in, t_list **env)
 
 	res = NULL;
 	if (!in->current_char)
-	{
 		init_token(&in->current_token, "", FINAL_TOKEN);
-		return (SUCCESS);
-	}
 	while (in->current_char)
 	{
 		if (exit_loop_conditions(in) == UNCLOSED_QUOTATIONS)
 			return (UNCLOSED_QUOTATIONS);
 		else if (exit_loop_conditions(in))
 			break ;
-		seq = get_literal_part(in, env);
+		seq = get_literal_part(in);
 		if (!seq)
 			return (MISSING_OPEN_PARENTHESE);
 		tmp = ft_concat(res, seq);
@@ -38,7 +35,8 @@ int	get_literal_token(t_input *in, t_list **env)
 		free(seq);
 		res = tmp;
 	}
-	init_token(&in->current_token, res, LITERAL);
+	if (res)
+		init_token(&in->current_token, res, LITERAL);
 	return (SUCCESS);
 }
 
@@ -51,8 +49,7 @@ int	exit_loop_conditions(t_input *in)
 	{
 		if (quotation_status(in))
 			return (UNCLOSED_QUOTATIONS);
-		if (!in->current_char)
-			return (1);
+		next_char(in);
 	}
 	if (in->quotations == DEFAULT)
 	{
@@ -64,21 +61,15 @@ int	exit_loop_conditions(t_input *in)
 	return (0);
 }
 
-char	*get_literal_part(t_input *in, t_list **env)
+char	*get_literal_part(t_input *in)
 {
 	int		start;
 
 	start = in->current_position;
 	if (in->quotations == SINGLE_QUOTE || in->quotations == DOUBLE_QUOTE)
-		return (get_quotation_sequence(in, env));
-	if (in->current_char == DOLLAR && (ft_isalnum(peek_char(in))
-			|| peek_char(in) == QUESTION_MARK))
-		return (expand_variable(in, DEFAULT, env));
+		return (get_quotation_sequence(in));
 	while (in->current_char && !is_literal_end(in))
 	{
-		if (in->current_char == DOLLAR
-			&& (ft_isalnum(peek_char(in)) || peek_char(in) == QUESTION_MARK))
-			break ;
 		if (in->current_char == CLOSE_PARENTHESE)
 			return (NULL);
 		next_char(in);
@@ -86,7 +77,7 @@ char	*get_literal_part(t_input *in, t_list **env)
 	return (ft_substr(in->input, start, in->current_position - start));
 }
 
-char	*get_quotation_sequence(t_input *in, t_list **env)
+char	*get_quotation_sequence(t_input *in)
 {
 	int		start;
 
@@ -99,39 +90,9 @@ char	*get_quotation_sequence(t_input *in, t_list **env)
 	}
 	else
 	{
-		if (in->current_char == DOLLAR && ft_isalnum(peek_char(in)))
-			return (expand_variable(in, DOUBLE_QUOTE, env));
-		else
-		{
-			while (in->current_char && in->current_char != DOUBLE_QUOTE
-				&& !(in->current_char == DOLLAR && ft_isalnum(peek_char(in))))
-				next_char(in);
-			return (ft_substr(in->input, start, in->current_position - start));
-		}
+		while (in->current_char && in->current_char != DOUBLE_QUOTE
+			&& !(in->current_char == DOLLAR && ft_isalnum(peek_char(in))))
+			next_char(in);
+		return (ft_substr(in->input, start, in->current_position - start));
 	}
-}
-
-char	*expand_variable(t_input *in, int state, t_list **env)
-{
-	char	*var_name;
-	char	*var_value;
-	int		start;
-
-	next_char(in);
-	start = in->current_position;
-	if (in->current_char == QUESTION_MARK)
-	{
-		next_char(in);
-		return (ft_itoa(g_exit));
-	}
-	while (ft_isalnum(in->current_char) || in->current_char == UNDERSCORE)
-		next_char(in);
-	var_name = ft_substr(in->input, start, in->current_position - start);
-	var_value = ft_getenv(var_name, *env);
-	if (var_value && !state)
-		var_value = ft_rm_consec_spaces(var_value);
-	else if (var_value && state)
-		var_value = ft_strdup(var_value);
-	free(var_name);
-	return (var_value);
 }

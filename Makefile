@@ -6,7 +6,7 @@
 #    By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/27 12:28:47 by dzubkova          #+#    #+#              #
-#    Updated: 2024/05/08 13:09:54 by dzubkova         ###   ########.fr        #
+#    Updated: 2024/05/12 13:02:50 by dzubkova         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ FILES = $(LEXD)lexer.c \
 		$(LEXD)quotation_status.c \
 		$(LEXD)special_char_tokens.c \
 		$(LEXD)recursive_tokens.c \
+		$(LEXD)expansion.c \
 		$(PARSED)parser.c \
 		$(PARSED)new_branches.c \
 		$(PARSED)parser_utils.c \
