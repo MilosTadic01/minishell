@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/10 10:10:44 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/11 13:31:54 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/12 14:08:00 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ typedef struct s_token
 	char	*value;
 	int		token_type;
 }	t_token;
-
 
 typedef struct s_redir_item
 {

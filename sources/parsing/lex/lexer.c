@@ -6,13 +6,13 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:32 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 12:50:54 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/12 13:09:41 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-int	create_token(t_input *in, t_list **env)
+int	create_token(t_input *in)
 {
 	skip_spaces(in);
 	if (in->current_token.token_type == AND
@@ -21,7 +21,7 @@ int	create_token(t_input *in, t_list **env)
 	else if (in->current_char == PIPE)
 		return (get_pipe_token(in));
 	else if (in->current_char == AMPERSAND)
-		return (get_ampersand_token(in, env));
+		return (get_ampersand_token(in));
 	else if (in->current_char == REDIRECT_IN)
 		return (get_input_redir_token(in));
 	else if (in->current_char == REDIRECT_OUT)
@@ -30,7 +30,7 @@ int	create_token(t_input *in, t_list **env)
 		return (get_subshell_token(in));
 	else
 	{
-		if (get_literal_token(in, env))
+		if (get_literal_token(in))
 			return (PARSING_ERROR);
 		return (SUCCESS);
 	}

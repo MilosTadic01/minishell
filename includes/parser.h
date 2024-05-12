@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:37 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 13:09:33 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/12 14:07:30 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ enum e_tag
 {
 	COMMAND,
 	BINOP,
-	SUBSHELL
+	SUBSHELL,
+	RECCALL
 }	;
 
 enum e_binop
@@ -28,11 +29,11 @@ enum e_binop
 
 typedef struct s_command
 {
-	char	**args; //cat file3
-	int		size; //1
+	char	**args;
+	int		size;
 
-	t_list	*ins; //item->type = smth, item->filename = file1; item->type = smth, item = file2
-	t_list	*outs; // NULL
+	t_list	*ins;
+	t_list	*outs;
 }	t_command;
 
 typedef struct s_ast
@@ -48,7 +49,10 @@ typedef struct s_ast
 	struct s_ast		*right;
 }	t_ast;
 
-char			*redir_filename(t_input *in, t_list **env);
+char			*redir_filename(t_input *in);
+int				advance_token(t_input *in);
+int				handle_command_argument(t_input *input, t_ast **ast);
+int				handle_redirection(t_input *input, t_ast **ast);
 int				is_command_separator(t_input *input);
 int				is_final_token(t_input *input);
 int				is_redirection(int type);
@@ -57,18 +61,15 @@ t_ast			*new_command(void);
 t_ast			*new_recursive_call(char *value);
 t_ast			*new_subshell(char *value);
 t_ast			*parse(char *input_string, t_list **env);
-t_ast			*parse_command(t_input *in, t_list **env);
-t_ast			*parse_pipe(t_input *input, t_list **env);
-t_ast			*parse_statement(t_input *input, t_list **env);
-t_ast			*parse_recursive_tokens(t_input *input, t_list **env);
+t_ast			*parse_command(t_input *in);
+t_ast			*parse_pipe(t_input *input);
+t_ast			*parse_statement(t_input *input);
+t_ast			*parse_recursive_tokens(t_input *input);
 t_redir_item	*new_item(int type, char *filename);
-int				advance_token(t_input *in, t_list **env);
 void			append_item(int type, char *filename, t_ast **ast);
 void			free_ast(t_ast *s);
 void			free_item_list(t_list **lst);
 void			free_str(char **str, int size);
-void			handle_command_argument(t_input *input, t_ast **ast);
-int				handle_redirection(t_input *input, t_list **env, t_ast **ast);
 void			prompt(char *subcmd, t_list **env);
 void			receive_signals(void);
 void			sighandler(int signum);

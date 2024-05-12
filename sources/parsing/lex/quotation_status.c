@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:15:20 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/24 11:26:10 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/12 13:19:23 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	quotation_status(t_input *in)
 			in->quotations = DEFAULT;
 		else if (in->quotations == DEFAULT)
 			in->quotations = DOUBLE_QUOTE;
-		next_char(in);
 	}
 	else if (in->current_char == SINGLE_QUOTE)
 	{
@@ -34,7 +33,6 @@ int	quotation_status(t_input *in)
 			in->quotations = DEFAULT;
 		else if (in->quotations == DEFAULT)
 			in->quotations = SINGLE_QUOTE;
-		next_char(in);
 	}
 	return (SUCCESS);
 }

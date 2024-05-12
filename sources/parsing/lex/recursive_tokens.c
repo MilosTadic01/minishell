@@ -6,12 +6,11 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 12:53:06 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 14:38:57 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/12 14:02:11 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
-
 
 int	get_subshell_token(t_input *in)
 {

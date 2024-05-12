@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 10:47:31 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 12:53:29 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/12 13:09:53 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	get_input_redir_token(t_input *in)
 	return (SUCCESS);
 }
 
-int	get_ampersand_token(t_input *in, t_list **env)
+int	get_ampersand_token(t_input *in)
 {
 	if (in->current_char == AMPERSAND)
 	{
@@ -55,7 +55,7 @@ int	get_ampersand_token(t_input *in, t_list **env)
 			next_char(in);
 		}
 		else
-			return (get_literal_token(in, env));
+			return (get_literal_token(in));
 	}
 	return (SUCCESS);
 }

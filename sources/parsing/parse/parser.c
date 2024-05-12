@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:33 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 18:01:01 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/12 14:04:06 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,16 @@
 t_ast	*parse(char *input_string, t_list **env)
 {
 	int		type;
-	//char	*copy;
 	t_ast	*final_ast;
 	t_input	in;
 
-	//copy = input_string;
-	//input_string = preprocess_env(copy, env);
-	//free(copy);
 	init_input(&in, input_string);
-	if (advance_token(&in, env))
+	if (preprocess_env(&in, env))
+	{
+		free(in.input);
+		return (NULL);
+	}
+	if (advance_token(&in))
 		return (NULL);
 	type = in.current_token.token_type;
 	if (type == PIPE || type == AND || type == OR)
@@ -31,27 +32,18 @@ t_ast	*parse(char *input_string, t_list **env)
 		free(in.input);
 		return (NULL);
 	}
-	final_ast = parse_statement(&in, env);
+	final_ast = parse_statement(&in);
 	free(in.input);
 	return (final_ast);
 }
 
-/*char	*preprocess_env(char *in, t_list **env)
-{
-	int 	idx;
-	int		start;
-	char	*before;
-	char	*expanded;
-	char	*after;
-}*/
-
-t_ast	*parse_statement(t_input *input, t_list **env)
+t_ast	*parse_statement(t_input *input)
 {
 	t_ast	*ast;
 	t_ast	*rest;
 	int		type;
 
-	ast = parse_pipe(input, env);
+	ast = parse_pipe(input);
 	if (!ast)
 		return (NULL);
 	if (is_final_token(input))
@@ -59,13 +51,13 @@ t_ast	*parse_statement(t_input *input, t_list **env)
 	type = input->current_token.token_type;
 	if (type == AND || type == OR)
 	{
-		advance_token(input, env);
+		advance_token(input);
 		if (is_final_token(input))
 		{
 			free_ast(ast);
 			return (NULL);
 		}
-		rest = parse_statement(input, env);
+		rest = parse_statement(input);
 		if (!rest)
 			return (NULL);
 		ast = new_binop(type, &ast, &rest);
@@ -73,25 +65,25 @@ t_ast	*parse_statement(t_input *input, t_list **env)
 	return (ast);
 }
 
-t_ast	*parse_pipe(t_input *input, t_list **env)
+t_ast	*parse_pipe(t_input *input)
 {
 	t_ast	*ast;
 	t_ast	*rest;
 
-	ast = parse_command(input, env);
+	ast = parse_command(input);
 	if (!ast)
 		return (NULL);
 	if (is_final_token(input))
 		return (ast);
 	if (input->current_token.token_type == PIPE)
 	{
-		advance_token(input, env);
+		advance_token(input);
 		if (is_final_token(input))
 		{
 			free_ast(ast);
 			return (NULL);
 		}
-		rest = parse_pipe(input, env);
+		rest = parse_pipe(input);
 		if (!rest)
 		{
 			free_ast(rest);
@@ -102,14 +94,14 @@ t_ast	*parse_pipe(t_input *input, t_list **env)
 	return (ast);
 }
 
-t_ast	*parse_command(t_input *input, t_list **env)
+t_ast	*parse_command(t_input *input)
 {
 	t_ast		*ast;
 
 	if (input->current_token.token_type == SUBSHELL
 		|| input->current_token.token_type == RECCALL)
 	{
-		ast = parse_recursive_tokens(input, env);
+		ast = parse_recursive_tokens(input);
 		return (ast);
 	}
 	ast = new_command();
@@ -117,12 +109,12 @@ t_ast	*parse_command(t_input *input, t_list **env)
 	{
 		if (is_redirection(input->current_token.token_type))
 		{
-			if (handle_redirection(input, env, &ast))
+			if (handle_redirection(input, &ast))
 				return (NULL);
 		}
 		else
 			handle_command_argument(input, &ast);
-		if (advance_token(input, env))
+		if (advance_token(input))
 		{
 			free_ast(ast);
 			return (NULL);
@@ -131,7 +123,7 @@ t_ast	*parse_command(t_input *input, t_list **env)
 	return (ast);
 }
 
-t_ast	*parse_recursive_tokens(t_input *input, t_list **env)
+t_ast	*parse_recursive_tokens(t_input *input)
 {
 	t_ast		*ast;
 
@@ -139,7 +131,7 @@ t_ast	*parse_recursive_tokens(t_input *input, t_list **env)
 		ast = new_subshell(input->current_token.value);
 	else
 		ast = new_recursive_call(input->current_token.value);
-	if (advance_token(input, env))
+	if (advance_token(input))
 	{
 		free_ast(ast);
 		return (NULL);
