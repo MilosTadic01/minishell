@@ -19,6 +19,12 @@ static int  which_builtin(char *str)
     return (0);
 }
 
+static void close_pipes_and_wait(t_exe *b)
+{
+    pipe_closer(b);
+    go_wait(b);
+}
+
 static int  command_exec(t_ast *s, t_exe *b)
 {
     int builtin;
@@ -43,7 +49,7 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
 {
     if (s->tag == COMMAND)
         g_exit = command_exec(s, b);
-    else if (s->tag == SUBSHELL)
+    else if (s->tag == SUBSHELL || s->tag == RECCALL)
         g_exit = minishell(s->subshell_cmd, b->env);
     else
     {
@@ -53,11 +59,16 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
         if (s->left)
             g_exit = traverse_ast_to_exec(s->left, b);
         b->log_op = s->op; // assign / update log_op before going right
-        if (b->is_pipeline == 1 && ((!s->left && !s->right) || \
-            (s->right->tag == AND || s->right->tag == OR))) // bottom of ast
-            go_wait(b);
+        if (b->is_pipeline == 1 && s->right != NULL && \
+        (s->right->op == AND || s->right->op == OR)) // bottom of ppl for currently parsed command
+            close_pipes_and_wait(b);
         if (s->right)
             g_exit = traverse_ast_to_exec(s->right, b);
+        b->is_pipeline = 0;
+    }
+    if (b->is_pipeline == 1 && !s->left && !s->right) // bottom of ast
+    {
+        close_pipes_and_wait(b);
         b->is_pipeline = 0;
     }
     return (g_exit); // right?

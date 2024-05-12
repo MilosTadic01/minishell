@@ -50,7 +50,7 @@ FILES = $(LEXD)lexer.c \
 		$(EXECD)bin_path_setup.c \
 		$(EXECD)exec_utils.c \
 		$(EXECD)pipeline_setup.c \
-		$(EXECD)pipe_switching.c \
+		$(EXECD)pipe_fu.c \
 		$(EXECD)wait_pipeline.c \
 		$(EXECD)heredoc.c \
 		main.c

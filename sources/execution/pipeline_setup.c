@@ -40,23 +40,24 @@
 
 static void update_pipe_info(t_ast *s, t_exe *b)
 {
-	t_ast   *subsh_ast;
+	t_ast   *reccall_ast;
 
-	subsh_ast = NULL;
+	reccall_ast = NULL;
     b->is_pipeline = 1;
-    if (s->tag == PIPE)
+    if (s->op == PIPE)
     {
         b->ppl_cmd_count++;
         if (s->right)
             update_pipe_info(s->right, b);
     }
-	else if (s->tag == SUBSHELL)
+	else if (s->tag == SUBSHELL || s->tag == RECCALL)
 	{
-		subsh_ast = parse(s->subshell_cmd, b->env);
-		if (!subsh_ast)
-			ft_putstr_fd("pipe counter: failed to parse subshell\n", 2);
-		else if (subsh_ast->right)
+		reccall_ast = parse(s->subshell_cmd, b->env);
+		if (!reccall_ast)
+			ft_putstr_fd("pipe counter: failed to parse subshell_cmd\n", 2);
+		else if (reccall_ast->right)
 			update_pipe_info(s, b);
+		free(reccall_ast);
 	}
 }
 

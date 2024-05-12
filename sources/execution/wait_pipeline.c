@@ -36,5 +36,6 @@ void    go_wait(t_exe *b)
             ft_putstr_fd("waitpid: error\n", 2);
     }
     free(wpid);
+    // free(b->ppl_pids);
     free(b->ppl_wstatuses);
 }

@@ -52,9 +52,10 @@ void        prep_execve_args(t_ast *s, t_exe *b);
 void        seek_path(t_exe *b);
 // pipeline_setup.c
 void	    set_up_pipeline(t_ast *s, t_exe *b);
-// pipe_switching.c
+// pipe_fu.c
 int         reuse_pipe_in_parent(t_exe *b);
 void        lay_child_pipes(t_exe *b);
+void        pipe_closer(t_exe *b);
 // wait_pipeline.c
 void        go_wait(t_exe *b);
 // exec_utils.c
