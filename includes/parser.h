@@ -10,7 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
+#ifndef PARSER_H
+# define PARSER_H
+
+# include "minishell.h"
 
 enum e_tag
 {
@@ -70,6 +73,7 @@ void			append_item(int type, char *filename, t_ast **ast);
 void			free_ast(t_ast *s);
 void			free_item_list(t_list **lst);
 void			free_str(char **str, int size);
-void			prompt(char *subcmd, t_list **env);
 void			receive_signals(void);
 void			sighandler(int signum);
+
+#endif

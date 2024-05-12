@@ -28,7 +28,7 @@ static void init_exe_bus(t_exe *exe_bus, t_ast *s, t_list **env)
     exe_bus->log_op = 0;
 }
 
-void    exec(t_ast *s, char *subcmd, t_list **env)
+void    exec(t_ast *s, char *subcmd, t_exe *b, t_list **env)
 {
     t_exe   exe_bus;
 
@@ -37,8 +37,13 @@ void    exec(t_ast *s, char *subcmd, t_list **env)
         ft_putstr_fd("minishell: exec: uninitialized args", STDERR_FILENO);
         return ;
     }
-    init_exe_bus(&exe_bus, s, env);
-    if (!subcmd)
-        exec_heredocs(&exe_bus);
-    traverse_ast_to_exec(s, &exe_bus);
+    if (b == NULL)
+    {
+        init_exe_bus(&exe_bus, s, env);
+        if (!subcmd)
+            exec_heredocs(&exe_bus);
+        traverse_ast_to_exec(s, &exe_bus);
+    }
+    else
+        traverse_ast_to_exec(s, b);
 }

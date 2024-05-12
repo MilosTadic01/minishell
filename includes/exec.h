@@ -36,7 +36,7 @@ enum    e_bltn
 }   ;
 
 // exec_main.c
-void        exec(t_ast *s, char *subcmd, t_list **env);
+void        exec(t_ast *s, char *subcmd, t_exe *b, t_list **env);
 // traversal.c
 int         traverse_ast_to_exec(t_ast *s, t_exe *b);
 // heredoc.c

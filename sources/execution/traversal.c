@@ -51,7 +51,7 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
     if (s->tag == COMMAND)
         g_exit = command_exec(s, b);
     else if (s->tag == SUBSHELL || s->tag == RECCALL)
-        g_exit = minishell(s->subshell_cmd, b->env);
+        g_exit = minishell(s->subshell_cmd, b, b->env);
     else
     {
         // count pipes, set is_pipeline to True

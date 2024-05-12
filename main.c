@@ -23,25 +23,25 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 	g_exit = 0;
 	my_env = init_env(envp);
-	minishell(NULL, &my_env);
+	minishell(NULL, NULL, &my_env);
 	ft_lstclear(&my_env);
 	return (0);
 }
 
-int	minishell(char *subcmd, t_list **my_env)
+int	minishell(char *subcmd, t_exe *b, t_list **my_env)
 {
 	receive_signals();
 	if (!subcmd)
 	{
 		while (1)
-			prompt(subcmd, my_env);
+			prompt(subcmd, b, my_env);
 	}
 	else
-		prompt(subcmd, my_env);
+		prompt(subcmd, b, my_env);
 	return (g_exit);
 }
 
-void	prompt(char *subcmd, t_list **my_env)
+void	prompt(char *subcmd, t_exe *b, t_list **my_env)
 {
 	char				*line;
 	char				*copy;
@@ -66,7 +66,7 @@ void	prompt(char *subcmd, t_list **my_env)
 		return ;
 	}
 	//print_ast(ast);
-	exec(ast, subcmd, my_env);
+	exec(ast, subcmd, b, my_env);
 	add_history(line);
 	free(line);
 	free_ast(ast);
