@@ -66,7 +66,7 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
             g_exit = traverse_ast_to_exec(s->right, b);
         b->is_pipeline = 0;
     }
-    if (b->is_pipeline == 1 && !s->left && !s->right) // bottom of ast
+    if (b->is_pipeline == 1 && (b->i == b->ppl_cmd_count - 1)) // bottom of ast
     {
         close_pipes_and_wait(b);
         b->is_pipeline = 0;
