@@ -29,7 +29,8 @@ int    exec_bin(t_ast *s, t_exe *b)
             // slap_on_redirs(s, b);
             execve(b->execve_path, b->execve_argv, b->execve_envp);
         }
-        wait(&b->smpl_wstatus);
+        else
+            waitpid(b->smpl_cmd_pid, &b->smpl_wstatus, 0);
     }
     g_exit = errno;
     return (g_exit);

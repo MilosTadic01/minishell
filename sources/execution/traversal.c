@@ -61,10 +61,12 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
         b->log_op = s->op; // assign / update log_op before going right
         if (b->is_pipeline == 1 && s->right != NULL && \
         (s->right->op == AND || s->right->op == OR)) // bottom of ppl for currently parsed command
+        {
             close_pipes_and_wait(b);
+            b->is_pipeline = 0;
+        }
         if (s->right)
             g_exit = traverse_ast_to_exec(s->right, b);
-        b->is_pipeline = 0;
     }
     if (b->is_pipeline == 1 && (b->i == b->ppl_cmd_count - 1)) // bottom of pipeline
     {
