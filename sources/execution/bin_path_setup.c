@@ -31,5 +31,8 @@ void    seek_path(t_exe *b)
         if (access(b->execve_path, X_OK) == 0)
             break ;
         free(b->execve_path);
+        b->execve_path = NULL;
     }
+    if (!b->execve_path)
+        perror(b->execve_argv[0]);
 }
