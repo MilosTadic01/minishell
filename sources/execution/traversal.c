@@ -23,6 +23,7 @@ static void close_pipes_and_wait_and_reset_pipeline(t_exe *b)
 {
     pipe_closer(b);
     go_wait(b);
+    // if (b->is_subshell == 0)
     b->is_pipeline = 0;
 }
 
@@ -70,7 +71,7 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
         if (s->right)
             g_exit = traverse_ast_to_exec(s->right, b);
     }
-    if (b->is_pipeline == 1 && (b->i == b->ppl_cmd_count - 1) && !(b->is_subshell)) // bottom of pipeline
+    if (b->is_pipeline == 1 && (b->i == b->ppl_cmd_count - 1)) // bottom of pipeline
         close_pipes_and_wait_and_reset_pipeline(b);
     return (g_exit); // right?
 }
