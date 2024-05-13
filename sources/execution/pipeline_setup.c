@@ -57,7 +57,7 @@ static void update_pipe_info(t_ast *s, t_exe *b)
 			ft_putstr_fd("pipe counter: failed to parse subshell_cmd\n", 2);
 		else if (reccall_ast->right)
 			update_pipe_info(s, b);
-		free(reccall_ast);
+		free_ast(reccall_ast);
 	}
 }
 

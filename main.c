@@ -67,7 +67,7 @@ void	prompt(char *subcmd, t_exe *b, t_list **my_env)
 	}
 	//print_ast(ast);
 	//printf("DONE\n");
-	exec(ast, subcmd, my_env);
+	exec(ast, subcmd, b, my_env);
 	add_history(line);
 	free(line);
 	free_ast(ast);
