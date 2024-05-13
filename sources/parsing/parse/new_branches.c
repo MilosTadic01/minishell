@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:16:26 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 13:08:42 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/13 11:36:42 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ t_ast	*new_subshell(char *value)
 		return (NULL);
 	ast->tag = SUBSHELL;
 	ast->subshell_cmd = value;
+	ast->op = -1;
+	ast->command = NULL;
 	ast->left = NULL;
 	ast->right = NULL;
 	return (ast);
@@ -79,6 +81,8 @@ t_ast	*new_recursive_call(char *value)
 		return (NULL);
 	ast->tag = RECCALL;
 	ast->subshell_cmd = value;
+	ast->op = -1;
+	ast->command = NULL;
 	ast->left = NULL;
 	ast->right = NULL;
 	return (ast);
