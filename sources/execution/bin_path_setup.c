@@ -34,5 +34,8 @@ void    seek_path(t_exe *b)
         b->execve_path = NULL;
     }
     if (!b->execve_path)
+    {
         perror(b->execve_argv[0]);
+        g_exit = errno;
+    }
 }

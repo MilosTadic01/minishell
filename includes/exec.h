@@ -39,14 +39,14 @@ enum    e_bltn
 // exec_main.c
 void        exec(t_ast *s, char *subcmd, t_exe *b, t_list **env);
 // traversal.c
-int         traverse_ast_to_exec(t_ast *s, t_exe *b);
+void        traverse_ast_to_exec(t_ast *s, t_exe *b);
 // heredoc.c
 void        exec_heredocs(t_exe *exe_bus);
 void        free_heredocs(t_exe *exe_bus);
 // exec_builtin.c
-int         exec_builtin(int builtin, t_ast *s, t_exe *b);
+void        exec_builtin(int builtin, t_ast *s, t_exe *b);
 // exec_bin.c
-int         exec_bin(t_ast *s, t_exe *b);
+void        exec_bin(t_ast *s, t_exe *b);
 // bin_prep_execve_args.c
 void        prep_execve_args(t_ast *s, t_exe *b);
 // bin_path_setup.c

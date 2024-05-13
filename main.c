@@ -28,7 +28,7 @@ int main(int argc, char **argv, char **envp)
 	return (0);
 }
 
-int	minishell(char *subcmd, t_exe *b, t_list **my_env)
+void	minishell(char *subcmd, t_exe *b, t_list **my_env)
 {
 	receive_signals();
 	if (!subcmd)
@@ -38,7 +38,6 @@ int	minishell(char *subcmd, t_exe *b, t_list **my_env)
 	}
 	else
 		prompt(subcmd, b, my_env);
-	return (g_exit);
 }
 
 void	prompt(char *subcmd, t_exe *b, t_list **my_env)

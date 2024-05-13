@@ -37,7 +37,7 @@ extern int g_exit;
 # include "exec.h"
 # include "builtins.h"
 
-int     minishell(char *subcmd, t_exe *b, t_list **my_env);
+void    minishell(char *subcmd, t_exe *b, t_list **my_env);
 void    prompt(char *subcmd, t_exe *b, t_list **env);
 
 # define PIPE 124
