@@ -22,10 +22,10 @@ static int  too_many_args(int size)
     return (0);
 }
 
-static int	try_to_go_home_if_no_args(char **cmdarr, t_list **env)
+static int	try_to_go_home_if_no_args(int size, t_list **env)
 {
-	if (cmdarr[1])
-		return (1);
+	if (size > 1)
+		return (0);
 	if (ft_getenv("HOME", *env) == NULL)
 	{
 		ft_putstr_fd("minishell: cd: HOME not set\n", 2);
@@ -37,9 +37,11 @@ static int	try_to_go_home_if_no_args(char **cmdarr, t_list **env)
 	return (g_exit);
 }
 
-static int	try_to_go_to_path(char **cmdarr, t_list **env)
+static int	try_to_go_to_path(int size, char **cmdarr, t_list **env)
 {
 	(void)env;
+	if (size < 2)
+		return (0);
 	if (ft_strcmp(cmdarr[1], "~") == 0)
 	{
 		ft_putstr_fd("minishell: cd: home not specified other than the \
@@ -68,9 +70,9 @@ int	ft_cd(int size, char **cmdarr, t_list **env)
 		return (1);
 	if (too_many_args(size))
 		return (1);
-	if (try_to_go_home_if_no_args(cmdarr, env) != SUCCESS)
+	if (try_to_go_home_if_no_args(size, env) != SUCCESS)
 		return (1);
-	if (try_to_go_to_path(cmdarr, env) != SUCCESS)
+	if (try_to_go_to_path(size, cmdarr, env) != SUCCESS)
 		return (1);
 	cwd = ft_getcwd();
 	newpwd = ft_strjoin("PWD=", cwd);
