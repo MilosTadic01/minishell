@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 12:57:33 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/12 14:03:48 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/13 12:32:33 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ char	*expand_variable(t_input *in, int state, t_list **env)
 		var_value = ft_rm_consec_spaces(var_value);
 	else if (var_value && state)
 		var_value = ft_strdup(var_value);
+	else
+		var_value = ft_strdup("");
 	free(var_name);
 	return (var_value);
 }
