@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 16:01:26 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/13 10:52:07 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	prompt(char *subcmd, t_list **my_env)
 		return ;
 	}
 	//print_ast(ast);
+	//printf("DONE\n");
 	exec(ast, subcmd, my_env);
 	add_history(line);
 	free(line);
