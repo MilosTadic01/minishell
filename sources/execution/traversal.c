@@ -25,6 +25,7 @@ static void close_pipes_and_wait_and_reset_pipeline(t_exe *b)
     go_wait(b);
     // if (b->is_subshell == 0)
     b->is_pipeline = 0;
+    b->ppl_cmd_count = 0;
 }
 
 static void command_exec(t_ast *s, t_exe *b)
@@ -66,7 +67,7 @@ void    traverse_ast_to_exec(t_ast *s, t_exe *b)
             traverse_ast_to_exec(s->left, b);
         b->log_op = s->op; // assign / update log_op before going right
         if (b->is_pipeline == 1 && s->right != NULL && \
-        (s->right->op == AND || s->right->op == OR)) // bottom of ppl for currently parsed command
+        ((s->right->tag == BINOP && s->right->op == AND) || (s->right->tag == BINOP && s->right->op == OR))) // bottom of ppl for currently parsed command
             close_pipes_and_wait_and_reset_pipeline(b);
         if (s->right)
             traverse_ast_to_exec(s->right, b);

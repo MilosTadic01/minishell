@@ -95,5 +95,11 @@ void    lay_child_pipes(t_exe *b)
     {
         dup2(b->pp_fds[1 - (b->i % 2)][0], STDIN_FILENO);
         close(b->pp_fds[1 - (b->i % 2)][0]);
+        close(b->pp_fds[1 - (b->i % 2)][1]);
+    }
+    else // if 0th ppl_cmd, close the "lead-in" pipe, important for cat | cat | ls
+    {
+        close(b->pp_fds[1 - (b->i % 2)][0]);
+        close(b->pp_fds[1 - (b->i % 2)][1]);
     }
 }
