@@ -34,6 +34,8 @@ int    exec_builtin(int builtin, t_ast *s, t_exe *b)
             g_exit = call_builtin(builtin, s, b);
             exit(g_exit);
         }
+        // else
+        //     b->ppl_pids[b->i] = -1;
         return (0); // had to add some return value here, doesn't seem right, but neither does error value
     }
     else

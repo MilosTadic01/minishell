@@ -1,5 +1,12 @@
 #include "../../includes/minishell.h"
 
+static void free_n_error_n_exit(char *errprefix)
+{
+    // free
+    perror(errprefix);
+    exit(errno);
+}
+
 int    exec_bin(t_ast *s, t_exe *b)
 {
     // idea (red thread of returns): if (prep) != 0, print error then set g_exit and return
@@ -17,7 +24,10 @@ int    exec_bin(t_ast *s, t_exe *b)
             prep_execve_args(s, b);
             lay_child_pipes(b);
             // slap_on_redirs(s, b);
+            if (!b->execve_path || !b->execve_argv || !b->execve_envp)
+                exit (errno); // what value to give?
             execve(b->execve_path, b->execve_argv, b->execve_envp);
+            free_n_error_n_exit("execve in a pipeline");
         }
     }
     else
@@ -27,9 +37,13 @@ int    exec_bin(t_ast *s, t_exe *b)
         {
             prep_execve_args(s, b);
             // slap_on_redirs(s, b);
+            if (!b->execve_path || !b->execve_argv || !b->execve_envp)
+                exit (errno); // what value to give?
             execve(b->execve_path, b->execve_argv, b->execve_envp);
+            free_n_error_n_exit("execve for simple cmd");
         }
-        wait(&b->smpl_wstatus);
+        else
+            waitpid(b->smpl_cmd_pid, &b->smpl_wstatus, 0);
     }
     g_exit = errno;
     return (g_exit);

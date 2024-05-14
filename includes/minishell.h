@@ -31,12 +31,14 @@ extern int g_exit;
 # include <readline/history.h>
 # include "../libft/libft.h"
 # include "lexer.h"
+# include "structs.h"
 # include "parser.h"
 # include "errors.h"
 # include "exec.h"
 # include "builtins.h"
 
-int	minishell(char *subcmd, t_list **my_env);
+int     minishell(char *subcmd, t_exe *b, t_list **my_env);
+void    prompt(char *subcmd, t_exe *b, t_list **env);
 
 # define PIPE 124
 # define SINGLE_QUOTE 39

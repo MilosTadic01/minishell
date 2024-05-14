@@ -65,6 +65,7 @@
     "types.h": "c",
     "readline.h": "c",
     "errors.h": "c",
-    "algorithm": "c"
+    "algorithm": "c",
+    "structs.h": "c"
   }
 }

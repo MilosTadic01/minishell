@@ -19,10 +19,11 @@ static int  which_builtin(char *str)
     return (0);
 }
 
-static void close_pipes_and_wait(t_exe *b)
+static void close_pipes_and_wait_and_reset_pipeline(t_exe *b)
 {
     pipe_closer(b);
     go_wait(b);
+    b->is_pipeline = 0;
 }
 
 static int  command_exec(t_ast *s, t_exe *b)
@@ -50,7 +51,7 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
     if (s->tag == COMMAND)
         g_exit = command_exec(s, b);
     else if (s->tag == SUBSHELL || s->tag == RECCALL)
-        g_exit = minishell(s->subshell_cmd, b->env);
+        g_exit = minishell(s->subshell_cmd, b, b->env);
     else
     {
         // count pipes, set is_pipeline to True
@@ -61,15 +62,11 @@ int    traverse_ast_to_exec(t_ast *s, t_exe *b)
         b->log_op = s->op; // assign / update log_op before going right
         if (b->is_pipeline == 1 && s->right != NULL && \
         (s->right->op == AND || s->right->op == OR)) // bottom of ppl for currently parsed command
-            close_pipes_and_wait(b);
+            close_pipes_and_wait_and_reset_pipeline(b);
         if (s->right)
             g_exit = traverse_ast_to_exec(s->right, b);
-        b->is_pipeline = 0;
     }
-    if (b->is_pipeline == 1 && (b->i == b->ppl_cmd_count - 1)) // bottom of ast
-    {
-        close_pipes_and_wait(b);
-        b->is_pipeline = 0;
-    }
+    if (b->is_pipeline == 1 && (b->i == b->ppl_cmd_count - 1)) // bottom of pipeline
+        close_pipes_and_wait_and_reset_pipeline(b);
     return (g_exit); // right?
 }

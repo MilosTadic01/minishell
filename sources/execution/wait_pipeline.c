@@ -31,11 +31,13 @@ void    go_wait(t_exe *b)
     wpid = malloc(b->ppl_cmd_count * sizeof(pid_t));
     while (++i < b->ppl_cmd_count)
     {
+        // if (b->ppl_pids[b->i] == -1)
+        //     continue ;
         wpid[i] = waitpid(b->ppl_pids[i], &b->ppl_wstatuses[i], 0);
         if (wpid[i] < 0)
             ft_putstr_fd("waitpid: error\n", 2);
     }
     free(wpid);
-    // free(b->ppl_pids);
+    free(b->ppl_pids);
     free(b->ppl_wstatuses);
 }
