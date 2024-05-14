@@ -70,8 +70,9 @@ int     reuse_pipe_in_parent(t_exe *b)
     // all others
     else if (b->i > 1)
     {
-        if (close(b->pp_fds[b->i % 2][0]) < 0 || \
-            close(b->pp_fds[1 - (b->i % 2)][1]) < 0)
+        if (b->pp_fds[b->i % 2][0] > -1 && b->pp_fds[1 - (b->i % 2)][1] > -1 && \
+            (close(b->pp_fds[b->i % 2][0]) < 0 || \
+            close(b->pp_fds[1 - (b->i % 2)][1]) < 0))
                 return (-1);
         b->pp_fds[b->i % 2][0] = -1;
         b->pp_fds[1 - (b->i % 2)][1] = -1;
@@ -87,19 +88,37 @@ void    lay_child_pipes(t_exe *b)
 {
     if (b->i != b->ppl_cmd_count - 1) // if not last ppl_cmd, redir out
     {
-        close(b->pp_fds[b->i % 2][0]);
-        dup2(b->pp_fds[b->i % 2][1], STDOUT_FILENO);
-        close(b->pp_fds[b->i % 2][1]);
+        if (b->pp_fds[b->i % 2][0] > -1)
+        {
+            if (close(b->pp_fds[b->i % 2][0]) < 0)
+                perror("close");
+        }
+        if (b->pp_fds[b->i % 2][1] > -1)
+        {
+            dup2(b->pp_fds[b->i % 2][1], STDOUT_FILENO);
+            if (close(b->pp_fds[b->i % 2][1]) < 0)
+                perror("close");
+        }
     }
     if (b->i != 0) // if not 0th ppl_cmd, redir in
     {
-        dup2(b->pp_fds[1 - (b->i % 2)][0], STDIN_FILENO);
-        close(b->pp_fds[1 - (b->i % 2)][0]);
-        close(b->pp_fds[1 - (b->i % 2)][1]);
+        if (b->pp_fds[1 - (b->i % 2)][0] > -1)
+        {
+            dup2(b->pp_fds[1 - (b->i % 2)][0], STDIN_FILENO);
+            if (close(b->pp_fds[1 - (b->i % 2)][0]) < 0)
+                perror("close");
+        }
+        if (b->pp_fds[1 - (b->i % 2)][1] > -1)
+        {
+            if (close(b->pp_fds[1 - (b->i % 2)][1]) < 0)
+                perror("close");
+        }
     }
-    else // if 0th ppl_cmd, close the "lead-in" pipe, important for cat | cat | ls
+    else if (b->i == 0)// if 0th ppl_cmd, close the "lead-in" pipe, important for cat | cat | ls
     {
-        close(b->pp_fds[1 - (b->i % 2)][0]);
-        close(b->pp_fds[1 - (b->i % 2)][1]);
+        if (b->pp_fds[1 - (b->i % 2)][0] > -1)
+            close(b->pp_fds[1 - (b->i % 2)][0]);
+        if (b->pp_fds[1 - (b->i % 2)][1] > -1)
+            close(b->pp_fds[1 - (b->i % 2)][1]);
     }
 }
