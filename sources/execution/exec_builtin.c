@@ -20,7 +20,7 @@ static int call_builtin(int builtin, t_ast *s, t_exe *b)
 }
 
 // TODO: slap on redirs
-int    exec_builtin(int builtin, t_ast *s, t_exe *b)
+void    exec_builtin(int builtin, t_ast *s, t_exe *b)
 {
     if (b->is_pipeline)
     {
@@ -34,10 +34,10 @@ int    exec_builtin(int builtin, t_ast *s, t_exe *b)
             g_exit = call_builtin(builtin, s, b);
             exit(g_exit);
         }
-        // else
+        // else // currently ignoring this idea, bc in a ppl, builtins are forked for
         //     b->ppl_pids[b->i] = -1;
-        return (0); // had to add some return value here, doesn't seem right, but neither does error value
+        return ; // had to add some return value here, doesn't seem right, but neither does error value
     }
     else
-        return (call_builtin(builtin, s, b));
+        call_builtin(builtin, s, b);
 }

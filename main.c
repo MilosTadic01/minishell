@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/13 13:11:31 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/14 10:16:32 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int main(int argc, char **argv, char **envp)
 	return (0);
 }
 
-int	minishell(char *subcmd, t_exe *b, t_list **my_env)
+void	minishell(char *subcmd, t_exe *b, t_list **my_env)
 {
 	receive_signals();
 	if (!subcmd)
@@ -38,7 +38,6 @@ int	minishell(char *subcmd, t_exe *b, t_list **my_env)
 	}
 	else
 		prompt(subcmd, b, my_env);
-	return (g_exit);
 }
 
 void	prompt(char *subcmd, t_exe *b, t_list **my_env)

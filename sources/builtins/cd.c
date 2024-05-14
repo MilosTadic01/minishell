@@ -51,8 +51,7 @@ static int	try_to_go_to_path(int size, char **cmdarr, t_list **env)
 	if (chdir(cmdarr[1]) < 0)
 	{
 		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-		ft_putstr_fd(cmdarr[1], STDERR_FILENO);
-		strerror(errno);
+		perror(cmdarr[1]);
 	}
 	g_exit = errno;
 	return (g_exit);

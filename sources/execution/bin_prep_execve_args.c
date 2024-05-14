@@ -10,7 +10,8 @@ static void    convert_env(t_exe *b)
     b->execve_envp = malloc((size + 1) * sizeof(char *));
     if (!b->execve_envp)
     {
-        perror("minishell: for execve: malloc fail for envp: ");
+        perror("minishell: for execve: malloc fail for envp");
+        g_exit = ENOMEM;
         return ;
     }
     i = -1;
@@ -29,10 +30,14 @@ static void convert_argv(t_ast *s, t_exe *b)
 
     i = -1;
     b->execve_argv = malloc((s->command->size + 1) * sizeof(char *));
-    while (++i < s->command->size)
+    if (!b->execve_argv)
     {
-        b->execve_argv[i] = ft_strdup(s->command->args[i]);
+        perror("minishell: for execve: malloc fail for argv");
+        g_exit = ENOMEM;
+        return ;
     }
+    while (++i < s->command->size)
+        b->execve_argv[i] = ft_strdup(s->command->args[i]);
     b->execve_argv[i] = NULL;
 }
 

@@ -8,7 +8,7 @@ void    free_strarr(char **strarr)
     while (strarr[++i])
         free(strarr[i]);
     free(strarr);
-    *strarr = NULL;
+    // *strarr = NULL; // this was causing "invalid write of size 8"
 }
 
 void	fork_one_for_simple_cmd(t_exe *b)
