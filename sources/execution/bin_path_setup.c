@@ -20,6 +20,11 @@ void    seek_path(t_exe *b)
     int             i;
 
     i = -1;
+    if (access(b->execve_argv[0], X_OK) == 0)
+    {
+        b->execve_path = b->execve_argv[0];
+        return ;
+    }
     b->my_paths = ft_split(ft_getenv("PATH", *(b->env)), ':');
     if (!b->my_paths)
         ft_putstr_fd("Malloc fail @ path split\n", 2); // free execve_argv n exit
