@@ -16,13 +16,13 @@ static void count_heredocs(t_ast *s, t_exe *b)
             ins_cpy = ins_cpy->next;
         }
     }
-    if (s->tag == SUBSHELL)
+    if (s->tag == SUBSHELL || s->tag == RECCALL)
     {
         subsh_ast = parse(s->subshell_cmd, b->env);
-        if (subsh_ast->left)
-            count_heredocs(subsh_ast->left, b);
-        if (subsh_ast->right)
-            count_heredocs(subsh_ast->right, b);
+        if (!subsh_ast)
+            ft_putstr_fd("count heredocs: parse: malloc fail\n", 2);
+        else if (subsh_ast)
+            count_heredocs(subsh_ast, b);
         free_ast(subsh_ast);
     }
     if (s->left)
@@ -47,7 +47,7 @@ static void fetch_hd_delimiters(t_ast *s, t_exe *b)
             ins_cpy = ins_cpy->next;
         }
     }
-    if (s->tag == SUBSHELL)
+    if (s->tag == SUBSHELL || s->tag == RECCALL)
     {
         subsh_ast = parse(s->subshell_cmd, b->env);
         if (subsh_ast->left)
