@@ -48,9 +48,10 @@ static void command_exec(t_ast *s, t_exe *b)
     builtin = 0;
     if (!s || !s->command || !s->command->args)
         return ;
-    if (!b->log_op || b->log_op == PIPE || \
+    if (b->subshell_do[b->subshell_lvl] &&
+        (!b->log_op || b->log_op == PIPE || \
         (b->log_op == AND && g_exit == 0) || \
-        (b->log_op == OR && g_exit > 0))
+        (b->log_op == OR && g_exit > 0)))
     {
         builtin = which_builtin(s->command->args[0]);
         if (builtin)
@@ -63,16 +64,34 @@ static void command_exec(t_ast *s, t_exe *b)
     // return (g_exit); // retain the value of g_exit if not executing
 }
 
+static void set_subshell_do(t_exe *b)
+{
+    int i;
+
+    i = 0;
+    while (i < b->subshell_lvl && b->subshell_do[i] == 1)
+        i++;
+    i--;
+    if (i == (b->subshell_lvl - 1) && \
+        (!b->log_op || b->log_op == PIPE || \
+        (b->log_op == AND && g_exit == 0) || \
+        (b->log_op == OR && g_exit > 0)))
+        b->subshell_do[b->subshell_lvl] = 1;
+}
+
 void    traverse_ast_to_exec(t_ast *s, t_exe *b)
 {
     if (s->tag == COMMAND)
         command_exec(s, b);
-    else if (s->tag == SUBSHELL || s->tag == RECCALL)
+    else if (s->tag == SUBSHELL)
     {
-        ++(b->is_subshell);
+        ++(b->subshell_lvl);
+        set_subshell_do(b);
         minishell(s->subshell_cmd, b, b->env);
-        --(b->is_subshell);
+        --(b->subshell_lvl);
     }
+    else if (s->tag == RECCALL)
+        minishell(s->subshell_cmd, b, b->env);
     else
     {
         // count pipes, set is_pipeline to True

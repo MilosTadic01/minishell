@@ -1,6 +1,8 @@
 #ifndef EXEC_H
 # define EXEC_H
 
+# define MAX_GOS 10000
+
 # include "minishell.h"
 
 typedef struct  s_exe {
@@ -14,8 +16,8 @@ typedef struct  s_exe {
     int     fd_redir_out;
     char    **hd_delimiters;
     int     is_pipeline;
-    t_list  **should_exe_stack;
-    int     is_subshell;
+    int     subshell_lvl;
+    int     subshell_do[MAX_GOS];
     int     ppl_cmd_count;
     int     pp_fds[2][2];
     pid_t   smpl_cmd_pid;
