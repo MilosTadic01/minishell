@@ -28,6 +28,19 @@ static void close_pipes_and_wait_and_reset_pipeline(t_exe *b)
     b->ppl_cmd_count = 0;
 }
 
+static void increment_hd_idx(t_ast *s, t_exe *b)
+{
+    t_list *ins_cpy;
+
+    ins_cpy = s->command->ins;
+    while (ins_cpy)
+    {
+        if (ins_cpy->as_item->type == REDIRECT_IN_IN)
+            (b->hd_idx)++;
+        ins_cpy = ins_cpy->next;
+    }
+}
+
 static void command_exec(t_ast *s, t_exe *b)
 {
     int builtin;
@@ -45,6 +58,8 @@ static void command_exec(t_ast *s, t_exe *b)
         else
             exec_bin(s, b);
     }
+    else
+        increment_hd_idx(s, b);
     // return (g_exit); // retain the value of g_exit if not executing
 }
 
@@ -53,11 +68,11 @@ void    traverse_ast_to_exec(t_ast *s, t_exe *b)
     if (s->tag == COMMAND)
         command_exec(s, b);
     else if (s->tag == SUBSHELL || s->tag == RECCALL)
-    // {
-    //     ++(b->is_subshell);
+    {
+        ++(b->is_subshell);
         minishell(s->subshell_cmd, b, b->env);
-    //     --(b->is_subshell);
-    // }
+        --(b->is_subshell);
+    }
     else
     {
         // count pipes, set is_pipeline to True

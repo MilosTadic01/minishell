@@ -49,6 +49,8 @@ FILES = $(LEXD)lexer.c \
 		$(EXECD)exec_bin.c \
 		$(EXECD)bin_prep_execve_args.c \
 		$(EXECD)bin_path_setup.c \
+		$(EXECD)redirs.c \
+		$(EXECD)redirs_utils.c \
 		$(EXECD)exec_utils.c \
 		$(EXECD)pipeline_setup.c \
 		$(EXECD)pipe_fu.c \

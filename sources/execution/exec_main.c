@@ -10,7 +10,10 @@ static void init_exe_bus(t_exe *exe_bus, t_ast *s, t_list **env)
     exe_bus->env = env;
     exe_bus->i = -1;
     exe_bus->hd_count = 0;
+    exe_bus->hd_idx = -1;
     exe_bus->hd_fds = NULL;
+    exe_bus->fd_redir_in = -1;
+    exe_bus->fd_redir_out = -1;
     exe_bus->is_pipeline = 0;
     exe_bus->is_subshell = 0;
     exe_bus->ppl_cmd_count = 0;
@@ -44,6 +47,7 @@ void    exec(t_ast *s, char *subcmd, t_exe *b, t_list **env)
         if (!subcmd)
             exec_heredocs(&exe_bus);
         traverse_ast_to_exec(s, &exe_bus);
+        free_heredocs(&exe_bus);
     }
     else
         traverse_ast_to_exec(s, b);

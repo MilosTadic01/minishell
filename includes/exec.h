@@ -8,9 +8,13 @@ typedef struct  s_exe {
     t_list  **env;
     int     i;
     int     hd_count;
+    int     hd_idx;
     int     *hd_fds;
+    int     fd_redir_in;
+    int     fd_redir_out;
     char    **hd_delimiters;
     int     is_pipeline;
+    t_list  **should_exe_stack;
     int     is_subshell;
     int     ppl_cmd_count;
     int     pp_fds[2][2];
@@ -59,6 +63,11 @@ void        lay_child_pipes(t_exe *b);
 void        pipe_closer(t_exe *b);
 // wait_pipeline.c
 void        go_wait(t_exe *b);
+// redirs.c
+void        set_up_redirs(t_ast *s, t_exe *b);
+// redirs_utils.c
+int         slap_on_redirs_in_child(t_exe *b);
+void        clean_up_after_redirs_in_parent(t_exe *b);
 // exec_utils.c
 void	    fork_one_for_simple_cmd(t_exe *b);
 void        fork_one_in_ppl(t_exe *b);
