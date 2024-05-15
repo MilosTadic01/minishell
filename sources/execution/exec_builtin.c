@@ -39,5 +39,5 @@ void    exec_builtin(int builtin, t_ast *s, t_exe *b)
         return ; // had to add some return value here, doesn't seem right, but neither does error value
     }
     else
-        call_builtin(builtin, s, b);
+        g_exit = call_builtin(builtin, s, b);
 }

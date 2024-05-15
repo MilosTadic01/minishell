@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:32 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/14 12:33:07 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:47:18 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,7 @@ int	create_token(t_input *in)
 	else if (in->current_char == OPEN_PARENTHESE)
 		return (get_subshell_token(in));
 	else
-	{
-		if (get_literal_token(in))
-			return (PARSING_ERROR);
-		return (SUCCESS);
-	}
+		return (get_literal_token(in));
 	return (PARSING_ERROR);
 }
 
