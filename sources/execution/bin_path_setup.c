@@ -38,6 +38,7 @@ void    seek_path(t_exe *b)
         free(b->execve_path);
         b->execve_path = NULL;
     }
+    // free_strarr(b->my_paths);
     if (!b->execve_path)
     {
         perror(b->execve_argv[0]);

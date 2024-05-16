@@ -44,12 +44,17 @@ FILES = $(LEXD)lexer.c \
 		$(BUILTINSD)printnget_env.c \
 		$(BUILTINSD)exit.c \
 		$(EXECD)exec_main.c \
-		$(EXECD)traversal.c \
+		$(EXECD)exec_utils.c \
 		$(EXECD)exec_builtin.c \
 		$(EXECD)exec_bin.c \
 		$(EXECD)bin_prep_execve_args.c \
 		$(EXECD)bin_path_setup.c \
-		$(EXECD)exec_utils.c \
+		$(EXECD)traversal.c \
+		$(EXECD)traversal_utils.c \
+		$(EXECD)redir.c \
+		$(EXECD)redir_ins.c \
+		$(EXECD)redir_outs.c \
+		$(EXECD)redir_utils.c \
 		$(EXECD)pipeline_setup.c \
 		$(EXECD)pipe_fu.c \
 		$(EXECD)wait_pipeline.c \

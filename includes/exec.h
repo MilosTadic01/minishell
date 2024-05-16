@@ -1,6 +1,8 @@
 #ifndef EXEC_H
 # define EXEC_H
 
+# define MAX_GOS 10000
+
 # include "minishell.h"
 
 typedef struct  s_exe {
@@ -8,10 +10,14 @@ typedef struct  s_exe {
     t_list  **env;
     int     i;
     int     hd_count;
+    int     hd_idx;
     int     *hd_fds;
+    int     fd_redir_in;
+    int     fd_redir_out;
     char    **hd_delimiters;
     int     is_pipeline;
-    int     is_subshell;
+    int     subshell_lvl;
+    int     subshell_do[MAX_GOS];
     int     ppl_cmd_count;
     int     pp_fds[2][2];
     pid_t   smpl_cmd_pid;
@@ -40,6 +46,10 @@ enum    e_bltn
 void        exec(t_ast *s, char *subcmd, t_exe *b, t_list **env);
 // traversal.c
 void        traverse_ast_to_exec(t_ast *s, t_exe *b);
+// traversal_utils.c
+int         which_builtin(char *str);
+void        close_pipes_and_wait_and_reset_pipeline(t_exe *b);
+void        increment_hd_idx(t_ast *s, t_exe *b);
 // heredoc.c
 void        exec_heredocs(t_exe *exe_bus);
 void        free_heredocs(t_exe *exe_bus);
@@ -59,6 +69,17 @@ void        lay_child_pipes(t_exe *b);
 void        pipe_closer(t_exe *b);
 // wait_pipeline.c
 void        go_wait(t_exe *b);
+// redir.c
+int         set_up_redirs(t_ast *s, t_exe *b);
+// redir_ins.c
+int         infile_legitimacy_control(t_ast *s, t_exe *b, int hd_count);
+int         count_hds_in_this_cmd(t_ast *s);
+void        locate_last_infile_and_open_it(t_ast *s, t_exe *b);
+// redir_outs.c
+int         open_all_outfiles(t_ast *s, t_exe *b);
+// redir_utils.c
+int         slap_on_redirs_in_child(t_exe *b);
+void        clean_up_after_redirs_in_parent(t_exe *b);
 // exec_utils.c
 void	    fork_one_for_simple_cmd(t_exe *b);
 void        fork_one_in_ppl(t_exe *b);
