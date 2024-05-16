@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:33 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/12 14:04:06 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:42:34 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_ast	*parse(char *input_string, t_list **env)
 	t_input	in;
 
 	init_input(&in, input_string);
-	if (preprocess_env(&in, env))
+	if (preprocess_env(&in, env) || unclosed_parenthesis_check(&in))
 	{
 		free(in.input);
 		return (NULL);
@@ -51,8 +51,7 @@ t_ast	*parse_statement(t_input *input)
 	type = input->current_token.token_type;
 	if (type == AND || type == OR)
 	{
-		advance_token(input);
-		if (is_final_token(input))
+		if (advance_token(input) || (is_final_token(input)))
 		{
 			free_ast(ast);
 			return (NULL);

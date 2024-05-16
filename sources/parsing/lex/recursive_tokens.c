@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 12:53:06 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/12 14:02:11 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:44:35 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@ int	get_subshell_token(t_input *in)
 	int		nested_count;
 
 	next_char(in);
-	nested_count = 0;
+	nested_count = 1;
 	start = in->current_position;
-	while (in->current_char && (in->current_char != CLOSE_PARENTHESE
-			|| nested_count > 0))
+	while (in->current_char && nested_count)
 	{
 		if (in->current_char == OPEN_PARENTHESE)
 			nested_count++;
@@ -30,9 +29,7 @@ int	get_subshell_token(t_input *in)
 			nested_count--;
 		next_char(in);
 	}
-	if (!in->current_char)
-		return (UNCLOSED_PARENTHESIS);
-	value = ft_substr(in->input, start, in->current_position - start);
+	value = ft_substr(in->input, start, in->current_position - start - 1);
 	init_token(&in->current_token, value, SUBSHELL);
 	next_char(in);
 	return (SUCCESS);

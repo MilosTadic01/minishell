@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:15:20 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/12 13:19:23 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/15 16:46:21 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,24 @@ int	unclosed_quotations_check(t_input *in)
 		copy++;
 	}
 	return (UNCLOSED_QUOTATIONS);
+}
+
+int	unclosed_parenthesis_check(t_input *in)
+{
+	int		nested_count;
+	char	*copy;
+
+	nested_count = 0;
+	copy = in->input;
+	while (*copy)
+	{
+		if (*copy == OPEN_PARENTHESE)
+			nested_count++;
+		else if (*copy == CLOSE_PARENTHESE)
+			nested_count--;
+		copy++;
+	}
+	if (nested_count)
+		return (UNCLOSED_PARENTHESIS);
+	return (SUCCESS);
 }
