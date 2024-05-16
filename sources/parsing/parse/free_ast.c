@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:08:20 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 14:52:50 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/16 19:37:42 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	free_ast(t_ast *s)
 		free_item_list(&s->command->outs);
 		free(s->command);
 	}
+	else if (s->tag == SUBSHELL || s->tag == RECCALL)
+		free(s->subshell_cmd);
 	if (s->left)
 		free_ast(s->left);
 	if (s->right)

@@ -38,7 +38,7 @@ static void increment_subshell_lvl_and_call_rec_minishell(t_ast *s, t_exe *b)
 {
     ++(b->subshell_lvl);
     set_subshell_do(b);
-    minishell(s->subshell_cmd, b, b->env);
+    minishell(ft_strdup(s->subshell_cmd), b, b->env);
     --(b->subshell_lvl);
 }
 
@@ -71,7 +71,7 @@ void    traverse_ast_to_exec(t_ast *s, t_exe *b)
     else if (s->tag == SUBSHELL)
         increment_subshell_lvl_and_call_rec_minishell(s, b);
     else if (s->tag == RECCALL)
-        minishell(s->subshell_cmd, b, b->env);
+        minishell(ft_strdup(s->subshell_cmd), b, b->env);
     else
         logical_and_pipal_jiujitsu_and_leftright_rec(s, b);
     if (b->is_pipeline == 1 && (b->i == b->ppl_cmd_count - 1))
