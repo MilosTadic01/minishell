@@ -30,13 +30,14 @@ static int  is_numeric_arg(char **cmdarr)
     return (1);
 }
 
+// if just 'exit' it actually carries the errno when no args. See: bbbb || exit
 int    ft_exit(int size, char **cmdarr)
 {
     if (!cmdarr && !cmdarr[0])
         return (1);
     ft_putstr_fd("exit\n", 2); //but not when in ()? How?
     if (size == 1)
-        exit(errno); // if just 'exit' it doesn't use errno, it just exits clean, right? Nope, actually carries the errno when no arguments. See: bbbb || exit
+        exit(errno); 
     if (too_many_args(size)) // hold on, if this is the case it WILL NOT EXIT?? but will still print 'exit', wth?
         return (1);
     if (!is_numeric_arg(cmdarr))

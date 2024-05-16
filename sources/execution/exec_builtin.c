@@ -16,28 +16,58 @@ static int call_builtin(int builtin, t_ast *s, t_exe *b)
         return (ft_printenv(*(b->env)));
     if (builtin == EXIT)
         return (ft_exit(s->command->size, s->command->args));
-    return (1);
+    return (0);
 }
 
-// TODO: slap on redirs
-void    exec_builtin(int builtin, t_ast *s, t_exe *b)
+static void exec_builtin_in_pipeline(int builtin, t_ast *s, t_exe *b)
 {
-    if (b->is_pipeline)
+    ++(b->i);
+    reuse_pipe_in_parent(b);
+    fork_one_in_ppl(b);
+    if (b->ppl_pids[b->i] == 0)
     {
-        ++(b->i);
-        reuse_pipe_in_parent(b);
-        fork_one_in_ppl(b);
-        if (b->ppl_pids[b->i] == 0)
-        {
-            lay_child_pipes(b);
-            // slap_on_redirs(s, b);
-            g_exit = call_builtin(builtin, s, b);
+        lay_child_pipes(b);
+        if (slap_on_redirs_in_child(b) == EXIT_FAILURE)
             exit(g_exit);
-        }
-        // else // currently ignoring this idea, bc in a ppl, builtins are forked for
-        //     b->ppl_pids[b->i] = -1;
-        return ; // had to add some return value here, doesn't seem right, but neither does error value
+        g_exit = call_builtin(builtin, s, b);
+        exit(g_exit);
     }
     else
+        clean_up_after_redirs_in_parent(b);
+}
+
+static void exec_echo_in_child(int builtin, t_ast *s, t_exe *b)
+{
+    fork_one_for_simple_cmd(b);
+    if (b->smpl_cmd_pid == 0)
+    {
+        if (slap_on_redirs_in_child(b) == EXIT_FAILURE)
+            exit(g_exit);
         g_exit = call_builtin(builtin, s, b);
+        exit(g_exit);
+    }
+    else
+    {
+        clean_up_after_redirs_in_parent(b);
+        waitpid(b->smpl_cmd_pid, &b->smpl_wstatus, 0);
+        g_exit = (b->smpl_wstatus >> 8) & 0xFF;
+    }
+}
+
+static void exec_builtin_in_parent(int builtin, t_ast *s, t_exe *b)
+{
+    g_exit = call_builtin(builtin, s, b);
+    clean_up_after_redirs_in_parent(b);
+}
+
+void    exec_builtin(int builtin, t_ast *s, t_exe *b)
+{
+    if (set_up_redirs(s, b) == EXIT_FAILURE)
+        return ;
+    if (b->is_pipeline)
+        exec_builtin_in_pipeline(builtin, s, b);
+    else if ((s->command->ins || s->command->outs) && builtin == ECHO)
+        exec_echo_in_child(builtin, s, b);
+    else
+        exec_builtin_in_parent(builtin, s, b);
 }

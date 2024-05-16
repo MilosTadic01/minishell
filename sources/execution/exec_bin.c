@@ -24,11 +24,8 @@ static void free_n_error_n_exit(char *errprefix, t_exe *b)
 
 void    exec_bin(t_ast *s, t_exe *b)
 {
-    // idea (red thread of returns): if (prep) != 0, print error then set g_exit and return
-    // alternative: fork before prep, then you can exit anywhere
-    // tricky to get pid for pipeline into the pid_array if 
-    // prep_execve_args(s, b);
-    // CURRENT: moved the prep inside the child processes
+    if (set_up_redirs(s, b) == EXIT_FAILURE)
+        return ;
     if (b->is_pipeline)
     {
         ++(b->i);
@@ -38,12 +35,15 @@ void    exec_bin(t_ast *s, t_exe *b)
         {
             prep_execve_args(s, b);
             lay_child_pipes(b);
-            // slap_on_redirs(s, b);
-            if (!b->execve_path || !b->execve_argv || !b->execve_envp)
+            // slap_on_redirs;
+            if (!b->execve_path || !b->execve_argv || !b->execve_envp || \
+            slap_on_redirs_in_child(b) == EXIT_FAILURE)
                 free_n_error_n_exit(NULL, b);
             execve(b->execve_path, b->execve_argv, b->execve_envp);
             free_n_error_n_exit("execve in a pipeline", b);
         }
+        else
+            clean_up_after_redirs_in_parent(b);
     }
     else
     {
@@ -52,13 +52,15 @@ void    exec_bin(t_ast *s, t_exe *b)
         {
             prep_execve_args(s, b);
             // slap_on_redirs(s, b);
-            if (!b->execve_path || !b->execve_argv || !b->execve_envp)
+            if (!b->execve_path || !b->execve_argv || !b->execve_envp || \
+            slap_on_redirs_in_child(b) < 0)
                 free_n_error_n_exit(NULL, b);
             execve(b->execve_path, b->execve_argv, b->execve_envp);
             free_n_error_n_exit("execve for simple cmd", b);
         }
         else
         {
+            clean_up_after_redirs_in_parent(b);
             waitpid(b->smpl_cmd_pid, &b->smpl_wstatus, 0);
             g_exit = (b->smpl_wstatus >> 8) & 0xFF;
         }

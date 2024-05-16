@@ -1,10 +1,71 @@
 #include "../../includes/minishell.h"
 
+// static void print_ast(t_ast *s)
+//  {
+//  	t_list	*tmp;
+
+//  	if (s->tag == COMMAND)
+//  	{
+//  		printf("COMMAND\n");
+//  		for (int i = 0; i < s->command->size; i++)
+//  		{
+//  			printf("%s\n", s->command->args[i]);
+//  		}
+//  		tmp = s->command->ins;
+//  		while (tmp)
+//  		{
+//  			printf("input redirections %d to: %s\n", tmp->as_item->type, tmp->as_item->filename);
+//  			tmp = tmp->next;
+//  		}
+//  		tmp = s->command->outs;
+//  		while (tmp)
+//  		{
+//  			printf("output redirections %d to: %s\n",  tmp->as_item->type, tmp->as_item->filename);
+//  			tmp = tmp->next;
+//  		}
+//  	}
+//  	else if (s->tag == SUBSHELL)
+//  	{
+//  		printf("SUBSHELL\n");
+//  		printf("%s\n", s->subshell_cmd);
+//  	}
+// 	else if (s->tag == RECCALL)
+// 	{
+// 		printf("RECCAL\n");
+//  		printf("%s\n", s->subshell_cmd);
+// 	}
+//  	else
+//  	{
+//  		if (s->op == PIPE)
+//  			printf("PIPE\n");
+//  		if (s->op == AND)
+//  			printf("AND\n");
+//  		if (s->op == OR)
+//  			printf("OR\n");
+//  	}
+//  	if (s->left)
+//  	{
+//  		printf("PRINTING LEFT BRANCH:\n");
+//  		print_ast(s->left);
+//  	}
+//  	else
+//  		printf("\n");
+//  	if (s->right)
+//  	{
+//  		printf("PRINTING RIGHT BRANCH:\n");
+//  		print_ast(s->right);
+//  	}
+//  	else
+//  		printf("\n");
+//  }
+
 static void count_heredocs(t_ast *s, t_exe *b)
 {
     t_ast   *subsh_ast;
     t_list  *ins_cpy;
 
+    if (!s || !b)
+        return ;
     subsh_ast = NULL;
     if (s->tag == COMMAND && s->command->ins)
     {
@@ -16,14 +77,18 @@ static void count_heredocs(t_ast *s, t_exe *b)
             ins_cpy = ins_cpy->next;
         }
     }
-    if (s->tag == SUBSHELL || s->tag == RECCALL)
+    else if (s->tag == SUBSHELL || s->tag == RECCALL)
     {
         subsh_ast = parse(s->subshell_cmd, b->env);
         if (!subsh_ast)
-            ft_putstr_fd("count heredocs: parse: malloc fail\n", 2);
+            ft_putstr_fd("count heredocs: recursive parsing fail\n", 2);
         else if (subsh_ast)
             count_heredocs(subsh_ast, b);
+        // print_ast(subsh_ast);
+        // printf("DONE in count_heredocs\n");
         free_ast(subsh_ast);
+        // printf("\nfreed\n\n");
+        subsh_ast = NULL;
     }
     if (s->left)
         count_heredocs(s->left, b);
@@ -50,10 +115,10 @@ static void fetch_hd_delimiters(t_ast *s, t_exe *b)
     if (s->tag == SUBSHELL || s->tag == RECCALL)
     {
         subsh_ast = parse(s->subshell_cmd, b->env);
-        if (subsh_ast->left)
-            fetch_hd_delimiters(subsh_ast->left, b);
-        if (subsh_ast->right)
-            fetch_hd_delimiters(subsh_ast->right, b);
+        if (!subsh_ast)
+            ft_putstr_fd("fetch_hd_delimiters: recursive parsing fail\n", 2);
+        else if (subsh_ast)
+            fetch_hd_delimiters(subsh_ast, b);
         free_ast(subsh_ast);
     }
     if (s->left)
@@ -74,12 +139,31 @@ static void open_files_for_heredocs(t_exe *exe_bus)
         num = ft_itoa(i);
         path = ft_strjoin("/tmp/heredoc", num);
         free(num);
-        exe_bus->hd_fds[i] = open(path, O_RDWR | O_CREAT | O_APPEND, 0644);
+        exe_bus->hd_fds[i] = open(path, O_WRONLY| O_CREAT | O_TRUNC, 0644);
         if (exe_bus->hd_fds[i] < 0)
             perror("heredoc: ");
         free(path);
     }
 }
+
+// static void reopen_hd_files_for_reading(t_exe *exe_bus)
+// {
+//     int     i;
+//     char    *num;
+//     char    *path;
+
+//     i = -1;
+//     while (++i < exe_bus->hd_count)
+//     {
+//         num = ft_itoa(i);
+//         path = ft_strjoin("/tmp/heredoc", num);
+//         free(num);
+//         exe_bus->hd_fds[i] = open(path, O_RDONLY, 0644);
+//         if (exe_bus->hd_fds[i] < 0)
+//             perror("heredoc: ");
+//         free(path);
+//     }
+// }
 
 static void prompt_for_one_heredoc(t_exe *exe_bus, char *limiter, int i)
 {
@@ -129,6 +213,8 @@ static void prompt_for_all_heredocs(t_exe *exe_bus)
             continue ;
         }
         prompt_for_one_heredoc(exe_bus, limiter, i);
+        if (close(exe_bus->hd_fds[i]) < 0)
+            ft_putstr_fd("heredoc after writing: close fail\n", STDERR_FILENO);
         free(limiter);
     }
 }
@@ -148,8 +234,9 @@ void    exec_heredocs(t_exe *exe_bus)
     open_files_for_heredocs(exe_bus);
     // run prompts
     prompt_for_all_heredocs(exe_bus);
+    // reopen_hd_files_for_reading(exe_bus);
     // free
-    free_heredocs(exe_bus); // just for leak control now, will actually be needed in redir
+    // free_heredocs(exe_bus); // just for leak control now, will actually be needed in redir
 }
 
 void    free_heredocs(t_exe *exe_bus)
@@ -159,12 +246,14 @@ void    free_heredocs(t_exe *exe_bus)
     char    *path;
 
     i = -1;
+    if (exe_bus->hd_count == 0)
+        return ;
     while (++i < exe_bus->hd_count)
     {
         num = ft_itoa(i);
         path = ft_strjoin("/tmp/heredoc", num);
         free(num);
-        close(exe_bus->hd_fds[i]);
+        // close(exe_bus->hd_fds[i]);
         unlink(path);
         free(path);
         free(exe_bus->hd_delimiters[i]);
