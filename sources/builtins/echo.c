@@ -34,17 +34,15 @@ int ft_echo(int size, char **cmdarr)
     if (!cmdarr && !*cmdarr)
         return (1);
     i = 0;
-    if (size > 1)
-        n_flag = is_n_flag(cmdarr[1]);
-    else
-        n_flag = 0;
-    while (++i < size)
+    n_flag = 0;
+    while (++i < size && is_n_flag(cmdarr[i]))
+        n_flag = 1;
+    while (i < size)
     {
-        if (i == 1 && n_flag == 1)
-            continue ;
         echo_one_arg(cmdarr[i]);
         if (i + 1 != size)
             ft_putstr_fd(" ", STDOUT_FILENO);
+        i++;
     }
     if (!n_flag)
         ft_putstr_fd("\n", STDOUT_FILENO);

@@ -1,5 +1,64 @@
 #include "../../includes/minishell.h"
 
+// static void print_ast(t_ast *s)
+//  {
+//  	t_list	*tmp;
+
+//  	if (s->tag == COMMAND)
+//  	{
+//  		printf("COMMAND\n");
+//  		for (int i = 0; i < s->command->size; i++)
+//  		{
+//  			printf("%s\n", s->command->args[i]);
+//  		}
+//  		tmp = s->command->ins;
+//  		while (tmp)
+//  		{
+//  			printf("input redirections %d to: %s\n", tmp->as_item->type, tmp->as_item->filename);
+//  			tmp = tmp->next;
+//  		}
+//  		tmp = s->command->outs;
+//  		while (tmp)
+//  		{
+//  			printf("output redirections %d to: %s\n",  tmp->as_item->type, tmp->as_item->filename);
+//  			tmp = tmp->next;
+//  		}
+//  	}
+//  	else if (s->tag == SUBSHELL)
+//  	{
+//  		printf("SUBSHELL\n");
+//  		printf("%s\n", s->subshell_cmd);
+//  	}
+// 	else if (s->tag == RECCALL)
+// 	{
+// 		printf("RECCAL\n");
+//  		printf("%s\n", s->subshell_cmd);
+// 	}
+//  	else
+//  	{
+//  		if (s->op == PIPE)
+//  			printf("PIPE\n");
+//  		if (s->op == AND)
+//  			printf("AND\n");
+//  		if (s->op == OR)
+//  			printf("OR\n");
+//  	}
+//  	if (s->left)
+//  	{
+//  		printf("PRINTING LEFT BRANCH:\n");
+//  		print_ast(s->left);
+//  	}
+//  	else
+//  		printf("\n");
+//  	if (s->right)
+//  	{
+//  		printf("PRINTING RIGHT BRANCH:\n");
+//  		print_ast(s->right);
+//  	}
+//  	else
+//  		printf("\n");
+//  }
+
 static void count_heredocs(t_ast *s, t_exe *b)
 {
     t_ast   *subsh_ast;
@@ -18,14 +77,18 @@ static void count_heredocs(t_ast *s, t_exe *b)
             ins_cpy = ins_cpy->next;
         }
     }
-    if (s->tag == SUBSHELL || s->tag == RECCALL)
+    else if (s->tag == SUBSHELL || s->tag == RECCALL)
     {
         subsh_ast = parse(s->subshell_cmd, b->env);
         if (!subsh_ast)
             ft_putstr_fd("count heredocs: recursive parsing fail\n", 2);
         else if (subsh_ast)
             count_heredocs(subsh_ast, b);
+        // print_ast(subsh_ast);
+        // printf("DONE in count_heredocs\n");
         free_ast(subsh_ast);
+        // printf("\nfreed\n\n");
+        subsh_ast = NULL;
     }
     if (s->left)
         count_heredocs(s->left, b);

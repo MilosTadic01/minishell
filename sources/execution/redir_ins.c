@@ -12,13 +12,13 @@ static int reopen_hd_file_for_reading(t_exe *b, int i)
     free(path);
     if (b->fd_redir_in < 0)
     {
-        perror("heredoc: ");
+        perror("-minishell: heredoc");
         return (EXIT_FAILURE);
     }
     return (EXIT_SUCCESS);
 }
 
-static void locate_last_infile_and_open_it(t_ast *s, t_exe *b)
+void locate_last_infile_and_open_it(t_ast *s, t_exe *b)
 {
     t_list  *last_in;
     t_list  *ins_cpy;
@@ -38,11 +38,11 @@ static void locate_last_infile_and_open_it(t_ast *s, t_exe *b)
     {
         b->fd_redir_in = open(last_in->as_item->filename, O_RDONLY);
         if (b->fd_redir_in < 0)
-            perror("open for redir_in");
+            perror("-minishell: open for redir_in");
     }
 }
 
-static int  count_hds_in_this_cmd(t_ast *s)
+int  count_hds_in_this_cmd(t_ast *s)
 {
     t_list  *ins_cpy;
     int hds;
@@ -69,7 +69,7 @@ static int  are_all_infiles_legit(t_ast *s)
         {
             if (access(ins_cpy->as_item->filename, R_OK) != 0)
             {
-                ft_putstr_fd("minishell: ", STDERR_FILENO);
+                ft_putstr_fd("-minishell: ", STDERR_FILENO);
                 perror(ins_cpy->as_item->filename);
                 return (0);
             }
@@ -79,19 +79,14 @@ static int  are_all_infiles_legit(t_ast *s)
     return (1);
 }
 
-void    set_up_redirs(t_ast *s, t_exe *b)
+int infile_legitimacy_control(t_ast *s, t_exe *b, int hd_count)
 {
-    int     hd_count;
-
-    if (!s->command->ins && !s->command->outs)
-        return ;
-    hd_count = count_hds_in_this_cmd(s);
     if (!are_all_infiles_legit(s))
     {
         b->hd_idx += hd_count;
         b->fd_redir_in = -1;
-        return ;
+        g_exit = 1;
+        return (EXIT_FAILURE);
     }
-    else
-        locate_last_infile_and_open_it(s, b);
+    return (EXIT_SUCCESS);
 }

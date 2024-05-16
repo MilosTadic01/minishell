@@ -55,7 +55,7 @@ static void command_exec(t_ast *s, t_exe *b)
     {
         builtin = which_builtin(s->command->args[0]);
         if (builtin)
-            exec_builtin(builtin, s, b); // TODO: ditch return bc pipeline exit
+            exec_builtin(builtin, s, b);
         else
             exec_bin(s, b);
     }
