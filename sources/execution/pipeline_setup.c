@@ -7,16 +7,19 @@ static void update_pipe_info(t_ast *s, t_exe *b)
 
 	reccall_ast = NULL;
     b->is_pipeline = 1;
-	if (s->tag == COMMAND)
+	// if (s->tag == COMMAND)
+	// if (s->tag == COMMAND || s->tag == RECCALL)
+	if (s->tag == COMMAND || (s->tag == BINOP && s->op != PIPE))
 		b->ppl_cmd_count++;
-    else if (s->op == PIPE)
+    else if (s->tag == BINOP && s->op == PIPE)
     {
 		if (s->left)
             update_pipe_info(s->left, b);
         if (s->right)
             update_pipe_info(s->right, b);
     }
-	else if (s->tag == SUBSHELL || s->tag == RECCALL)
+	else if (s->tag == SUBSHELL)
+	// else if (s->tag == SUBSHELL || s->tag == RECCALL)
 	{
 		reccall_ast = parse(s->subshell_cmd, b->env);
 		if (!reccall_ast)
