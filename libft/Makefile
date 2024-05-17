@@ -6,7 +6,7 @@
 #    By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/04 15:45:07 by dzubkova          #+#    #+#              #
-#    Updated: 2024/05/17 10:02:40 by dzubkova         ###   ########.fr        #
+#    Updated: 2024/05/17 15:36:43 by dzubkova         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ BSRS = \
 
 OFILES = $(SRCS:.c=.o)
 BOFILES = $(BSRS:.c=.o)
-
+GNLD := ./get_next_line
 CFLAGS = -Wall -Wextra -Werror -g
 
 NAME = libft.a
@@ -34,7 +34,9 @@ NAME = libft.a
 all: $(NAME)
 
 $(NAME): $(OFILES)
-	ar rcs $(NAME) $(OFILES)
+	make -C $(GNLD) all
+	find $(GNLD) -name "*.o" -exec cp {} . \;
+	ar rcs $(NAME) *.o
 
 bonus: $(OFILES) $(BOFILES)
 	ar rcs $(NAME) $(BOFILES) $(OFILES)
@@ -43,14 +45,13 @@ bonus: $(OFILES) $(BOFILES)
 	cc -c $(CFLAGS) $< -o $@
 
 clean:
-	rm -f $(OFILES) $(BOFILES)
+	rm -f $(OFILES) $(BOFILES) $(GNLOFILES)
+	make -C $(GNLD) clean
 
 fclean: clean
 	rm -f $(NAME)
+	make -C $(GNLD) fclean
 
 re: fclean all
 
-test: libft.a
-	cc test.c libft.a -o test
-
-.PHONY: all bonus clean fclean re test
+.PHONY: all bonus clean fclean re

@@ -167,60 +167,69 @@ static void open_files_for_heredocs(t_exe *exe_bus)
 //   }
 // }
 
+/*static void	sigint_handler(int signum)
+{
+	(void)signum;
+	exit(130);
+}*/
+
+
 static void prompt_for_one_heredoc(t_exe *exe_bus, char *limiter, int i)
 {
 	char	*line;
 	char	*line_n;
 
-	receive_signals(0);
 	while (1)
 	{
 		line = NULL;
 		line_n = NULL;
-		line = readline("> ");
+		write(1, "> ", 2);
+		line = get_next_line(0);
 		if (!line)
 		{
-			ft_putstr_fd("readline error\n", STDERR_FILENO);
-			break ;
+			ft_putstr_fd("eof received when delimeter expected\n", STDERR_FILENO);
+			exit(0);
 		}
-		line_n = ft_strjoin(line, "\n");
-		if (!line_n)
+		if (ft_strcmp(line, limiter) == 0)
 		{
 			free(line);
-			ft_putstr_fd("malloc fail\n", STDERR_FILENO);
 			break ;
 		}
+		ft_putstr_fd(line, exe_bus->hd_fds[i]);
 		free(line);
-		if (ft_strcmp(line_n, limiter) == 0)
-		{
-			free(line_n);
-			break ;
-		}
-		ft_putstr_fd(line_n, exe_bus->hd_fds[i]);
-		free(line_n);
 	}
-	receive_signals(1);
 }
 
 static void prompt_for_all_heredocs(t_exe *exe_bus)
 {
-	int  i;
+	int		i;
 	char	*limiter;
+	pid_t	pid;
+	int		status;
 
 	i = -1;
-	while (++i < exe_bus->hd_count)
+	pid = fork();
+	receive_signals_noninteractive();
+	if (pid == 0)
 	{
-		limiter = ft_strjoin(exe_bus->hd_delimiters[i], "\n");
-		if (!limiter)
+		signal(SIGINT, SIG_DFL);
+		while (++i < exe_bus->hd_count)
 		{
-			ft_putstr_fd("heredoc limiter: malloc fail\n", STDERR_FILENO);
-			continue ;
+			limiter = ft_strjoin(exe_bus->hd_delimiters[i], "\n");
+			if (!limiter)
+			{
+				ft_putstr_fd("heredoc limiter: malloc fail\n", STDERR_FILENO);
+				continue ;
+			}
+			prompt_for_one_heredoc(exe_bus, limiter, i);
+			if (close(exe_bus->hd_fds[i]) < 0)
+				ft_putstr_fd("heredoc after writing: close fail\n", STDERR_FILENO);
+			free(limiter);
 		}
-		prompt_for_one_heredoc(exe_bus, limiter, i);
-		if (close(exe_bus->hd_fds[i]) < 0)
-			ft_putstr_fd("heredoc after writing: close fail\n", STDERR_FILENO);
-		free(limiter);
+		exit(0);
 	}
+	else
+		waitpid(pid, &status, 0);
 }
 
 void	exec_heredocs(t_exe *exe_bus)
