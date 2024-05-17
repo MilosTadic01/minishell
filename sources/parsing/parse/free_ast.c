@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:08:20 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/16 19:37:42 by daria            ###   ########.fr       */
+/*   Updated: 2024/05/17 09:12:39 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ void	free_ast(t_ast *s)
 		while (idx < s->command->size)
 			free(s->command->args[idx++]);
 		free(s->command->args);
+		s->command->args = NULL;
 		free_item_list(&s->command->ins);
 		free_item_list(&s->command->outs);
 		free(s->command);
+		s->command = NULL;
 	}
 	else if (s->tag == SUBSHELL || s->tag == RECCALL)
 		free(s->subshell_cmd);
@@ -35,6 +37,7 @@ void	free_ast(t_ast *s)
 	if (s->right)
 		free_ast(s->right);
 	free(s);
+	s = NULL;
 }
 
 void	free_item_list(t_list **lst)

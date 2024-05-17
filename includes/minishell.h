@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:40 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 12:41:31 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/17 14:38:16 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ extern int g_exit;
 # include "exec.h"
 # include "builtins.h"
 
-void    minishell(char *subcmd, t_exe *b, t_list **my_env);
-void    prompt(char *subcmd, t_exe *b, t_list **env);
+void	minishell(char *subcmd, t_exe *b, t_list **my_env);
+void	prompt(char *subcmd, t_exe *b, t_list **env);
 
 # define PIPE 124
 # define SINGLE_QUOTE 39

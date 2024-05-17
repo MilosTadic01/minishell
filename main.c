@@ -6,13 +6,13 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/15 16:25:22 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/17 14:39:40 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
-// static void print_ast(t_ast *s);
+//static void print_ast(t_ast *s);
 int g_exit;
 
 int main(int argc, char **argv, char **envp)
@@ -30,7 +30,7 @@ int main(int argc, char **argv, char **envp)
 
 void	minishell(char *subcmd, t_exe *b, t_list **my_env)
 {
-	receive_signals();
+	receive_signals_interactive();
 	if (!subcmd)
 	{
 		while (1)

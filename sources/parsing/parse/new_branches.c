@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:16:26 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/13 11:36:42 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/16 14:44:36 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_ast	*new_binop(int op, t_ast **left, t_ast **right)
 	ast->tag = BINOP;
 	ast->left = *left;
 	ast->right = *right;
+	ast->subshell_cmd = NULL;
 	return (ast);
 }
 
@@ -53,6 +54,7 @@ t_ast	*new_command(void)
 	ast->command->size = 0;
 	ast->command->ins = NULL;
 	ast->command->outs = NULL;
+	ast->subshell_cmd = NULL;
 	return (ast);
 }
 

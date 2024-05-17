@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 12:19:03 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/04/22 17:08:05 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/17 15:37:09 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdint.h>
 # include <stdlib.h>
 # include "../includes/structs.h"
+# include "get_next_line/get_next_line.h"
 
 # define INT_MIN_STR "-2147483648"
 # define MIN_INT -2147483648

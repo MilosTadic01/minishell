@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:37 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/12 14:07:30 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/17 17:17:51 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ void			append_item(int type, char *filename, t_ast **ast);
 void			free_ast(t_ast *s);
 void			free_item_list(t_list **lst);
 void			free_str(char **str, int size);
-void			receive_signals(void);
-void			sighandler(int signum);
+void			receive_signals_interactive(void);
+void			receive_signals_noninteractive(void);
+void			sighandler_interactive(int signum);
+void			sighandler_noninteractive(int signum);
 
 #endif
