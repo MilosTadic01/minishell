@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:08:20 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/17 09:10:54 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/17 09:12:39 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	free_ast(t_ast *s)
 		free(s->command);
 		s->command = NULL;
 	}
+	else if (s->tag == SUBSHELL || s->tag == RECCALL)
+		free(s->subshell_cmd);
 	if (s->left)
 		free_ast(s->left);
 	if (s->right)

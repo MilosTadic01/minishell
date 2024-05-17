@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   literal_tokens.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:16:56 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/12 14:01:09 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:52:25 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,17 @@ int	get_literal_token(t_input *in)
 	char	*seq;
 	char	*res;
 	char	*tmp;
+	int		exit_check;
 
 	res = NULL;
 	if (!in->current_char)
 		init_token(&in->current_token, "", FINAL_TOKEN);
 	while (in->current_char)
 	{
-		if (exit_loop_conditions(in) == UNCLOSED_QUOTATIONS)
+		exit_check = exit_loop_conditions(in);
+		if (exit_check == UNCLOSED_QUOTATIONS)
 			return (UNCLOSED_QUOTATIONS);
-		else if (exit_loop_conditions(in))
+		else if (exit_check)
 			break ;
 		seq = get_literal_part(in);
 		if (!seq)
@@ -42,8 +44,6 @@ int	get_literal_token(t_input *in)
 
 int	exit_loop_conditions(t_input *in)
 {
-	if (ft_isspace(in->current_char) && in->quotations == DEFAULT)
-		return (1);
 	if (in->current_char == SINGLE_QUOTE
 		|| in->current_char == DOUBLE_QUOTE)
 	{

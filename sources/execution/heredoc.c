@@ -87,8 +87,6 @@ static void count_heredocs(t_ast *s, t_exe *b)
             count_heredocs(subsh_ast, b);
         // print_ast(subsh_ast);
         // printf("DONE in count_heredocs\n");
-        free(subsh_ast->subshell_cmd);
-        subsh_ast->subshell_cmd = NULL;
         free_ast(subsh_ast);
        // printf("freed\n");
         // printf("\nfreed\n\n");
