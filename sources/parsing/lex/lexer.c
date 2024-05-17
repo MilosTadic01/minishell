@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:32 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/15 16:47:18 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/17 11:49:04 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,9 @@ void	init_input(t_input *in, char *input_string)
 	in->current_token.value = NULL;
 }
 
-void	init_token(t_token *new_token, char *value, int type)
+int	init_token(t_token *new_token, char *value, int type)
 {
 	new_token->token_type = type;
 	new_token->value = value;
+	return (SUCCESS);
 }

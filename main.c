@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/17 09:12:32 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/17 11:17:50 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int main(int argc, char **argv, char **envp)
 
 void	minishell(char *subcmd, t_exe *b, t_list **my_env)
 {
-	receive_signals();
+	receive_signals(1);
 	if (!subcmd)
 	{
 		while (1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   literal_tokens.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:16:56 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/16 20:52:25 by daria            ###   ########.fr       */
+/*   Updated: 2024/05/17 11:50:39 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	get_literal_token(t_input *in)
 
 	res = NULL;
 	if (!in->current_char)
-		init_token(&in->current_token, "", FINAL_TOKEN);
+		return (init_token(&in->current_token, "", FINAL_TOKEN));
 	while (in->current_char)
 	{
 		exit_check = exit_loop_conditions(in);
@@ -37,9 +37,7 @@ int	get_literal_token(t_input *in)
 		free(seq);
 		res = tmp;
 	}
-	if (res)
-		init_token(&in->current_token, res, LITERAL);
-	return (SUCCESS);
+	return (init_token(&in->current_token, res, LITERAL));
 }
 
 int	exit_loop_conditions(t_input *in)

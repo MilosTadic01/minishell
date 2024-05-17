@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:35 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/15 16:40:25 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/17 11:49:37 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int			append_sequence(t_input *in, int start, char **res, t_list **env);
 int			continue_processing(t_input *in, char **res);
 int			create_token(t_input *in);
 int			exit_loop_conditions(t_input *in);
+int			init_token(t_token *new_token, char *value, int type);
 int			is_control_char(t_input *in);
 int			is_literal_end(t_input *in);
 int			is_logical_operator(t_input *in);
@@ -46,7 +47,6 @@ int			quotation_status(t_input *in);
 int			unclosed_parenthesis_check(t_input *in);
 int			unclosed_quotations_check(t_input *in);
 void		init_input(t_input *in, char *input_string);
-void		init_token(t_token *new_token, char *value, int type);
 void		next_char(t_input *in);
 void		skip_spaces(t_input *in);
 

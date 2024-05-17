@@ -6,7 +6,7 @@
 #    By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/04 15:45:07 by dzubkova          #+#    #+#              #
-#    Updated: 2024/05/02 11:14:43 by dzubkova         ###   ########.fr        #
+#    Updated: 2024/05/17 10:02:40 by dzubkova         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ BSRS = \
 OFILES = $(SRCS:.c=.o)
 BOFILES = $(BSRS:.c=.o)
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
 NAME = libft.a
 
