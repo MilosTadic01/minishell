@@ -80,13 +80,17 @@ static void count_heredocs(t_ast *s, t_exe *b)
     else if (s->tag == SUBSHELL || s->tag == RECCALL)
     {
         subsh_ast = parse(s->subshell_cmd, b->env);
+        //printf("parsed\n");
         if (!subsh_ast)
             ft_putstr_fd("count heredocs: recursive parsing fail\n", 2);
         else if (subsh_ast)
             count_heredocs(subsh_ast, b);
         // print_ast(subsh_ast);
         // printf("DONE in count_heredocs\n");
+        free(subsh_ast->subshell_cmd);
+        subsh_ast->subshell_cmd = NULL;
         free_ast(subsh_ast);
+       // printf("freed\n");
         // printf("\nfreed\n\n");
         subsh_ast = NULL;
     }

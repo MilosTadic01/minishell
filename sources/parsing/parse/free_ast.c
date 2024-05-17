@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:08:20 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/08 14:52:50 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/17 09:10:54 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,18 @@ void	free_ast(t_ast *s)
 		while (idx < s->command->size)
 			free(s->command->args[idx++]);
 		free(s->command->args);
+		s->command->args = NULL;
 		free_item_list(&s->command->ins);
 		free_item_list(&s->command->outs);
 		free(s->command);
+		s->command = NULL;
 	}
 	if (s->left)
 		free_ast(s->left);
 	if (s->right)
 		free_ast(s->right);
 	free(s);
+	s = NULL;
 }
 
 void	free_item_list(t_list **lst)

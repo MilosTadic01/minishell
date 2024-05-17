@@ -66,6 +66,8 @@
     "readline.h": "c",
     "errors.h": "c",
     "algorithm": "c",
-    "structs.h": "c"
+    "structs.h": "c",
+    "builtins.h": "c",
+    "parser.h": "c"
   }
 }
