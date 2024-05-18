@@ -17,7 +17,7 @@ void    exec_bin(t_ast *s, t_exe *b)
                 slap_on_redirs_in_child(s, b) == EXIT_FAILURE)
                 free_n_error_n_exit(NULL, b);
             execve(b->execve_path, b->execve_argv, b->execve_envp);
-            free_n_error_n_exit("execve in a pipeline", b);
+            free_n_error_n_exit(b->execve_argv[0], b);
         }
         else
             clean_up_after_redirs_in_parent(b);
@@ -33,7 +33,7 @@ void    exec_bin(t_ast *s, t_exe *b)
             slap_on_redirs_in_child(s, b) == EXIT_FAILURE)
                 free_n_error_n_exit(NULL, b);
             execve(b->execve_path, b->execve_argv, b->execve_envp);
-            free_n_error_n_exit("execve for simple cmd", b);
+            free_n_error_n_exit(b->execve_argv[0], b);
         }
         else
         {

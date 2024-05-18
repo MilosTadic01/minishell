@@ -25,16 +25,13 @@ static void loop_thru_path_possibilities(t_exe *b)
         b->execve_path = crt_cmdpath(b->my_paths[i], b->execve_argv[0]);
         if (!b->execve_path)
             free_n_error_n_exit("crt_cmdpath() fail", b);
-        if (access(b->execve_path, X_OK) == 0)
+        if (access(b->execve_path, X_OK) == 0 || !b->my_paths[i + 1])
             break ;
         free(b->execve_path);
         b->execve_path = NULL;
     }
-    if (!b->execve_path)
-    {
-        perror(b->execve_argv[0]);
-        g_exit = errno;
-    }
+    if (!b->my_paths[i + 1])
+        g_exit = 127;
 }
 
 void    seek_path(t_exe *b)

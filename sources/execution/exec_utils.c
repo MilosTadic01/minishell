@@ -35,6 +35,8 @@ void	fork_one_in_ppl(t_exe *b)
 
 void free_n_error_n_exit(char *errprefix, t_exe *b)
 {
+    if (errprefix)
+        perror(errprefix);
     if (b->execve_path)
     {
         free(b->execve_path);
@@ -55,7 +57,5 @@ void free_n_error_n_exit(char *errprefix, t_exe *b)
         free_strarr(b->my_paths);
         b->my_paths = NULL;
     }
-    if (errprefix)
-        perror(errprefix);
     exit(g_exit);
 }
