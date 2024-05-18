@@ -70,19 +70,20 @@ void        pipe_closer(t_exe *b);
 // wait_pipeline.c
 void        go_wait(t_exe *b);
 // redir.c
-int         set_up_redirs(t_ast *s, t_exe *b);
+void        set_up_redirs(t_ast *s, t_exe *b);
 // redir_ins.c
-int         infile_legitimacy_control(t_ast *s, t_exe *b, int hd_count);
+void        infile_legitimacy_control(t_ast *s, t_exe *b, int hd_count);
 int         count_hds_in_this_cmd(t_ast *s);
 void        locate_last_infile_and_open_it(t_ast *s, t_exe *b);
 // redir_outs.c
 int         open_all_outfiles(t_ast *s, t_exe *b);
 // redir_utils.c
-int         slap_on_redirs_in_child(t_exe *b);
+int         slap_on_redirs_in_child(t_ast *s, t_exe *b);
 void        clean_up_after_redirs_in_parent(t_exe *b);
 // exec_utils.c
 void	    fork_one_for_simple_cmd(t_exe *b);
 void        fork_one_in_ppl(t_exe *b);
 void        free_strarr(char **strarr);
+void        free_n_error_n_exit(char *errprefix, t_exe *b);
 
 #endif

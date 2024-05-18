@@ -77,5 +77,7 @@ int export_cmdarr(int size, char **cmdarr, t_list **env)
         if (ft_export(cmdarr[i], env) != SUCCESS)
             return (1);
     }
+    if (i == 1)
+        ft_printenv(*env);
     return (SUCCESS);
 }

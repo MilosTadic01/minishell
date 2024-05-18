@@ -1,7 +1,13 @@
 #include "../../includes/minishell.h"
 
-int    slap_on_redirs_in_child(t_exe *b)
+int    slap_on_redirs_in_child(t_ast *s, t_exe *b)
 {
+    if (s->command->ins && b->fd_redir_in == -1)
+    {
+        close(STDIN_FILENO);
+        g_exit = 1;
+        return (EXIT_FAILURE);
+    }
     if (b->fd_redir_in > -1 && dup2(b->fd_redir_in, STDIN_FILENO) < 0)
     {
         perror("dup2 for redir_in");

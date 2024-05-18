@@ -1,64 +1,5 @@
 #include "../../includes/minishell.h"
 
-// static void print_ast(t_ast *s)
-//  {
-//  	t_list	*tmp;
-
-//  	if (s->tag == COMMAND)
-//  	{
-//  		printf("COMMAND\n");
-//  		for (int i = 0; i < s->command->size; i++)
-//  		{
-//  			printf("%s\n", s->command->args[i]);
-//  		}
-//  		tmp = s->command->ins;
-//  		while (tmp)
-//  		{
-//  			printf("input redirections %d to: %s\n", tmp->as_item->type, tmp->as_item->filename);
-//  			tmp = tmp->next;
-//  		}
-//  		tmp = s->command->outs;
-//  		while (tmp)
-//  		{
-//  			printf("output redirections %d to: %s\n",  tmp->as_item->type, tmp->as_item->filename);
-//  			tmp = tmp->next;
-//  		}
-//  	}
-//  	else if (s->tag == SUBSHELL)
-//  	{
-//  		printf("SUBSHELL\n");
-//  		printf("%s\n", s->subshell_cmd);
-//  	}
-// 	else if (s->tag == RECCALL)
-// 	{
-// 		printf("RECCAL\n");
-//  		printf("%s\n", s->subshell_cmd);
-// 	}
-//  	else
-//  	{
-//  		if (s->op == PIPE)
-//  			printf("PIPE\n");
-//  		if (s->op == AND)
-//  			printf("AND\n");
-//  		if (s->op == OR)
-//  			printf("OR\n");
-//  	}
-//  	if (s->left)
-//  	{
-//  		printf("PRINTING LEFT BRANCH:\n");
-//  		print_ast(s->left);
-//  	}
-//  	else
-//  		printf("\n");
-//  	if (s->right)
-//  	{
-//  		printf("PRINTING RIGHT BRANCH:\n");
-//  		print_ast(s->right);
-//  	}
-//  	else
-//  		printf("\n");
-//  }
-
 static void count_heredocs(t_ast *s, t_exe *b)
 {
 	t_ast   *subsh_ast;
@@ -80,16 +21,11 @@ static void count_heredocs(t_ast *s, t_exe *b)
 	else if (s->tag == SUBSHELL || s->tag == RECCALL)
 	{
 		subsh_ast = parse(s->subshell_cmd, b->env);
-		//printf("parsed\n");
 		if (!subsh_ast)
 			ft_putstr_fd("count heredocs: recursive parsing fail\n", 2);
 		else if (subsh_ast)
 			count_heredocs(subsh_ast, b);
-		// print_ast(subsh_ast);
-		// printf("DONE in count_heredocs\n");
 		free_ast(subsh_ast);
-	   // printf("freed\n");
-		// printf("\nfreed\n\n");
 		subsh_ast = NULL;
 	}
 	if (s->left)
@@ -177,17 +113,17 @@ static void open_files_for_heredocs(t_exe *exe_bus)
 static void prompt_for_one_heredoc(t_exe *exe_bus, char *limiter, int i)
 {
 	char	*line;
-	char	*line_n;
+	// char	*line_n;
 
 	while (1)
 	{
 		line = NULL;
-		line_n = NULL;
+		// line_n = NULL;
 		write(1, "> ", 2);
 		line = get_next_line(0);
 		if (!line)
 		{
-			ft_putstr_fd("eof received when delimeter expected\n", STDERR_FILENO);
+			ft_putstr_fd("eof received when delimiter expected\n", 2);
 			exit(0);
 		}
 		if (ft_strcmp(line, limiter) == 0)

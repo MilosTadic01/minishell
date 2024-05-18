@@ -32,3 +32,30 @@ void	fork_one_in_ppl(t_exe *b)
         free_strarr(b->execve_envp);
     }
 }
+
+void free_n_error_n_exit(char *errprefix, t_exe *b)
+{
+    if (b->execve_path)
+    {
+        free(b->execve_path);
+        b->execve_path = NULL;
+    }
+    if (b->execve_argv)
+    {
+        free_strarr(b->execve_argv);
+        b->execve_path = NULL;
+    }
+    if (b->execve_envp)
+    {
+        free_strarr(b->execve_envp);
+        b->execve_envp = NULL;
+    }
+    if (b->my_paths)
+    {
+        free_strarr(b->my_paths);
+        b->my_paths = NULL;
+    }
+    if (errprefix)
+        perror(errprefix);
+    exit(g_exit);
+}

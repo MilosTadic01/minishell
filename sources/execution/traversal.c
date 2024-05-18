@@ -46,14 +46,17 @@ static void command_exec(t_ast *s, t_exe *b)
 {
     int builtin;
 
-    if (!s || !s->command || !s->command->args)
+    builtin = 0;
+    // if (!s || !s->command || !s->command->args)
+    if (!s || !s->command)
         return ;
     if (b->subshell_do[b->subshell_lvl] &&
         (!b->log_op || b->log_op == PIPE || \
         (b->log_op == AND && g_exit == 0) || \
         (b->log_op == OR && g_exit > 0)))
     {
-        builtin = which_builtin(s->command->args[0]);
+        if (s->command->args)
+            builtin = which_builtin(s->command->args[0]);
         if (builtin)
             exec_builtin(builtin, s, b);
         else

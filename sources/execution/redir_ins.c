@@ -38,7 +38,11 @@ void locate_last_infile_and_open_it(t_ast *s, t_exe *b)
     {
         b->fd_redir_in = open(last_in->as_item->filename, O_RDONLY);
         if (b->fd_redir_in < 0)
-            perror("-minishell: open for redir_in");
+        {
+            ft_putstr_fd("-minishell: ", 2);
+            perror(last_in->as_item->filename);
+            // b->fd_redir_in = open("/dev/null", O_RDONLY);
+        }
     }
 }
 
@@ -68,25 +72,21 @@ static int  are_all_infiles_legit(t_ast *s)
         if (ins_cpy->as_item->type == REDIRECT_IN)
         {
             if (access(ins_cpy->as_item->filename, R_OK) != 0)
-            {
-                ft_putstr_fd("-minishell: ", STDERR_FILENO);
-                perror(ins_cpy->as_item->filename);
                 return (0);
-            }
         }
         ins_cpy = ins_cpy->next;
     }
     return (1);
 }
 
-int infile_legitimacy_control(t_ast *s, t_exe *b, int hd_count)
+void infile_legitimacy_control(t_ast *s, t_exe *b, int hd_count)
 {
     if (!are_all_infiles_legit(s))
     {
         b->hd_idx += hd_count;
         b->fd_redir_in = -1;
         g_exit = 1;
-        return (EXIT_FAILURE);
+        // return (EXIT_FAILURE);
     }
-    return (EXIT_SUCCESS);
+    // return (EXIT_SUCCESS);
 }

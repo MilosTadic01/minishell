@@ -27,7 +27,7 @@ static void exec_builtin_in_pipeline(int builtin, t_ast *s, t_exe *b)
     if (b->ppl_pids[b->i] == 0)
     {
         lay_child_pipes(b);
-        if (slap_on_redirs_in_child(b) == EXIT_FAILURE)
+        if (slap_on_redirs_in_child(s, b) == EXIT_FAILURE)
             exit(g_exit);
         g_exit = call_builtin(builtin, s, b);
         exit(g_exit);
@@ -41,7 +41,7 @@ static void exec_echo_in_child(int builtin, t_ast *s, t_exe *b)
     fork_one_for_simple_cmd(b);
     if (b->smpl_cmd_pid == 0)
     {
-        if (slap_on_redirs_in_child(b) == EXIT_FAILURE)
+        if (slap_on_redirs_in_child(s, b) == EXIT_FAILURE)
             exit(g_exit);
         g_exit = call_builtin(builtin, s, b);
         exit(g_exit);
@@ -62,8 +62,7 @@ static void exec_builtin_in_parent(int builtin, t_ast *s, t_exe *b)
 
 void    exec_builtin(int builtin, t_ast *s, t_exe *b)
 {
-    if (set_up_redirs(s, b) == EXIT_FAILURE)
-        return ;
+    set_up_redirs(s, b);
     if (b->is_pipeline)
         exec_builtin_in_pipeline(builtin, s, b);
     else if ((s->command->ins || s->command->outs) && builtin == ECHO)
