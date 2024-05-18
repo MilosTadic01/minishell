@@ -69,16 +69,17 @@ void        lay_child_pipes(t_exe *b);
 void        pipe_closer(t_exe *b);
 // wait_pipeline.c
 void        go_wait(t_exe *b);
-// redir.c
+// redir_setup.c
 void        set_up_redirs(t_ast *s, t_exe *b);
-// redir_ins.c
+// redir_ins_setup.c
 void        infile_legitimacy_control(t_ast *s, t_exe *b, int hd_count);
 int         count_hds_in_this_cmd(t_ast *s);
-void        locate_last_infile_and_open_it(t_ast *s, t_exe *b);
-// redir_outs.c
-int         open_all_outfiles(t_ast *s, t_exe *b);
-// redir_utils.c
+int         open_and_close_infiles_while_legit(t_ast *s, t_exe *b, int hd_count);
+// redir_outs_setup.c
+int         try_opening_all_outfiles(t_ast *s, t_exe *b);
+// redir_duping_child.c
 int         slap_on_redirs_in_child(t_ast *s, t_exe *b);
+// redir_utils.c
 void        clean_up_after_redirs_in_parent(t_exe *b);
 // exec_utils.c
 void	    fork_one_for_simple_cmd(t_exe *b);

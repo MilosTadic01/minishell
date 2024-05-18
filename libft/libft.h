@@ -75,4 +75,6 @@ void		ft_lstclear(t_list **lst);
 void		ft_lstdelone(t_list *lst);
 void		ft_lstdrop_back(t_list **lst);
 
+char        *get_next_line(int fd);
+
 #endif

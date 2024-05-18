@@ -20,7 +20,7 @@ static void init_exe_bus(t_exe *exe_bus, t_ast *s, t_list **env)
     exe_bus->env = env;
     exe_bus->i = -1;
     exe_bus->hd_count = 0;
-    exe_bus->hd_idx = -1;
+    exe_bus->hd_idx = 0;
     exe_bus->hd_fds = NULL;
     exe_bus->fd_redir_in = -1;
     exe_bus->fd_redir_out = -1;

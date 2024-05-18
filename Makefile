@@ -51,9 +51,10 @@ FILES = $(LEXD)lexer.c \
 		$(EXECD)bin_path_setup.c \
 		$(EXECD)traversal.c \
 		$(EXECD)traversal_utils.c \
-		$(EXECD)redir.c \
-		$(EXECD)redir_ins.c \
-		$(EXECD)redir_outs.c \
+		$(EXECD)redir_setup.c \
+		$(EXECD)redir_ins_setup.c \
+		$(EXECD)redir_outs_setup.c \
+		$(EXECD)redir_duping_child.c \
 		$(EXECD)redir_utils.c \
 		$(EXECD)pipeline_setup.c \
 		$(EXECD)pipe_fu.c \

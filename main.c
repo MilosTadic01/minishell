@@ -66,7 +66,8 @@ void	prompt(char *subcmd, t_exe *b, t_list **my_env)
 	}
 	// print_ast(ast);
 	// printf("DONE\n");
-	exec(ast, subcmd, b, my_env);
+	if (*line != 0)
+		exec(ast, subcmd, b, my_env);
 	if (*line != 0)
 		add_history(line);
 	free(line);

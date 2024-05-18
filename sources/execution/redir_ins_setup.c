@@ -18,32 +18,33 @@ static int reopen_hd_file_for_reading(t_exe *b, int i)
     return (EXIT_SUCCESS);
 }
 
-void locate_last_infile_and_open_it(t_ast *s, t_exe *b)
+int open_and_close_infiles_while_legit(t_ast *s, t_exe *b, int hd_count)
 {
-    t_list  *last_in;
     t_list  *ins_cpy;
+    int     i;
 
-    last_in = s->command->ins;
+    i = -1;
     ins_cpy = s->command->ins;
     while (ins_cpy)
     {
         if (ins_cpy->as_item->type == REDIRECT_IN_IN)
-            (b->hd_idx)++;
-        last_in = ins_cpy;
+            reopen_hd_file_for_reading(b, (b->hd_idx - hd_count + ++i));
+        else if (ins_cpy->as_item->type == REDIRECT_IN)
+        {
+            b->fd_redir_in = open(ins_cpy->as_item->filename, O_RDONLY);
+            if (b->fd_redir_in < 0)
+            {
+                ft_putstr_fd("-minishell: ", 2);
+                perror(ins_cpy->as_item->filename);
+                return (EXIT_FAILURE);
+                // b->fd_redir_in = open("/dev/null", O_RDONLY);
+            }
+        }
+        if (ins_cpy->next && b->fd_redir_in > -1)
+            close(b->fd_redir_in);
         ins_cpy = ins_cpy->next;
     }
-    if (last_in->as_item->type == REDIRECT_IN_IN)
-        reopen_hd_file_for_reading(b, b->hd_idx);
-    else if (last_in->as_item->type == REDIRECT_IN)
-    {
-        b->fd_redir_in = open(last_in->as_item->filename, O_RDONLY);
-        if (b->fd_redir_in < 0)
-        {
-            ft_putstr_fd("-minishell: ", 2);
-            perror(last_in->as_item->filename);
-            // b->fd_redir_in = open("/dev/null", O_RDONLY);
-        }
-    }
+    return (EXIT_SUCCESS);
 }
 
 int  count_hds_in_this_cmd(t_ast *s)

@@ -42,7 +42,7 @@ static void exec_echo_in_child(int builtin, t_ast *s, t_exe *b)
     if (b->smpl_cmd_pid == 0)
     {
         if (slap_on_redirs_in_child(s, b) == EXIT_FAILURE)
-            exit(g_exit);
+            exit(1);
         g_exit = call_builtin(builtin, s, b);
         exit(g_exit);
     }

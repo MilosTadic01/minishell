@@ -1,6 +1,6 @@
 #include "../../includes/minishell.h"
 
-int open_all_outfiles(t_ast *s, t_exe *b)
+int try_opening_all_outfiles(t_ast *s, t_exe *b)
 {
     t_list  *outs_cpy;
 
