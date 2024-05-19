@@ -13,20 +13,15 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-extern int g_exit;
-
-# define _XOPEN_SOURCE 700
-# define _DEFAULT_SOURCE
-
 # include <sys/wait.h>
 # include <unistd.h>
 # include <errno.h>
 # include <stdio.h>
 # include <signal.h>
 # include <limits.h>
-# include <fcntl.h> // open
-# include <sys/types.h> // readline, open
-# include <sys/stat.h> // open
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/libft.h"
@@ -36,6 +31,11 @@ extern int g_exit;
 # include "errors.h"
 # include "exec.h"
 # include "builtins.h"
+
+extern int	g_exit;
+
+# define _XOPEN_SOURCE 700
+# define _DEFAULT_SOURCE
 
 void	minishell(char *subcmd, t_exe *b, t_list **my_env);
 void	prompt(char *subcmd, t_exe *b, t_list **env);
@@ -75,6 +75,5 @@ void	prompt(char *subcmd, t_exe *b, t_list **env);
 
 # define OPEN_PARENTHESE 40
 # define CLOSE_PARENTHESE 41
-
 
 #endif
