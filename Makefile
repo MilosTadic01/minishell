@@ -65,7 +65,7 @@ FILES = $(LEXD)lexer.c \
 
 NAME = minishell
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 MAKE = make
 
 all: libft $(NAME)
@@ -77,7 +77,7 @@ $(NAME): $(OFILES) $(HFILES)
 	cc $(CFLAGS) $(OFILES) -I$(INCLUDESD) -L$(LIBFTD) -lft -lreadline -lhistory -o $(NAME)
 
 %.o: %.c $(HFILES)
-	cc -c $(CFLAGS) -g $< -o $@
+	cc -c $(CFLAGS) $< -o $@
 
 clean:
 	rm -f $(OFILES)
