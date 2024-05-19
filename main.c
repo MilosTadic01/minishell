@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/17 14:39:40 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/19 19:35:08 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int main(int argc, char **argv, char **envp)
 
 void	minishell(char *subcmd, t_exe *b, t_list **my_env)
 {
-	receive_signals_interactive();
+	//receive_signals_interactive();
 	if (!subcmd)
 	{
 		while (1)
@@ -46,12 +46,14 @@ void	prompt(char *subcmd, t_exe *b, t_list **my_env)
 	char				*copy;
 	t_ast				*ast;
 
+	receive_signals_interactive();
 	if (!subcmd)
 		line = readline("minishell> ");
 	else
 		line = subcmd;
 	if (!line)
 		exit(g_exit);
+	receive_signals_noninteractive();
 	copy = line;
 	line = ft_strtrim(copy, " ");
 	free(copy);
@@ -62,13 +64,22 @@ void	prompt(char *subcmd, t_exe *b, t_list **my_env)
 		g_exit = 2;
 		add_history(line);
 		free(line);
-		return ;
+		return (minishell(NULL, NULL, my_env));
 	}
 	// print_ast(ast);
 	// printf("DONE\n");
 	if (*line != 0)
-		exec(ast, subcmd, b, my_env);
-	if (*line != 0)
+	{
+		if (exec(ast, subcmd, b, my_env))
+		{
+			ft_putendl_fd("Error: bad syntax", 2);
+			g_exit = 2;
+			add_history(line);
+			free(line);
+			return (minishell(NULL, NULL, my_env));
+		}
+	}
+	if (*line != 0 && !subcmd)
 		add_history(line);
 	free(line);
 	free_ast(ast);

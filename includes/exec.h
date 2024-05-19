@@ -44,7 +44,7 @@ enum	e_bltn
 }	;
 
 // exec_main.c
-void	exec(t_ast *s, char *subcmd, t_exe *b, t_list **env);
+int		exec(t_ast *s, char *subcmd, t_exe *b, t_list **env);
 // traversal.c
 void	traverse_ast_to_exec(t_ast *s, t_exe *b);
 // traversal_utils.c
@@ -52,7 +52,7 @@ int		which_builtin(char *str);
 void	close_pipes_and_wait_and_reset_pipeline(t_exe *b);
 void	increment_hd_idx(t_ast *s, t_exe *b);
 // heredoc.c
-void	exec_heredocs(t_exe *exe_bus);
+int		exec_heredocs(t_exe *exe_bus);
 void	free_heredocs(t_exe *exe_bus);
 // exec_builtin.c
 void	exec_builtin(int builtin, t_ast *s, t_exe *b);

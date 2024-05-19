@@ -35,10 +35,9 @@ static void	exec_a_simple_bin(t_ast *s, t_exe *b)
 	else
 	{
 		clean_up_after_redirs_in_parent(b);
-		receive_signals_noninteractive();
 		waitpid(b->smpl_cmd_pid, &b->smpl_wstatus, 0);
-		receive_signals_interactive();
-		g_exit = (b->smpl_wstatus >> 8) & 0xFF;
+		if (g_exit != 130)
+			g_exit = (b->smpl_wstatus >> 8) & 0xFF;
 	}
 }
 
