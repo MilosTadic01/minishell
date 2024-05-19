@@ -57,33 +57,36 @@ FILES = $(LEXD)lexer.c \
 		$(EXECD)redir_duping_child.c \
 		$(EXECD)redir_utils.c \
 		$(EXECD)pipeline_setup.c \
-		$(EXECD)pipe_fu.c \
+		$(EXECD)pipe_fu_parent.c \
+		$(EXECD)pipe_fu_children.c \
 		$(EXECD)wait_pipeline.c \
 		$(EXECD)heredoc.c \
 		main.c
 
 NAME = minishell
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 MAKE = make
 
-all: $(NAME)
+all: libft $(NAME)
+
+libft:
+	$(MAKE) -sC $(LIBFTD) bonus
 
 $(NAME): $(OFILES) $(HFILES)
-	$(MAKE) bonus -C $(LIBFTD)
-	cc $(CFLAGS) $(OFILES) $(LIBFTD)libft.a -g -lreadline -lhistory -o $(NAME)
+	cc $(CFLAGS) $(OFILES) -I$(INCLUDESD) -L$(LIBFTD) -lft -lreadline -lhistory -o $(NAME)
 
 %.o: %.c $(HFILES)
 	cc -c $(CFLAGS) -g $< -o $@
 
 clean:
 	rm -f $(OFILES)
-	$(MAKE) clean -C ./libft
+	$(MAKE) clean -C $(LIBFTD)
 
 fclean: clean
 	rm -f $(NAME)
-	$(MAKE) fclean -C ./libft
+	$(MAKE) fclean -C $(LIBFTD)
 
 re: fclean all
 
-.PHONY: all clean re fclean bonus
+.PHONY: all clean re fclean libft

@@ -35,7 +35,9 @@
 extern int	g_exit;
 
 # define _XOPEN_SOURCE 700
-# define _DEFAULT_SOURCE
+# ifndef _DEFAULT_SOURCE
+#  define _DEFAULT_SOURCE
+# endif
 
 void	minishell(char *subcmd, t_exe *b, t_list **my_env);
 void	prompt(char *subcmd, t_exe *b, t_list **env);

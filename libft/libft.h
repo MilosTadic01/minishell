@@ -17,8 +17,8 @@
 # include <unistd.h>
 # include <stdint.h>
 # include <stdlib.h>
-# include "../includes/structs.h"
 # include "get_next_line/get_next_line.h"
+# include "../includes/structs.h"
 
 # define INT_MIN_STR "-2147483648"
 # define MIN_INT -2147483648
@@ -75,6 +75,6 @@ void		ft_lstclear(t_list **lst);
 void		ft_lstdelone(t_list *lst);
 void		ft_lstdrop_back(t_list **lst);
 
-char        *get_next_line(int fd);
+// char        *get_next_line(int fd);
 
 #endif

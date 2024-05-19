@@ -39,7 +39,9 @@ $(NAME): $(OFILES)
 	ar rcs $(NAME) *.o
 
 bonus: $(OFILES) $(BOFILES)
-	ar rcs $(NAME) $(BOFILES) $(OFILES)
+	make -C $(GNLD) all
+	find $(GNLD) -name "*.o" -exec cp {} . \;
+	ar rcs $(NAME) *.o
 
 %.o: %.c
 	cc -c $(CFLAGS) $< -o $@
