@@ -1,12 +1,12 @@
 #include "../../includes/minishell.h"
 
-static void count_heredocs(t_ast *s, t_exe *b)
+static int count_heredocs(t_ast *s, t_exe *b)
 {
 	t_ast   *subsh_ast;
 	t_list  *ins_cpy;
 
 	if (!s || !b)
-		return ;
+		return (ERROR);
 	subsh_ast = NULL;
 	if (s->tag == COMMAND && s->command->ins)
 	{
@@ -22,8 +22,8 @@ static void count_heredocs(t_ast *s, t_exe *b)
 	{
 		subsh_ast = parse(s->subshell_cmd, b->env);
 		if (!subsh_ast)
-			ft_putstr_fd("count heredocs: recursive parsing fail\n", 2);
-		else if (subsh_ast)
+			return (PARSING_ERROR);
+		if (subsh_ast)
 			count_heredocs(subsh_ast, b);
 		free_ast(subsh_ast);
 		subsh_ast = NULL;
@@ -32,6 +32,7 @@ static void count_heredocs(t_ast *s, t_exe *b)
 		count_heredocs(s->left, b);
 	if (s->right)
 		count_heredocs(s->right, b);
+	return (SUCCESS);
 }
 
 static void fetch_hd_delimiters(t_ast *s, t_exe *b)
@@ -67,7 +68,7 @@ static void fetch_hd_delimiters(t_ast *s, t_exe *b)
 
 static void open_files_for_heredocs(t_exe *exe_bus)
 {
-	int  i;
+	int		i;
 	char	*num;
 	char	*path;
 
@@ -145,7 +146,7 @@ static void prompt_for_all_heredocs(t_exe *exe_bus)
 
 	i = -1;
 	pid = fork();
-	receive_signals_noninteractive();
+	//receive_signals_noninteractive();
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
@@ -168,12 +169,13 @@ static void prompt_for_all_heredocs(t_exe *exe_bus)
 		waitpid(pid, &status, 0);
 }
 
-void	exec_heredocs(t_exe *exe_bus)
+int	exec_heredocs(t_exe *exe_bus)
 {
 	// count heredocs
-	count_heredocs(exe_bus->s, exe_bus);
+	if (count_heredocs(exe_bus->s, exe_bus))
+		return (PARSING_ERROR);
 	if (exe_bus->hd_count == 0)
-		return ;
+		return (SUCCESS);
 	// malloc
 	exe_bus->hd_delimiters = malloc((exe_bus->hd_count) * sizeof(char *));
 	fetch_hd_delimiters(exe_bus->s, exe_bus);
@@ -183,6 +185,7 @@ void	exec_heredocs(t_exe *exe_bus)
 	open_files_for_heredocs(exe_bus);
 	// run prompts
 	prompt_for_all_heredocs(exe_bus);
+	return (SUCCESS);
 	// reopen_hd_files_for_reading(exe_bus);
 	// free
 	// free_heredocs(exe_bus); // just for leak control now, will actually be needed in redir
@@ -190,7 +193,7 @@ void	exec_heredocs(t_exe *exe_bus)
 
 void	free_heredocs(t_exe *exe_bus)
 {
-	int  i;
+	int		i;
 	char	*num;
 	char	*path;
 

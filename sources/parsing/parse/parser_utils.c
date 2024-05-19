@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:17:07 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/16 15:22:23 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:46:13 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,15 @@ int	is_redirection(int type)
 
 int	advance_token(t_input *in)
 {
-	if (in->current_token.token_type == LITERAL)
+	int	old_type;
+
+	old_type = in->current_token.token_type;
+	if (old_type == LITERAL)
 	{
 		free(in->current_token.value);
 		in->current_token.token_type = FINAL_TOKEN;
 	}
 	if (create_token(in))
-	{
 		return (PARSING_ERROR);
-	}
 	return (SUCCESS);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:32 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/17 11:49:04 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:44:07 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	create_token(t_input *in)
 	skip_spaces(in);
 	if ((in->current_token.token_type == AND
 			|| in->current_token.token_type == OR)
-		&& in->current_char != OPEN_PARENTHESE)
+		&& in->current_char != OPEN_PARENTHESE && in->current_char)
 		return (get_recursive_token(in));
 	else if (in->current_char == PIPE)
 		return (get_pipe_token(in));

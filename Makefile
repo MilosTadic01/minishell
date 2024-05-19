@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+         #
+#    By: daria <daria@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/27 12:28:47 by dzubkova          #+#    #+#              #
-#    Updated: 2024/05/17 10:01:16 by dzubkova         ###   ########.fr        #
+#    Updated: 2024/05/19 16:39:11 by daria            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,10 +74,10 @@ libft:
 	$(MAKE) -sC $(LIBFTD) bonus
 
 $(NAME): $(OFILES) $(HFILES)
-	cc $(CFLAGS) $(OFILES) -I$(INCLUDESD) -L$(LIBFTD) -lft -lreadline -lhistory -o $(NAME)
+	cc $(CFLAGS) $(OFILES) -I$(INCLUDESD) -L$(LIBFTD) -L/opt/homebrew/opt/readline/lib -lft -lreadline -lhistory -o $(NAME)
 
 %.o: %.c $(HFILES)
-	cc -c $(CFLAGS) -g $< -o $@
+	cc -c $(CFLAGS) -I/opt/homebrew/opt/readline/include $< -o $@
 
 clean:
 	rm -f $(OFILES)
