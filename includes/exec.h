@@ -48,7 +48,8 @@ enum	e_bltn
 // exec_main.c
 int		exec(t_ast *s, char *subcmd, t_exe *b);
 // init_exe_bus.c
-void	init_exe_bus(t_exe *exe_bus, t_list **my_env);
+void	big_init_exe_bus_with_ast(t_ast *s, t_exe *exe_bus);
+void	pre_ast_init_exe_bus(t_exe *exe_bus, t_list **my_env);
 // traversal.c
 void	traverse_ast_to_exec(t_ast *s, t_exe *b);
 // traversal_utils.c

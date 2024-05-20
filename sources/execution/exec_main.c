@@ -19,13 +19,16 @@ int	exec(t_ast *s, char *subcmd, t_exe *b)
 		ft_putstr_fd("minishell: exec: uninitialized args", STDERR_FILENO);
 		return (ERROR);
 	}
-	if (b->heredocs_need_execution && !subcmd)
+	if (b->s == NULL)
 	{
-		b->heredocs_need_execution = 0;
-		if (exec_heredocs(b))
-			return (PARSING_ERROR);
-		traverse_ast_to_exec(s, b);
-		free_heredocs(b);
+		big_init_exe_bus_with_ast(s, b);
+		if (!subcmd)
+		{
+			if (exec_heredocs(b))
+				return (PARSING_ERROR);
+			traverse_ast_to_exec(s, b);
+			free_heredocs(b);
+		}
 	}
 	else
 		traverse_ast_to_exec(s, b);

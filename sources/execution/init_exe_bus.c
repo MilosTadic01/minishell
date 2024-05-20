@@ -30,18 +30,24 @@ static void	init_pipe_fds(t_exe *exe_bus)
 	exe_bus->pp_fds[1][1] = 0;
 }
 
+void	pre_ast_init_exe_bus(t_exe *exe_bus, t_list **my_env)
+{
+	exe_bus->exit_st = 0;
+	exe_bus->s = NULL;
+	exe_bus->env = my_env;
+}
+
 /*
 ppl_cmd_count = 1 bc we traverse the ast recursively and
 if s->tag == PIPE, cmd_count++. i = -1 bc that's a ++i type counter.
 To reset it intelligently or to add another one? I guess
 we're reusing the i, which in hindsight I've come to regret.
 */
-void	init_exe_bus(t_exe *exe_bus, t_list **my_env)
+void	big_init_exe_bus_with_ast(t_ast *s, t_exe *exe_bus)
 {
-	exe_bus->exit_st = 0;
+	// exe_bus->exit_st = 0;
 	exe_bus->heredocs_need_execution = 1;
-	exe_bus->s = NULL;
-	exe_bus->env = my_env;
+	exe_bus->s = s;
 	exe_bus->i = -1;
 	exe_bus->hd_count = 0;
 	exe_bus->hd_idx = 0;

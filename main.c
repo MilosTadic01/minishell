@@ -24,7 +24,7 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 	g_exit = 0;
 	my_env = init_env(envp);
-	init_exe_bus(&exe_bus, &my_env);
+	pre_ast_init_exe_bus(&exe_bus, &my_env);
 	minishell(NULL, &exe_bus);
 	ft_lstclear(&my_env);
 	return (0);
@@ -68,7 +68,7 @@ void	prompt(char *subcmd, t_exe *b)
 		free(line);
 		return (minishell(NULL, b));
 	}
-	b->s = ast;
+	b->s = NULL;
 	// print_ast(ast);
 	// printf("DONE\n");
 	if (*line != 0)
