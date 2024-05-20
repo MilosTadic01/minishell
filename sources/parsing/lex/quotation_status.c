@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotation_status.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:15:20 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/20 17:27:19 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/20 22:47:37 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	unclosed_parenthesis_check(t_input *in)
 
 	nested_count = 0;
 	copy = in->input;
+	q_status = DEFAULT;
 	while (*copy)
 	{
 		set_q_status_parenthesis(&q_status, *copy);
