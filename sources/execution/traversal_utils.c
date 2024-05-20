@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   traversal_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mitadic <mitadic@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/28 14:23:38 by mitadic           #+#    #+#             */
+/*   Updated: 2024/05/18 23:55:08 by mitadic          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	which_builtin(char *str)
@@ -25,7 +37,6 @@ void	close_pipes_and_wait_and_reset_pipeline(t_exe *b)
 {
 	pipe_closer(b);
 	go_wait(b);
-	// if (b->is_subshell == 0)
 	b->is_pipeline = 0;
 	b->ppl_cmd_count = 0;
 }

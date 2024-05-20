@@ -63,7 +63,6 @@ t_ast			*new_binop(int op, t_ast **left, t_ast **right);
 t_ast			*new_command(void);
 t_ast			*new_recursive_call(char *value);
 t_ast			*new_subshell(char *value);
-t_ast			*parse(char *input_string, t_list **env);
 t_ast			*parse_command(t_input *in);
 t_ast			*parse_pipe(t_input *input);
 t_ast			*parse_statement(t_input *input);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir_outs_setup.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mitadic <mitadic@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/14 11:23:38 by mitadic           #+#    #+#             */
+/*   Updated: 2024/05/18 15:35:08 by mitadic          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	try_opening_all_outfiles(t_ast *s, t_exe *b)
@@ -16,7 +28,7 @@ int	try_opening_all_outfiles(t_ast *s, t_exe *b)
 		if (b->fd_redir_out < 0)
 		{
 			perror("-minishell: open file for redir_out");
-			g_exit = 1;
+			b->exit_st = 1;
 			return (EXIT_FAILURE);
 		}
 		outs_cpy = outs_cpy->next;

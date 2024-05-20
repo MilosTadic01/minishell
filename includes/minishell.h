@@ -31,6 +31,7 @@
 # include "errors.h"
 # include "exec.h"
 # include "builtins.h"
+# include "parsing_for_exit_st.h"
 
 extern int	g_exit;
 
@@ -39,8 +40,8 @@ extern int	g_exit;
 #  define _DEFAULT_SOURCE
 # endif
 
-void	minishell(char *subcmd, t_exe *b, t_list **my_env);
-void	prompt(char *subcmd, t_exe *b, t_list **env);
+void	minishell(char *subcmd, t_exe *b);
+void	prompt(char *subcmd, t_exe *b);
 
 # define PIPE 124
 # define SINGLE_QUOTE 39

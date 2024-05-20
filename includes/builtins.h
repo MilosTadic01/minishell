@@ -13,13 +13,16 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 # include "minishell.h"
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 // pwd.c
-int		ft_pwd(void);
-char	*ft_getcwd(void);
+int		ft_pwd(t_exe *b);
+char	*ft_getcwd(t_exe *b);
 
 // cd.c
-int		ft_cd(int size, char **cmdarr, t_list **env);
+int		ft_cd(int size, char **cmdarr, t_exe *b);
 
 // echo.c
 int		ft_echo(int size, char **cmdarr);

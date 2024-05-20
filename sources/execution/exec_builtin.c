@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_builtin.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mitadic <mitadic@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/20 15:11:38 by mitadic           #+#    #+#             */
+/*   Updated: 2024/05/18 12:12:08 by mitadic          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static int	call_builtin(int builtin, t_ast *s, t_exe *b)
@@ -5,9 +17,9 @@ static int	call_builtin(int builtin, t_ast *s, t_exe *b)
 	if (builtin == ECHO)
 		return (ft_echo(s->command->size, s->command->args));
 	if (builtin == CD)
-		return (ft_cd(s->command->size, s->command->args, b->env));
+		return (ft_cd(s->command->size, s->command->args, b));
 	if (builtin == PWD)
-		return (ft_pwd());
+		return (ft_pwd(b));
 	if (builtin == EXPORT)
 		return (export_cmdarr(s->command->size, s->command->args, b->env));
 	if (builtin == UNSET)
@@ -28,9 +40,9 @@ static void	exec_builtin_in_pipeline(int builtin, t_ast *s, t_exe *b)
 	{
 		lay_child_pipes(b);
 		if (slap_on_redirs_in_child(s, b) == EXIT_FAILURE)
-			exit(g_exit);
-		g_exit = call_builtin(builtin, s, b);
-		exit(g_exit);
+			exit(b->exit_st);
+		b->exit_st = call_builtin(builtin, s, b);
+		exit(b->exit_st);
 	}
 	else
 		clean_up_after_redirs_in_parent(b);
@@ -43,20 +55,20 @@ static void	exec_echo_in_child(int builtin, t_ast *s, t_exe *b)
 	{
 		if (slap_on_redirs_in_child(s, b) == EXIT_FAILURE)
 			exit(1);
-		g_exit = call_builtin(builtin, s, b);
-		exit(g_exit);
+		b->exit_st = call_builtin(builtin, s, b);
+		exit(b->exit_st);
 	}
 	else
 	{
 		clean_up_after_redirs_in_parent(b);
 		waitpid(b->smpl_cmd_pid, &b->smpl_wstatus, 0);
-		g_exit = (b->smpl_wstatus >> 8) & 0xFF;
+		b->exit_st = (b->smpl_wstatus >> 8) & 0xFF;
 	}
 }
 
 static void	exec_builtin_in_parent(int builtin, t_ast *s, t_exe *b)
 {
-	g_exit = call_builtin(builtin, s, b);
+	b->exit_st = call_builtin(builtin, s, b);
 	clean_up_after_redirs_in_parent(b);
 }
 
