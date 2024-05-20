@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 11:15:20 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/17 11:45:20 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/20 17:27:19 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,18 +62,38 @@ int	unclosed_parenthesis_check(t_input *in)
 {
 	int		nested_count;
 	char	*copy;
+	int		q_status;
 
 	nested_count = 0;
 	copy = in->input;
 	while (*copy)
 	{
-		if (*copy == OPEN_PARENTHESE)
+		set_q_status_parenthesis(&q_status, *copy);
+		if (*copy == OPEN_PARENTHESE && !q_status)
 			nested_count++;
-		else if (*copy == CLOSE_PARENTHESE)
+		else if (*copy == CLOSE_PARENTHESE && !q_status)
 			nested_count--;
 		copy++;
 	}
 	if (nested_count)
 		return (UNCLOSED_PARENTHESIS);
 	return (SUCCESS);
+}
+
+void	set_q_status_parenthesis(int *q_status, char copy)
+{
+	if (copy == DOUBLE_QUOTE)
+	{
+		if (*q_status == DOUBLE_QUOTE)
+			*q_status = DEFAULT;
+		else if (*q_status == DEFAULT)
+			*q_status = DOUBLE_QUOTE;
+	}
+	else if (copy == SINGLE_QUOTE)
+	{
+		if (*q_status == SINGLE_QUOTE)
+			*q_status = DEFAULT;
+		else if (*q_status == DEFAULT)
+			*q_status = SINGLE_QUOTE;
+	}
 }

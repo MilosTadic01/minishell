@@ -3,27 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:40 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/19 19:04:57 by daria            ###   ########.fr       */
+/*   Updated: 2024/05/20 15:59:41 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <sys/wait.h>
 # include <unistd.h>
+# include <signal.h>
 # include <errno.h>
 # include <stdio.h>
-# include <signal.h>
+# include <sys/wait.h>
 # include <limits.h>
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "core.h"
 # include "../libft/libft.h"
 # include "lexer.h"
 # include "structs.h"
@@ -34,11 +35,6 @@
 # include "parsing_for_exit_st.h"
 
 extern int	g_exit;
-
-# define _XOPEN_SOURCE 700
-# ifndef _DEFAULT_SOURCE
-#  define _DEFAULT_SOURCE
-# endif
 
 void	minishell(char *subcmd, t_exe *b);
 void	prompt(char *subcmd, t_exe *b);

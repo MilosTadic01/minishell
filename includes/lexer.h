@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:35 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/17 11:49:37 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/20 17:32:17 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ typedef struct s_input
 	int		quotations;
 	t_token	current_token;
 }	t_input;
-
 
 char		*get_literal_part(t_input *in);
 char		*get_quotation_sequence(t_input *in);
@@ -45,6 +44,7 @@ int			unclosed_parenthesis_check(t_input *in);
 int			unclosed_quotations_check(t_input *in);
 void		init_input(t_input *in, char *input_string);
 void		next_char(t_input *in);
+void		set_q_status_parenthesis(int *q_status, char copy);
 void		skip_spaces(t_input *in);
 
 #endif

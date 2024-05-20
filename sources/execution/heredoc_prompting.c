@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_prompting.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mitadic <mitadic@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 14:02:38 by mitadic           #+#    #+#             */
-/*   Updated: 2024/05/19 01:13:08 by mitadic          ###   ########.fr       */
+/*   Updated: 2024/05/20 17:03:25 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void	prompt_for_all_heredocs(t_exe *exe_bus)
 	int		status;
 
 	pid = fork();
-	//receive_signals_noninteractive();
 	if (pid == 0)
 		set_a_limiter_and_prompt_for_each_in_a_loop(exe_bus);
 	else

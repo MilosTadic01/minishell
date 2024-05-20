@@ -6,14 +6,12 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:37 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/17 17:17:51 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/20 17:14:18 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
-
-# include "minishell.h"
 
 enum e_tag
 {

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: daria <daria@student.42.fr>                +#+  +:+       +#+         #
+#    By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/27 12:28:47 by dzubkova          #+#    #+#              #
-#    Updated: 2024/05/19 16:39:11 by daria            ###   ########.fr        #
+#    Updated: 2024/05/20 17:12:25 by dzubkova         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ FILES = $(LEXD)lexer.c \
 		$(LEXD)special_char_tokens.c \
 		$(LEXD)recursive_tokens.c \
 		$(LEXD)expansion.c \
+		$(LEXD)preprocessing.c \
 		$(PARSED)parser.c \
 		$(PARSED)new_branches.c \
 		$(PARSED)parser_utils.c \
