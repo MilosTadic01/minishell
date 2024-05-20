@@ -70,7 +70,7 @@ int	ft_export(char *kv_str, t_list **env)
 	if (!kv_str || !env)
 		return (SUCCESS);
 	keylen = extract_keylen(kv_str);
-	if (is_invalid_key(keylen, kv_str))
+	if (keylen == 0 || is_invalid_key(keylen, kv_str))
 		return (1);
 	del_if_already_an_envvar(keylen, kv_str, env);
 	tmp = (t_type){.as_str = kv_str};

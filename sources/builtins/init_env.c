@@ -64,8 +64,18 @@ static void	set_pwd(t_list **env)
 
 static void	set_shell(t_list **env)
 {
-	if (ft_strcmp(ft_getenv("SHELL", *env), "minishell") != 0)
-		ft_export("SHELL=minishell", env);
+	t_type	tmp;
+
+	if (!env || !*env)
+	{
+		tmp = (t_type){.as_str = "SHELL=minishell"};
+		ft_lstadd_back(env, ft_lstnew(&tmp, AS_STR));
+	}
+	else
+	{
+		if (ft_strcmp(ft_getenv("SHELL", *env), "minishell") != 0)
+			ft_export("SHELL=minishell", env);
+	}
 }
 
 t_list	*init_env(char **envp)
@@ -76,12 +86,15 @@ t_list	*init_env(char **envp)
 
 	i = -1;
 	env = NULL;
-	while (envp[++i])
-		;
-	while (--i >= 0)
+	if (envp && *envp)
 	{
-		tmp = (t_type){.as_str = envp[i]};
-		ft_lstadd_back(&env, ft_lstnew(&tmp, AS_STR));
+		while (envp[++i])
+			;
+		while (--i >= 0)
+		{
+			tmp = (t_type){.as_str = envp[i]};
+			ft_lstadd_back(&env, ft_lstnew(&tmp, AS_STR));
+		}
 	}
 	set_shell(&env);
 	set_pwd(&env);
