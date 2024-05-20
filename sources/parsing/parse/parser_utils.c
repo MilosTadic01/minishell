@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:17:07 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/19 17:46:13 by daria            ###   ########.fr       */
+/*   Updated: 2024/05/20 11:41:14 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ int	advance_token(t_input *in)
 		in->current_token.token_type = FINAL_TOKEN;
 	}
 	if (create_token(in))
+		return (PARSING_ERROR);
+	if (old_type == PIPE && is_command_separator(in))
 		return (PARSING_ERROR);
 	return (SUCCESS);
 }
