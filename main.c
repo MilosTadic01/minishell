@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/20 16:04:42 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/20 21:49:27 by daria            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/minishell.h"
 
 //static void print_ast(t_ast *s);
-int g_exit;
+static void	clean_and_run(char **line, t_exe *b);
 
-int main(int argc, char **argv, char **envp)
+int	g_exit;
+
+int	main(int argc, char **argv, char **envp)
 {
 	t_list	*my_env;
 	t_exe	exe_bus;
@@ -32,7 +34,6 @@ int main(int argc, char **argv, char **envp)
 
 void	minishell(char *subcmd, t_exe *b)
 {
-	//receive_signals_interactive();
 	if (!subcmd)
 	{
 		while (1)
@@ -61,30 +62,22 @@ void	prompt(char *subcmd, t_exe *b)
 	free(copy);
 	ast = parse(line, b);
 	if (!ast)
-	{
-		ft_putendl_fd("Error: bad syntax", 2);
-		b->exit_st = 2;
-		add_history(line);
-		free(line);
-		return (minishell(NULL, b));
-	}
-	// print_ast(ast);
-	// printf("DONE\n");
-	if (*line != 0)
-	{
-		if (exec(ast, subcmd, b))
-		{
-			ft_putendl_fd("Error: bad syntax", 2);
-			b->exit_st = 2;
-			add_history(line);
-			free(line);
-			return (minishell(NULL, b));
-		}
-	}
+		return (clean_and_run(&line, b));
+	if (*line != 0 && exec(ast, subcmd, b))
+		return (clean_and_run(&line, b));
 	if (*line != 0)
 		add_history(line);
 	free(line);
 	free_ast(ast);
+}
+
+static void	clean_and_run(char **line, t_exe *b)
+{
+	ft_putendl_fd("Error: bad syntax", STDERR_FILENO);
+	b->exit_st = 2;
+	add_history(*line);
+	free(*line);
+	return (minishell(NULL, b));
 }
 
 // static void print_ast(t_ast *s)
@@ -101,13 +94,15 @@ void	prompt(char *subcmd, t_exe *b)
 //  		tmp = s->command->ins;
 //  		while (tmp)
 //  		{
-//  			printf("input redirections %d to: %s\n", tmp->as_item->type, tmp->as_item->filename);
+//  			printf("input redirections %d to: %s\n", 
+//tmp->as_item->type, tmp->as_item->filename);
 //  			tmp = tmp->next;
 //  		}
 //  		tmp = s->command->outs;
 //  		while (tmp)
 //  		{
-//  			printf("output redirections %d to: %s\n",  tmp->as_item->type, tmp->as_item->filename);
+//  			printf("output redirections %d to: %s\n",  
+//tmp->as_item->type, tmp->as_item->filename);
 //  			tmp = tmp->next;
 //  		}
 //  	}
