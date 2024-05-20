@@ -68,7 +68,6 @@ void	prompt(char *subcmd, t_exe *b)
 		free(line);
 		return (minishell(NULL, b));
 	}
-	b->s = NULL;
 	// print_ast(ast);
 	// printf("DONE\n");
 	if (*line != 0)

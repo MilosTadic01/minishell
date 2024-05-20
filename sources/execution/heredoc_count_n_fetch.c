@@ -44,9 +44,9 @@ int	count_heredocs(t_ast *s, t_exe *b)
 		free_ast(subsh_ast);
 		subsh_ast = NULL;
 	}
-	if (s->left && count_heredocs(subsh_ast, b))
+	if (s->left && count_heredocs(s->left, b))
 		return (PARSING_ERROR);
-	if (s->right && count_heredocs(subsh_ast, b))
+	if (s->right && count_heredocs(s->right, b))
 		return (PARSING_ERROR);
 	return (SUCCESS);
 }
