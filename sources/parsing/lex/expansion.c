@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 12:57:33 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/17 11:54:25 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/20 11:05:26 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int	append_sequence(t_input *in, int start, char **res, t_list **env)
 		free(*res);
 		free(expanded_seq);
 		*res = tmp;
+		return (process_input(in, res, env));
 	}
 	return (continue_processing(in, res));
 }

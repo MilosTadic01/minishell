@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/20 12:15:28 by dzubkova          #+#    #+#             */
+/*   Updated: 2024/05/20 12:16:12 by dzubkova         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static int count_heredocs(t_ast *s, t_exe *b)
 {
-	t_ast   *subsh_ast;
-	t_list  *ins_cpy;
+	t_ast	*subsh_ast;
+	t_list	*ins_cpy;
 
 	if (!s || !b)
 		return (ERROR);
@@ -23,22 +35,22 @@ static int count_heredocs(t_ast *s, t_exe *b)
 		subsh_ast = parse(s->subshell_cmd, b->env);
 		if (!subsh_ast)
 			return (PARSING_ERROR);
-		if (subsh_ast)
-			count_heredocs(subsh_ast, b);
+		if (subsh_ast && count_heredocs(subsh_ast, b))
+			return (PARSING_ERROR);
 		free_ast(subsh_ast);
 		subsh_ast = NULL;
 	}
-	if (s->left)
-		count_heredocs(s->left, b);
-	if (s->right)
-		count_heredocs(s->right, b);
+	if (s->left && count_heredocs(subsh_ast, b))
+		return (PARSING_ERROR);
+	if (s->right && count_heredocs(subsh_ast, b))
+		return (PARSING_ERROR);
 	return (SUCCESS);
 }
 
 static void fetch_hd_delimiters(t_ast *s, t_exe *b)
 {
-	t_ast   *subsh_ast;
-	t_list  *ins_cpy;
+	t_ast	*subsh_ast;
+	t_list	*ins_cpy;
 
 	subsh_ast = NULL;
 	if (s->tag == COMMAND && s->command->ins)

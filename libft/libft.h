@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 12:19:03 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/17 15:37:09 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/20 12:16:56 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int			ft_isdigit(int c);
 int			ft_isalpha(int c);
 int			ft_isalnum(int c);
 int			ft_isascii(int c);
-int         ft_isplusminus(int c);
+int			ft_isplusminus(int c);
 int			ft_isprint(int c);
 int			ft_isspace(char ch);
 int			ft_strcmp(const char *s1, const char *s2);

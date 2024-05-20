@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 12:53:06 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/15 16:44:35 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/20 11:32:05 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ int	get_subshell_token(t_input *in)
 		next_char(in);
 	}
 	value = ft_substr(in->input, start, in->current_position - start - 1);
+	if (!ft_strlen(value))
+	{
+		free(value);
+		return (PARSING_ERROR);
+	}
 	init_token(&in->current_token, value, SUBSHELL);
 	next_char(in);
 	return (SUCCESS);
@@ -44,6 +49,11 @@ int	get_recursive_token(t_input *in)
 	while (in->current_char && !is_logical_operator(in))
 		next_char(in);
 	value = ft_substr(in->input, start, in->current_position - start);
+	if (!ft_strlen(value))
+	{
+		free(value);
+		return (PARSING_ERROR);
+	}
 	init_token(&in->current_token, value, RECCALL);
 	return (SUCCESS);
 }

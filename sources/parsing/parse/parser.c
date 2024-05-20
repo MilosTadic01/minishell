@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 17:30:33 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/16 15:29:45 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/20 11:46:09 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,7 @@ t_ast	*parse_pipe(t_input *input)
 		return (ast);
 	if (input->current_token.token_type == PIPE)
 	{
-		advance_token(input);
-		if (is_final_token(input))
+		if (advance_token(input) || is_final_token(input))
 		{
 			free_ast(ast);
 			return (NULL);
