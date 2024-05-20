@@ -44,6 +44,10 @@ FILES = $(LEXD)lexer.c \
 		$(BUILTINSD)printnget_env.c \
 		$(BUILTINSD)exit.c \
 		$(EXECD)exec_main.c \
+		$(EXECD)heredoc_boss.c \
+		$(EXECD)heredoc_count_n_fetch.c \
+		$(EXECD)heredoc_prompting.c \
+		$(EXECD)init_exe_bus.c \
 		$(EXECD)exec_utils.c \
 		$(EXECD)exec_builtin.c \
 		$(EXECD)exec_bin.c \
@@ -60,12 +64,11 @@ FILES = $(LEXD)lexer.c \
 		$(EXECD)pipe_fu_parent.c \
 		$(EXECD)pipe_fu_children.c \
 		$(EXECD)wait_pipeline.c \
-		$(EXECD)heredoc.c \
 		main.c
 
 NAME = minishell
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 MAKE = make
 
 all: libft $(NAME)

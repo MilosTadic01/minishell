@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   traversal.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mitadic <mitadic@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/18 10:44:38 by mitadic           #+#    #+#             */
+/*   Updated: 2024/05/18 11:12:08 by mitadic          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /*features bottom of ppl for currently parsed command (if b->is_ppl == 1...)
@@ -29,8 +41,8 @@ static void	set_subshell_do(t_exe *b)
 	i--;
 	if (i == (b->subshell_lvl - 1) && \
 			(!b->log_op || b->log_op == PIPE || \
-			(b->log_op == AND && g_exit == 0) || \
-			(b->log_op == OR && g_exit > 0)))
+			(b->log_op == AND && b->exit_st == 0) || \
+			(b->log_op == OR && b->exit_st > 0)))
 		b->subshell_do[b->subshell_lvl] = 1;
 }
 
@@ -38,7 +50,7 @@ static void	increment_subshell_lvl_and_call_rec_minishell(t_ast *s, t_exe *b)
 {
 	++(b->subshell_lvl);
 	set_subshell_do(b);
-	minishell(ft_strdup(s->subshell_cmd), b, b->env);
+	minishell(ft_strdup(s->subshell_cmd), b);
 	--(b->subshell_lvl);
 }
 
@@ -52,8 +64,8 @@ static void	command_exec(t_ast *s, t_exe *b)
 		return ;
 	if (b->subshell_do[b->subshell_lvl] && \
 		(!b->log_op || b->log_op == PIPE || \
-		(b->log_op == AND && g_exit == 0) || \
-		(b->log_op == OR && g_exit > 0)))
+		(b->log_op == AND && b->exit_st == 0) || \
+		(b->log_op == OR && b->exit_st > 0)))
 	{
 		if (s->command->args)
 			builtin = which_builtin(s->command->args[0]);
@@ -74,7 +86,7 @@ void	traverse_ast_to_exec(t_ast *s, t_exe *b)
 	else if (s->tag == SUBSHELL)
 		increment_subshell_lvl_and_call_rec_minishell(s, b);
 	else if (s->tag == RECCALL)
-		minishell(ft_strdup(s->subshell_cmd), b, b->env);
+		minishell(ft_strdup(s->subshell_cmd), b);
 	else
 		logical_and_pipal_jiujitsu_and_leftright_rec(s, b);
 	if (b->is_pipeline == 1 && (b->i == b->ppl_cmd_count - 1))

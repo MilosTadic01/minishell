@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-char	*ft_getcwd(void)
+char	*ft_getcwd(t_exe *b)
 {
 	char	*buff;
 	char	*pwd;
@@ -25,21 +25,21 @@ char	*ft_getcwd(void)
 	else
 	{
 		pwd = getcwd(buff, PATH_MAX);
-		g_exit = errno;
+		b->exit_st = errno;
 		if (pwd == NULL)
 			perror("minishell: getcwd: ");
 	}
 	return (pwd);
 }
 
-int	ft_pwd(void)
+int	ft_pwd(t_exe *b)
 {
 	char	*pwd;
 
-	pwd = ft_getcwd();
+	pwd = ft_getcwd(b);
 	ft_putstr_fd(pwd, STDOUT_FILENO);
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	if (pwd)
 		free(pwd);
-	return (g_exit);
+	return (b->exit_st);
 }

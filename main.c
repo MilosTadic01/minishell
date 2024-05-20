@@ -17,30 +17,32 @@ int g_exit;
 
 int main(int argc, char **argv, char **envp)
 {
-	t_list				*my_env;
+	t_list	*my_env;
+	t_exe	exe_bus;
 
 	(void)argc;
 	(void)argv;
 	g_exit = 0;
 	my_env = init_env(envp);
-	minishell(NULL, NULL, &my_env);
+	init_exe_bus(&exe_bus, &my_env);
+	minishell(NULL, &exe_bus);
 	ft_lstclear(&my_env);
 	return (0);
 }
 
-void	minishell(char *subcmd, t_exe *b, t_list **my_env)
+void	minishell(char *subcmd, t_exe *b)
 {
 	//receive_signals_interactive();
 	if (!subcmd)
 	{
 		while (1)
-			prompt(subcmd, b, my_env);
+			prompt(subcmd, b);
 	}
 	else
-		prompt(subcmd, b, my_env);
+		prompt(subcmd, b);
 }
 
-void	prompt(char *subcmd, t_exe *b, t_list **my_env)
+void	prompt(char *subcmd, t_exe *b)
 {
 	char				*line;
 	char				*copy;
@@ -52,31 +54,32 @@ void	prompt(char *subcmd, t_exe *b, t_list **my_env)
 	else
 		line = subcmd;
 	if (!line)
-		exit(g_exit);
+		exit(b->exit_st);
 	receive_signals_noninteractive();
 	copy = line;
 	line = ft_strtrim(copy, " ");
 	free(copy);
-	ast = parse(line, my_env);
+	ast = parse(line, b);
 	if (!ast)
 	{
 		ft_putendl_fd("Error: bad syntax", 2);
-		g_exit = 2;
+		b->exit_st = 2;
 		add_history(line);
 		free(line);
-		return (minishell(NULL, NULL, my_env));
+		return (minishell(NULL, b));
 	}
+	b->s = ast;
 	// print_ast(ast);
 	// printf("DONE\n");
 	if (*line != 0)
 	{
-		if (exec(ast, subcmd, b, my_env))
+		if (exec(ast, subcmd, b))
 		{
 			ft_putendl_fd("Error: bad syntax", 2);
-			g_exit = 2;
+			b->exit_st = 2;
 			add_history(line);
 			free(line);
-			return (minishell(NULL, NULL, my_env));
+			return (minishell(NULL, b));
 		}
 	}
 	if (*line != 0 && !subcmd)

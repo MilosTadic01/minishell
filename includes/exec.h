@@ -7,6 +7,8 @@
 
 typedef struct s_exe
 {
+	int		exit_st;
+	int		heredocs_need_execution;
 	t_ast	*s;
 	t_list	**env;
 	int		i;
@@ -44,16 +46,23 @@ enum	e_bltn
 }	;
 
 // exec_main.c
-int		exec(t_ast *s, char *subcmd, t_exe *b, t_list **env);
+int		exec(t_ast *s, char *subcmd, t_exe *b);
+// init_exe_bus.c
+void	init_exe_bus(t_exe *exe_bus, t_list **my_env);
 // traversal.c
 void	traverse_ast_to_exec(t_ast *s, t_exe *b);
 // traversal_utils.c
 int		which_builtin(char *str);
 void	close_pipes_and_wait_and_reset_pipeline(t_exe *b);
 void	increment_hd_idx(t_ast *s, t_exe *b);
-// heredoc.c
+// heredoc_boss.c
 int		exec_heredocs(t_exe *exe_bus);
 void	free_heredocs(t_exe *exe_bus);
+// heredoc_count_n_fetch.c
+int		count_heredocs(t_ast *s, t_exe *b);
+void	fetch_hd_delimiters(t_ast *s, t_exe *b);
+// heredoc_prompting.c
+void	prompt_for_all_heredocs(t_exe *exe_bus);
 // exec_builtin.c
 void	exec_builtin(int builtin, t_ast *s, t_exe *b);
 // exec_bin.c

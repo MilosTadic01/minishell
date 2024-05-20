@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir_ins_setup.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mitadic <mitadic@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/12 14:23:38 by mitadic           #+#    #+#             */
+/*   Updated: 2024/05/18 19:35:08 by mitadic          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static int	reopen_hd_file_for_reading(t_exe *b, int i)
@@ -18,6 +30,8 @@ static int	reopen_hd_file_for_reading(t_exe *b, int i)
 	return (EXIT_SUCCESS);
 }
 
+// This was a cool idea but wasn't fitting the purpose
+// b->fd_redir_in = open("/dev/null", O_RDONLY);
 int	open_and_close_infiles_while_legit(t_ast *s, t_exe *b, int hd_count)
 {
 	t_list	*ins_cpy;
@@ -37,7 +51,6 @@ int	open_and_close_infiles_while_legit(t_ast *s, t_exe *b, int hd_count)
 				ft_putstr_fd("-minishell: ", 2);
 				perror(ins_cpy->as_item->filename);
 				return (EXIT_FAILURE);
-				// b->fd_redir_in = open("/dev/null", O_RDONLY);
 			}
 		}
 		if (ins_cpy->next && b->fd_redir_in > -1)
@@ -86,8 +99,6 @@ void	infile_legitimacy_control(t_ast *s, t_exe *b, int hd_count)
 	{
 		b->hd_idx += hd_count;
 		b->fd_redir_in = -1;
-		g_exit = 1;
-		// return (EXIT_FAILURE);
+		b->exit_st = 1;
 	}
-	// return (EXIT_SUCCESS);
 }

@@ -1,13 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipeline_setup.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mitadic <mitadic@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 14:13:38 by mitadic           #+#    #+#             */
+/*   Updated: 2024/05/19 19:32:08 by mitadic          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 /*
-obsolete conditional checks
+obsolete conditional checks for update_pipe_info
 if (s->tag == COMMAND)
 if (s->tag == COMMAND || s->tag == RECCALL)
 and
 else if (s->tag == SUBSHELL || s->tag == RECCALL)
 */
-
 static void	update_pipe_info(t_ast *s, t_exe *b)
 {
 	t_ast	*reccall_ast;
@@ -25,7 +36,7 @@ static void	update_pipe_info(t_ast *s, t_exe *b)
 	}
 	else if (s->tag == SUBSHELL)
 	{
-		reccall_ast = parse(s->subshell_cmd, b->env);
+		reccall_ast = parse(s->subshell_cmd, b);
 		if (!reccall_ast)
 			ft_putstr_fd("pipe counter: failed to parse subshell_cmd\n", 2);
 		if (reccall_ast)

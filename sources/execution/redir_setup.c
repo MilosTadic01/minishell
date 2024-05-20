@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir_setup.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mitadic <mitadic@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/11 16:23:38 by mitadic           #+#    #+#             */
+/*   Updated: 2024/05/18 17:11:08 by mitadic          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 static void	set_up_redir_outs(t_ast *s, t_exe *b)
@@ -7,7 +19,7 @@ static void	set_up_redir_outs(t_ast *s, t_exe *b)
 		if (try_opening_all_outfiles(s, b) == EXIT_FAILURE)
 		{
 			b->fd_redir_out = -1;
-			g_exit = 1;
+			b->exit_st = 1;
 		}
 	}
 }
@@ -15,6 +27,10 @@ static void	set_up_redir_outs(t_ast *s, t_exe *b)
 /* hd_idx is immediately increased by hd_count, because we may need to stop
 the opening and closing of infiles early if one of them is fd == -1 and we
 need the correct hd_idx (more hd_to carry over into the following commands */
+// obsolete after += hd_count:
+// 		infile_legitimacy_control(s, b, hd_count);
+// 		if (infile_legitimacy_control(s, b, hd_count) == EXIT_FAILURE)
+//			return ;
 static int	set_up_redir_ins(t_ast *s, t_exe *b)
 {
 	int	hd_count;
@@ -23,9 +39,6 @@ static int	set_up_redir_ins(t_ast *s, t_exe *b)
 	{
 		hd_count = count_hds_in_this_cmd(s);
 		b->hd_idx += hd_count;
-		// infile_legitimacy_control(s, b, hd_count);
-		// if (infile_legitimacy_control(s, b, hd_count) == EXIT_FAILURE)
-		//     return ;
 		if (open_and_close_infiles_while_legit(s, b, hd_count) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 	}

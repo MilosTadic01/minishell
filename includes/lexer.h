@@ -22,11 +22,10 @@ typedef struct s_input
 	t_token	current_token;
 }	t_input;
 
-char		*expand_variable(t_input *in, int state, t_list **env);
+
 char		*get_literal_part(t_input *in);
 char		*get_quotation_sequence(t_input *in);
 char		peek_char(t_input *in);
-int			append_sequence(t_input *in, int start, char **res, t_list **env);
 int			continue_processing(t_input *in, char **res);
 int			create_token(t_input *in);
 int			exit_loop_conditions(t_input *in);
@@ -41,8 +40,6 @@ int			get_output_redir_token(t_input *in);
 int			get_pipe_token(t_input *in);
 int			get_recursive_token(t_input *in);
 int			get_subshell_token(t_input *in);
-int			preprocess_env(t_input *in, t_list **env);
-int			process_input(t_input *in, char **res, t_list **env);
 int			quotation_status(t_input *in);
 int			unclosed_parenthesis_check(t_input *in);
 int			unclosed_quotations_check(t_input *in);

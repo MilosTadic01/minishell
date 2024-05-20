@@ -12,12 +12,12 @@
 
 #include "../../../includes/minishell.h"
 
-int	preprocess_env(t_input *in, t_list **env)
+int	preprocess_env(t_input *in, t_exe *b)
 {
 	char	*res;
 
 	res = NULL;
-	if (process_input(in, &res, env))
+	if (process_input(in, &res, b))
 		return (PARSING_ERROR);
 	free(in->input);
 	init_input(in, res);
@@ -25,7 +25,7 @@ int	preprocess_env(t_input *in, t_list **env)
 	return (SUCCESS);
 }
 
-int	process_input(t_input *in, char **res, t_list **env)
+int	process_input(t_input *in, char **res, t_exe *b)
 {
 	int	start;
 
@@ -41,10 +41,10 @@ int	process_input(t_input *in, char **res, t_list **env)
 			break ;
 		next_char(in);
 	}
-	return (append_sequence(in, start, res, env));
+	return (append_sequence(in, start, res, b));
 }
 
-int	append_sequence(t_input *in, int start, char **res, t_list **env)
+int	append_sequence(t_input *in, int start, char **res, t_exe *b)
 {
 	char	*seq;
 	char	*tmp;
@@ -57,7 +57,7 @@ int	append_sequence(t_input *in, int start, char **res, t_list **env)
 	*res = tmp;
 	if (in->current_char == DOLLAR && in->quotations != SINGLE_QUOTE)
 	{
-		expanded_seq = expand_variable(in, in->quotations, env);
+		expanded_seq = expand_variable(in, in->quotations, b);
 		tmp = ft_concat(*res, expanded_seq);
 		free(*res);
 		free(expanded_seq);
@@ -86,7 +86,7 @@ int	continue_processing(t_input *in, char **res)
 	return (SUCCESS);
 }
 
-char	*expand_variable(t_input *in, int state, t_list **env)
+char	*expand_variable(t_input *in, int state, t_exe *b)
 {
 	char	*var_name;
 	char	*var_value;
@@ -97,12 +97,12 @@ char	*expand_variable(t_input *in, int state, t_list **env)
 	if (in->current_char == QUESTION_MARK)
 	{
 		next_char(in);
-		return (ft_itoa(g_exit));
+		return (ft_itoa(b->exit_st));
 	}
 	while (ft_isalnum(in->current_char) || in->current_char == UNDERSCORE)
 		next_char(in);
 	var_name = ft_substr(in->input, start, in->current_position - start);
-	var_value = ft_getenv(var_name, *env);
+	var_value = ft_getenv(var_name, *(b->env));
 	if (var_value && !state)
 		var_value = ft_rm_consec_spaces(var_value);
 	else if (var_value && state)

@@ -12,14 +12,14 @@
 
 #include "../../../includes/minishell.h"
 
-t_ast	*parse(char *input_string, t_list **env)
+t_ast	*parse(char *input_string, t_exe *b)
 {
 	int		type;
 	t_ast	*final_ast;
 	t_input	in;
 
 	init_input(&in, input_string);
-	if (preprocess_env(&in, env) || unclosed_parenthesis_check(&in))
+	if (preprocess_env(&in, b) || unclosed_parenthesis_check(&in))
 	{
 		free(in.input);
 		return (NULL);

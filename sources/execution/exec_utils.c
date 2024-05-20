@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mitadic <mitadic@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/12 14:23:38 by mitadic           #+#    #+#             */
+/*   Updated: 2024/05/17 19:35:08 by mitadic          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 // *strarr = NULL; omitted. This was causing "invalid write of size 8"
@@ -53,6 +65,8 @@ static void	free_the_distinct_path_and_argv(t_exe *b)
 
 void	free_n_error_n_exit(char *errprefix, t_exe *b)
 {
+	if (errprefix && !b->execve_path)
+		errno = ENOENT;
 	if (errprefix)
 		perror(errprefix);
 	if (b->execve_path && b->execve_argv && b->execve_path == b->execve_argv[0])
@@ -73,5 +87,5 @@ void	free_n_error_n_exit(char *errprefix, t_exe *b)
 		free_strarr(b->my_paths);
 		b->my_paths = NULL;
 	}
-	exit(g_exit);
+	exit(b->exit_st);
 }
