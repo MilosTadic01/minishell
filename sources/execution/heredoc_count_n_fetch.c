@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_count_n_fetch.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mitadic <mitadic@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 15:02:38 by mitadic           #+#    #+#             */
-/*   Updated: 2024/05/18 02:21:08 by mitadic          ###   ########.fr       */
+/*   Updated: 2024/05/20 12:29:53 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,15 @@ int	count_heredocs(t_ast *s, t_exe *b)
 		subsh_ast = parse(s->subshell_cmd, b);
 		if (!subsh_ast)
 			return (PARSING_ERROR);
-		if (subsh_ast)
-			count_heredocs(subsh_ast, b);
+		if (subsh_ast && count_heredocs(subsh_ast, b))
+			return (PARSING_ERROR);
 		free_ast(subsh_ast);
 		subsh_ast = NULL;
 	}
-	if (s->left)
-		count_heredocs(s->left, b);
-	if (s->right)
-		count_heredocs(s->right, b);
+	if (s->left && count_heredocs(subsh_ast, b))
+		return (PARSING_ERROR);
+	if (s->right && count_heredocs(subsh_ast, b))
+		return (PARSING_ERROR);
 	return (SUCCESS);
 }
 

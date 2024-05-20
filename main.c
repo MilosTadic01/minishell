@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/19 19:35:08 by daria            ###   ########.fr       */
+/*   Updated: 2024/05/20 13:04:10 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	prompt(char *subcmd, t_exe *b)
 			return (minishell(NULL, b));
 		}
 	}
-	if (*line != 0 && !subcmd)
+	if (*line != 0)
 		add_history(line);
 	free(line);
 	free_ast(ast);
