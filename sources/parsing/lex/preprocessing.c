@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:11:03 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/20 17:15:48 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/21 11:33:35 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ int	process_input(t_input *in, char **res, t_exe *b)
 			break ;
 		next_char(in);
 	}
-	return (append_sequence(in, start, res, b));
+	return (process_variable(in, start, res, b));
 }
 
-int	append_sequence(t_input *in, int start, char **res, t_exe *b)
+int	process_variable(t_input *in, int start, char **res, t_exe *b)
 {
 	char	*seq;
 	char	*tmp;

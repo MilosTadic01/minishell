@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daria <daria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 14:23:38 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/20 22:46:06 by daria            ###   ########.fr       */
+/*   Updated: 2024/05/21 13:29:43 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,15 +94,15 @@ static void	clean_and_run(char **line, t_exe *b)
 //  		tmp = s->command->ins;
 //  		while (tmp)
 //  		{
-//  			printf("input redirections %d to: %s\n", 
-//tmp->as_item->type, tmp->as_item->filename);
+//  			printf("input redirections %d to: %s\n",
+// tmp->as_item->type, tmp->as_item->filename);
 //  			tmp = tmp->next;
 //  		}
 //  		tmp = s->command->outs;
 //  		while (tmp)
 //  		{
-//  			printf("output redirections %d to: %s\n",  
-//tmp->as_item->type, tmp->as_item->filename);
+//  			printf("output redirections %d to: %s\n",
+// tmp->as_item->type, tmp->as_item->filename);
 //  			tmp = tmp->next;
 //  		}
 //  	}

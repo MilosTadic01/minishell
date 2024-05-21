@@ -6,7 +6,7 @@
 /*   By: dzubkova <dzubkova@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 12:53:06 by dzubkova          #+#    #+#             */
-/*   Updated: 2024/05/20 11:32:05 by dzubkova         ###   ########.fr       */
+/*   Updated: 2024/05/21 11:54:52 by dzubkova         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	get_recursive_token(t_input *in)
 	int		start;
 
 	start = in->current_position;
-	while (in->current_char && !is_logical_operator(in))
+	while (in->current_char)
 		next_char(in);
 	value = ft_substr(in->input, start, in->current_position - start);
 	if (!ft_strlen(value))
