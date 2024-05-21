@@ -15,7 +15,7 @@ write a shell in C
 | **Expansions Execution** | ➕ incl. pipelines and logical switches `export CMD="echo aa && echo bb"`. `$CMD` prints `aa` `bb` | ✅ |
 | **Logical Switching**| Execution depends on last exit status (`&&`, <code>&#124;&#124;</code>).| ✅ |
 | **Logical Layering** | When parentheses `()`, execution depends on any previous logical switch. | ✅ |
-| **Pipes**            | `cat \| sort` | ✅ |
+| **Pipes**            | `cat \| sort`; support for indefinite length pipeline | ✅ |
 | **Signal Handling**  | Handles `SIGINT`, `SIGQUIT` in non-interactive mode, as well as for STDIN_FILENO prompting and heredoc prompting.| ✅ |
 | **History**          | Command history and navigation.                               | ✅ |
 | **Error Handling**   | incl. exit statuses. `echo $?`                                  | ✅ |
