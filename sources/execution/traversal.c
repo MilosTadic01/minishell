@@ -26,7 +26,7 @@ static void	logical_and_pipal_jiujitsu_and_leftright_rec(t_ast *s, t_exe *b)
 	if (s->op == PIPE && b->is_pipeline == 0 && \
 		b->subshell_do[b->subshell_lvl] && \
 		((b->log_op == AND && b->exit_st == 0) || \
-		(b->log_op == OR && b->exit_st > 0)))
+		(b->log_op == OR && b->exit_st > 0) || b->log_op == 0))
 		set_up_pipeline(s, b);
 	if (s->left)
 		traverse_ast_to_exec(s->left, b);

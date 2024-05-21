@@ -32,6 +32,8 @@ static void	update_pipe_info(t_ast *s, t_exe *b)
 		b->ppl_cmd_count++;
 	else if (s->tag == BINOP && s->op == PIPE)
 	{
+		if (s->left)
+			update_pipe_info(s->left, b);
 		if (s->right)
 			update_pipe_info(s->right, b);
 	}
