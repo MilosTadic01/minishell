@@ -68,6 +68,10 @@ int	exec_heredocs(t_exe *exe_bus)
 	return (SUCCESS);
 }
 
+// once upon a time:
+	// free(num);
+	// close(exe_bus->hd_fds[i]);
+	// unlink(path);
 void	free_heredocs(t_exe *exe_bus)
 {
 	int		i;
@@ -82,7 +86,6 @@ void	free_heredocs(t_exe *exe_bus)
 		num = ft_itoa(i);
 		path = ft_strjoin("/tmp/heredoc", num);
 		free(num);
-		// close(exe_bus->hd_fds[i]);
 		unlink(path);
 		free(path);
 		free(exe_bus->hd_delimiters[i]);
