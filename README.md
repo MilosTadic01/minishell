@@ -1,7 +1,38 @@
 # minishell
 write a shell in C
 
-let's break it
+## Features Overview
+
+| Feature              | Description and Example                                                   | Status  |
+|----------------------|---------------------------------------------------------------|:---------:|
+| **Basic Commands**   | Execution of binaries like `ls`, `cat`.  | ✅ |
+| **Absolute Path Exec** | `/bin/ls`  | ✅ |
+| **Built-in Commands**| `cd`, `echo`, `pwd`, `exit`, `export`, `unset`, `env` without options.  | ✅ |
+| **Parsing Errors**   | `<(`, `(`, `&&\|`, `'`, `"`, etc. Minishell does not prompt for closure of open pairs.  | ✅ |
+| **Redirections**     | input (`<`), output (`>`), heredoc (`<<`) and append (`>>`) redirections. | ✅ |
+| **Environment Variables** | Interfaced via `export` and `unset`. `export TEST=55 TEST=99` | ✅ |
+| **Variable Expansion** | `echo $TEST` prints `99`  | ✅ |
+| **Expansions Execution** | ➕ incl. pipelines and logical switches `export CMD="echo aa && echo bb"`. `$CMD` prints `aa` `bb` | ✅ |
+| **Logical Switching**| Execution depends on last exit status (`&&`, <code>&#124;&#124;</code>).| ✅ |
+| **Logical Layering** | When parentheses `()`, execution depends on any previous logical switch. | ✅ |
+| **Pipes**            | `cat \| sort` | ✅ |
+| **Signal Handling**  | Handles `SIGINT`, `SIGQUIT` in non-interactive mode, as well as for STDIN_FILENO prompting and heredoc prompting.| ✅ |
+| **History**          | Command history and navigation.                               | ✅ |
+| **Error Handling**   | incl. exit statuses. `echo $?`                                  | ✅ |
+| **Err and fd redirection**| `2>`, `&>`, `4096>`              | ❌ |
+| **Shell variables**   |  `echo $SECONDS` (since the Shell was started)                 | ❌ |
+| **Built-in variables** | `echo $HISTSIZE`                                 | ❌ |
+| **Subshells**        | Execution in a child process when parentheses `()`.            | ❌ |
+| **Escaped Characters** | Escaping is not interpreted as such `\n`, `\t`              | ❌ |
+| **Ansi C Expansion** | `echo $'apple\nbanana'` prints `apple` `newline` `banana` | ❌ |
+| **Wildcards \* **   | `rm \*.c`                        | ❌ |
+| **Backgrounding** | Background a process with `&`.    | ❌ |
+| **Pipes through ()** | Yes: `ls \| (cat) \| cat`. No: `(echo aa && echo bb) \| cat`. | 🚧 |
+
+### Legend
+- ✅ Implemented and tested.
+- 🚧 In Progress: implemented for learning purposes but not entirely Bash-like.
+- ❌ Not Implemented.
 
 ## Navigating the massive knowledge of Shell
 
