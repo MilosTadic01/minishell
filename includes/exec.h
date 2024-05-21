@@ -20,16 +20,16 @@
 typedef struct s_exe
 {
 	int		exit_st;
-	int		heredocs_need_execution;
 	t_ast	*s;
 	t_list	**env;
+	int		heredocs_need_execution;
 	int		i;
 	int		hd_count;
 	int		hd_idx;
 	int		*hd_fds;
+	char	**hd_delimiters;
 	int		fd_redir_in;
 	int		fd_redir_out;
-	char	**hd_delimiters;
 	int		is_pipeline;
 	int		subshell_lvl;
 	int		subshell_do[MAX_GOS];

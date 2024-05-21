@@ -16,9 +16,17 @@
 Furthermore:
 1. if (s->op == PIPE...) => count pipes, set is_pipeline to True
 2. b->log_op = s->op; assign / update log_op before going right*/
+
+// Why isn't it required like this for bottom of ast?
+	// if (b->is_pipeline == 1 && (s->right == NULL || 
+	// 		(s->right != NULL && s->right->tag == BINOP && 
+	// 		(s->right->op == AND || s->right->op == OR))))
 static void	logical_and_pipal_jiujitsu_and_leftright_rec(t_ast *s, t_exe *b)
 {
-	if (s->op == PIPE && b->is_pipeline == 0)
+	if (s->op == PIPE && b->is_pipeline == 0 && \
+		b->subshell_do[b->subshell_lvl] && \
+		((b->log_op == AND && b->exit_st == 0) || \
+		(b->log_op == OR && b->exit_st > 0)))
 		set_up_pipeline(s, b);
 	if (s->left)
 		traverse_ast_to_exec(s->left, b);
@@ -63,7 +71,7 @@ static void	command_exec(t_ast *s, t_exe *b)
 	if (!s || !s->command)
 		return ;
 	if (b->subshell_do[b->subshell_lvl] && \
-		(!b->log_op || b->log_op == PIPE || \
+		(!b->log_op || (b->log_op == PIPE && b->is_pipeline > 0) || \
 		(b->log_op == AND && b->exit_st == 0) || \
 		(b->log_op == OR && b->exit_st > 0)))
 	{

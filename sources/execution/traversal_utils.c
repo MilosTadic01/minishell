@@ -38,7 +38,7 @@ void	close_pipes_and_wait_and_reset_pipeline(t_exe *b)
 	pipe_closer(b);
 	go_wait(b);
 	b->is_pipeline = 0;
-	b->ppl_cmd_count = 0;
+	b->ppl_cmd_count = 1;
 }
 
 void	increment_hd_idx(t_ast *s, t_exe *b)

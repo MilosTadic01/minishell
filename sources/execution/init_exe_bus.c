@@ -45,18 +45,18 @@ we're reusing the i, which in hindsight I've come to regret.
 */
 void	big_init_exe_bus_with_ast(t_ast *s, t_exe *exe_bus)
 {
-	// exe_bus->exit_st = 0;
-	exe_bus->heredocs_need_execution = 1;
 	exe_bus->s = s;
+	exe_bus->heredocs_need_execution = 1;
 	exe_bus->i = -1;
 	exe_bus->hd_count = 0;
 	exe_bus->hd_idx = 0;
 	exe_bus->hd_fds = NULL;
+	exe_bus->hd_delimiters = NULL;
 	exe_bus->fd_redir_in = -1;
 	exe_bus->fd_redir_out = -1;
 	exe_bus->is_pipeline = 0;
 	exe_bus->subshell_lvl = 0;
-	exe_bus->ppl_cmd_count = 0;
+	exe_bus->ppl_cmd_count = 1;
 	init_subshell_dos(exe_bus);
 	init_pipe_fds(exe_bus);
 	exe_bus->smpl_cmd_pid = -1;

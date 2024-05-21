@@ -19,18 +19,19 @@ if (s->tag == COMMAND || s->tag == RECCALL)
 and
 else if (s->tag == SUBSHELL || s->tag == RECCALL)
 */
+// On eval day, no longer going left, ppl_cmd_count default is 1 again
+	// if (s->left)
+		// 	update_pipe_info(s->left, b);
 static void	update_pipe_info(t_ast *s, t_exe *b)
 {
 	t_ast	*reccall_ast;
 
 	reccall_ast = NULL;
 	b->is_pipeline = 1;
-	if (s->tag == COMMAND || (s->tag == BINOP && s->op != PIPE))
+	if (s->tag == COMMAND)
 		b->ppl_cmd_count++;
 	else if (s->tag == BINOP && s->op == PIPE)
 	{
-		if (s->left)
-			update_pipe_info(s->left, b);
 		if (s->right)
 			update_pipe_info(s->right, b);
 	}
