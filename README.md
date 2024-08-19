@@ -3,22 +3,30 @@
 ## Intro
 
 ### Aim
-The goal of the project was to build a shell which abides by a long list of (rather rudimentary) expectations on one hand, but which at the same time should look up to the decades worth of features Bash shell as a role model. This has forced us to explore Bash extensively, but has at the same liberated us to selectively mimic those features of Bash which we deemed fun or important.
+The goal of the project was to build a shell which abides by a long list of (rather rudimentary) expectations on one hand, but which at the same time should look up to the decades worth of features Bash shell as a role model. This has forced us as the developers to explore Bash extensively, but has at the same liberated us to selectively mimic those features of Bash which we deemed fun or important.
 
 ### Shell definition
 A shell is a program which presents the computer user with a command line interface and which does three things in order to be useful:
 
+<details>
+	<summary>3 things</summary>
+
 1. **Parsing**: It parses i.e. interprets the user input
 2. **Execution**: It utilizes the resources of the OS...
-	1. ...by performing system calls aka `syscalls` to the kernel
-	2. ...by executing other utilities and programs
+	1. ...by performing system calls aka `syscalls` to the kernel for rudimentary operations like `read`, `write` or `open`
+	2. ...by executing other utilities and programs such as `ls` or `wc`
 3. **Redirection**: It performs input/output redirection
+
+</details>
 
 The result is a single-layer interface for a program, a shell, which can execute other programs and can manipulate the `i/o` of their respective executions.
 
 ### Example
 
 `echo hello world | cat | wc -w`
+
+<details>
+	<summary>3 things that happen with this command</summary>
 
 1. **Parsing**: A functional parser should, among other things, establish the following:
 	1. `echo`, `cat` and `wc -w` are commands
@@ -27,6 +35,8 @@ The result is a single-layer interface for a program, a shell, which can execute
 	4. `-w` is a flag/option of `wc` rather than its arg, i.e. `wc -w` is in its entirety a command
 2. **Execution**: A functional shell should be able to establish that `echo` is a builtin, to locate the binaries of `cat` and `wc`, and to execute the three functions or otherwise inform the user if either is not possible (but still execute the rest). The shell user needn't know where either of the programs `echo` or `cat` or `wc` are located on the system.
 3. **Redirection**: A functional shell should redirect the output of `echo hello world` to become the input of `cat` and the output thereof to become the input of `wc -w`.
+
+</details>
 
 ## Features Overview
 
