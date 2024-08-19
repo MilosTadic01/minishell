@@ -1,52 +1,78 @@
 # minishell
-write a shell in C
+
+## Intro
+
+### Aim
+The goal of the project was to build a shell which abides by a long list of (rather rudimentary) expectations on one hand, but which at the same time should look up to the decades worth of features Bash shell as a role model. This has forced us to explore Bash extensively, but has at the same liberated us to selectively mimic those features of Bash which we deemed fun or important.
+
+### Shell definition
+A shell is a program which presents the computer user with a command line interface and which does three things in order to be useful:
+
+1. **Parsing**: It parses i.e. interprets the user input
+2. **Execution**: It utilizes the resources of the OS...
+	1. ...by performing system calls aka `syscalls` to the kernel
+	2. ...by executing other utilities and programs
+3. **Redirection**: It performs input/output redirection
+
+The result is a single-layer interface for a program, a shell, which can execute other programs and can manipulate the `i/o` of their respective executions.
+
+### Example
+
+`echo hello world | cat | wc -w`
+
+1. **Parsing**: A functional parser should, among other things, establish the following:
+	1. `echo`, `cat` and `wc -w` are commands
+	2. `hello world` is the argument vector of `echo`
+	3. each `|` is a valid pipe, i.e. there is `i/o` taking place for each `|`
+	4. `-w` is a flag/option of `wc` rather than its arg, i.e. `wc -w` is in its entirety a command
+2. **Execution**: A functional shell should be able to establish that `echo` is a builtin, to locate the binaries of `cat` and `wc`, and to execute the three functions or otherwise inform the user if either is not possible (but still execute the rest). The shell user needn't know where either of the programs `echo` or `cat` or `wc` are located on the system.
+3. **Redirection**: A functional shell should redirect the output of `echo hello world` to become the input of `cat` and the output thereof to become the input of `wc -w`.
 
 ## Features Overview
 
-| Feature              | Description and Example                                                   | Status  |
-|----------------------|---------------------------------------------------------------|:---------:|
-| **Basic Commands**   | Execution of binaries like `ls`, `cat`.  | ✅ |
-| **Absolute Path Exec** | `/bin/ls`  | ✅ |
-| **Built-in Commands**| `cd`, `echo`, `pwd`, `exit`, `export`, `unset`, `env` without options.  | ✅ |
-| **Parsing Errors**   | `<(`, `(`, `&&\|`, `'`, `"`, etc. Minishell does not prompt for closure of open pairs.  | ✅ |
-| **Redirections**     | input (`<`), output (`>`), heredoc (`<<`) and append (`>>`) redirections. | ✅ |
-| **Environment Variables** | Interfaced via `export` and `unset`. `export TEST=55 TEST=99` | ✅ |
-| **Variable Expansion** | `echo $TEST` prints `99`  | ✅ |
-| **Expansions Execution** | ➕ incl. pipelines and logical switches `export CMD="echo aa && echo bb"`. `$CMD` prints `aa` `bb` | ✅ |
-| **Logical Switching**| Execution depends on last exit status (`&&`, <code>&#124;&#124;</code>).| ✅ |
-| **Logical Layering** | When parentheses `()`, execution depends on any previous logical switch. | ✅ |
-| **Pipes**            | `cat \| sort`; support for indefinite length pipeline | ✅ |
-| **Signal Handling**  | Handles `SIGINT`, `SIGQUIT` in non-interactive mode, as well as for STDIN_FILENO prompting and heredoc prompting.| ✅ |
-| **History**          | Command history and navigation.                               | ✅ |
-| **Error Handling**   | incl. exit statuses. `echo $?`                                  | ✅ |
-| **Err and fd redirection**| `2>`, `&>`, `4096>`              | ❌ |
-| **Shell variables**   |  `echo $SECONDS` (since the Shell was started)                 | ❌ |
-| **Built-in variables** | `echo $HISTSIZE`                                 | ❌ |
-| **Subshells**        | Execution in a child process when parentheses `()`.            | ❌ |
-| **Escaped Characters** | Escaping is not interpreted as such `\n`, `\t`              | ❌ |
-| **Ansi C Expansion** | `echo $'apple\nbanana'` prints `apple` `newline` `banana` | ❌ |
-| **Wildcards \* **   | `rm \*.c`                        | ❌ |
-| **Backgrounding** | Background a process with `&`.    | ❌ |
-| **Pipes through ()** | Yes: `ls \| (cat) \| cat`. No: `(echo aa && echo bb) \| cat`. | 🚧 |
+| Feature                    | Description and Example                                                                                                                                | Status |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | :----: |
+| **Basic Commands**         | Execution of binaries like `ls`, `cat`.                                                                                                                |   ✅    |
+| **Absolute Path Exec**     | `/bin/ls`                                                                                                                                              |   ✅    |
+| **Built-in Commands**      | `cd`, `echo`, `pwd`, `exit`, `export`, `unset`, `env` without options.                                                                                 |   ✅    |
+| **Parsing Errors**         | `<(`, `(`, `&&\|`, `'`, `"`, etc. Minishell does not prompt for closure of open pairs.                                                                 |   ✅    |
+| **Redirections**           | input (`<`), output (`>`), heredoc (`<<`) and append (`>>`) redirections.                                                                              |   ✅    |
+| **Environment Variables**  | Interfaced via `export` and `unset`.<br>`export TEST=55 TEST=99`                                                                                       |   ✅    |
+| **Variable Expansion**     | `echo $TEST` prints `99`                                                                                                                               |   ✅    |
+| **Expansions Execution**   | ➕ incl. pipelines and logical switches `export CMD="echo aa && echo bb"`. `$CMD` prints `aa` `bb`                                                      |   ✅    |
+| **Logical Switching**      | Execution of the command to the right of the logical operator depends on the exit status of the command to its left (`&&`, <code>&#124;&#124;</code>). |   ✅    |
+| **Logical Layering**       | When parenthesized expression `()`, its execution depends on any anteceding logical switch.                                                            |   ✅    |
+| **Pipes**                  | `cat \| sort`; support for indefinite length pipeline                                                                                                  |   ✅    |
+| **Signal Handling**        | Handles `SIGINT`, `SIGQUIT` in non-interactive mode, as well as for STDIN_FILENO prompting and heredoc prompting.                                      |   ✅    |
+| **History**                | Command history and navigation.                                                                                                                        |   ✅    |
+| **Error Handling**         | incl. exit statuses. `echo $?`                                                                                                                         |   ✅    |
+| **Err and fd redirection** | `2>`, `&>`, `4096>`                                                                                                                                    |   ❌    |
+| **Shell variables**        | `echo $SECONDS` (sec since the Shell was started)                                                                                                      |   ❌    |
+| **Built-in variables**     | `echo $HISTSIZE`                                                                                                                                       |   ❌    |
+| **Subshells**              | Execution in a child process when parentheses `()`.                                                                                                    |   ❌    |
+| **Escaped Characters**     | Escaping is not interpreted as such `\n`, `\t`                                                                                                         |   ❌    |
+| **Ansi C Expansion**       | `echo $'apple\nbanana'` prints `apple` `newline` `banana`                                                                                              |   ❌    |
+| **Wildcards \* **          | `rm \*.c`                                                                                                                                              |   ❌    |
+| **Backgrounding**          | Background a process with `&`.                                                                                                                         |   ❌    |
+| **Pipes through ()**       | Yes: `ls \| (cat) \| cat`. No: `(echo aa && echo bb) \| cat`.                                                                                          |   🚧   |
 
 ### Legend
 - ✅ Implemented and tested.
 - 🚧 In Progress: implemented for learning purposes but not entirely Bash-like.
 - ❌ Not Implemented.
 
-## Navigating the massive knowledge of Shell
+## Navigating the massive lore of Bash shell
 
 ### Formal docs
-
-* [The Open Group Base Secifications Issue 6. IEEE Std 1003.1, 2004 Edition. The definition of the Shell Command Language](https://pubs.opengroup.org/onlinepubs/009604499/utilities/xcu_chap02.html) (Note that 1003.2 is actually the issue that might be more relevant to Bash, though I forgot why)
 * [The GNU Bash manual](https://www.gnu.org/software/bash/manual/)
+* [The Open Group Base Secifications Issue 7, 2018 Edition. IEEE Std 1003.1-2017. The definition of the Shell Command Language](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html) 
 
-### Referencing specific commands (nav)
+### Understanding Bash / referencing specific commands
 
 * `type <cmd>` - what would get executed by Shell if `<cmd>` were part of the command
   * `type -a <cmd>` - show all possibilities for execution, whereas the top one will get executed if not otherwise specified
 * `help <cmd>` - the "man pages" for Shell builtins specifically
-* `man <cmd>` vs `info <cmd>` - ultimately, just try both, often they'll end up being the same
+* `man <cmd>` vs `info <cmd>` - ultimately, just try both, often they'll even end up pointing to the same file, but other times one or the other may have useful additional info
 * compgen - a milion options, a milion useful printouts
   * `compgen -b` - list the builtin cmds of this shell
   * `compgen -v` - list the builtin vars of this shell
@@ -73,15 +99,19 @@ extract_tokens(char ***input_string**)
 
 ## Authorized functions
 
-man section | meaning
-:---: | :---
-1 | user commands (Shell commands)
-2 | system calls
-3 | library functions
-7 | miscellaneous (file formats)
-8 | System Administration topics, incl. sysadmin commands
-9 | Kernel developer's manual
-rl_lib | rl_lib
+| man section | meaning                                               |
+| :---------: | :---------------------------------------------------- |
+|      1      | user commands (Shell commands)                        |
+|      2      | system calls                                          |
+|      3      | library functions                                     |
+|      4      | special files (usually found in /dev), drivers        |
+|      5      | file formats and conventions                          |
+|      6      | games and screensavers                                |
+|      7      | miscellaneous (incl. macro packages and conventions)  |
+|      8      | System Administration topics, incl. sysadmin commands |
+|      9      | Kernel developer's manual (non-standard)              |
+|   rl_lib    | rl_lib                                                |
+`apropos -s X .` - replace `X` with a digit to query for entries in that man section on your system
 
 * readline(3) - gnl, but official. [Programming with GNU readline](https://web.mit.edu/gnu/doc/html/rlman_2.html)
   * #include 
