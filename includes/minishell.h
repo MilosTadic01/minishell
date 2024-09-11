@@ -33,11 +33,13 @@
 # include "exec.h"
 # include "builtins.h"
 # include "parsing_for_exit_st.h"
+# include "aesthetics.h"
 
 extern int	g_exit;
 
 void	minishell(char *subcmd, t_exe *b);
 void	prompt(char *subcmd, t_exe *b);
+void	print_greeting(void);
 
 # define PIPE 124
 # define SINGLE_QUOTE 39

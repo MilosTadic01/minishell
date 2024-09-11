@@ -36,6 +36,7 @@ void	minishell(char *subcmd, t_exe *b)
 {
 	if (!subcmd)
 	{
+		print_greeting();
 		while (1)
 			prompt(subcmd, b);
 	}
@@ -78,6 +79,11 @@ static void	clean_and_run(char **line, t_exe *b)
 	add_history(*line);
 	free(*line);
 	return (minishell(NULL, b));
+}
+
+void	print_greeting(void)
+{
+	ft_putendl_fd(GREETING, STDIN_FILENO);
 }
 
 // static void print_ast(t_ast *s)

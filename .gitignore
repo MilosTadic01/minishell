@@ -6,3 +6,5 @@ forbidden
 libft/get_next_line.o
 libft/get_next_line/gnl.a
 libft/get_next_line_utils.o
+
+.DS_Store
