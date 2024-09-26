@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minishell.h"
+#include "../includes/minishell.h"
 
 //static void print_ast(t_ast *s);
 static void	clean_and_run(char **line, t_exe *b);

@@ -65,7 +65,7 @@ FILES = $(LEXD)lexer.c \
 		$(EXECD)pipe_fu_parent.c \
 		$(EXECD)pipe_fu_children.c \
 		$(EXECD)wait_pipeline.c \
-		main.c
+		./sources/main.c
 
 NAME = minishell
 
