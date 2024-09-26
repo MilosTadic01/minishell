@@ -27,6 +27,7 @@ int	main(int argc, char **argv, char **envp)
 	g_exit = 0;
 	my_env = init_env(envp);
 	pre_ast_init_exe_bus(&exe_bus, &my_env);
+	print_greeting();
 	minishell(NULL, &exe_bus);
 	ft_lstclear(&my_env);
 	return (0);
@@ -36,7 +37,6 @@ void	minishell(char *subcmd, t_exe *b)
 {
 	if (!subcmd)
 	{
-		print_greeting();
 		while (1)
 			prompt(subcmd, b);
 	}

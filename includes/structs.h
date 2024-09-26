@@ -43,7 +43,7 @@ typedef struct s_list
 {
 	enum e_data_types	type;
 	struct s_list		*next;
-	union
+	union 
 	{
 		t_token			*as_token;
 		t_redir_item	*as_item;
