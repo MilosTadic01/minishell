@@ -1,3 +1,7 @@
+# Technical page
+
+## Approaching a shell
+
 ### Aim
 
 The goal of the project was to build a shell which abides by a long list of (rather rudimentary) expectations on one hand, but which at the same time should look up to the decades worth of features Bash shell as a role model. This has forced us as the developers to explore Bash extensively, but has at the same liberated us to selectively mimic those features of Bash which we deemed fun or important.
@@ -36,39 +40,60 @@ The result is a single-layer interface for a program, a shell, which can execute
 
 </details>
 
-## Features Overview
-
-| Feature                    | Description and Example                                                                                                                                | Status |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | :----: |
-| **Basic Commands**         | Execution of binaries like `ls`, `cat`.                                                                                                                |   ✅   |
-| **Absolute Path Exec**     | `/bin/ls`                                                                                                                                              |   ✅   |
-| **Built-in Commands**      | `cd`, `echo`, `pwd`, `exit`, `export`, `unset`, `env` without options.                                                                                 |   ✅   |
-| **Parsing Errors**         | `<(`, `(`, `&&\|`, `'`, `"`, etc. Minishell does not prompt for closure of open pairs.                                                                 |   ✅   |
-| **Redirections**           | input (`<`), output (`>`), heredoc (`<<`) and append (`>>`) redirections.                                                                              |   ✅   |
-| **Environment Variables**  | Interfaced via `export` and `unset`.<br>`export TEST=55 TEST=99`                                                                                       |   ✅   |
-| **Variable Expansion**     | `echo $TEST` prints `99`                                                                                                                               |   ✅   |
-| **Expansions Execution**   | ➕ incl. pipelines and logical switches `export CMD="echo aa && echo bb"`. `$CMD` prints `aa` `bb`                                                     |   ✅   |
-| **Logical Switching**      | Execution of the command to the right of the logical operator depends on the exit status of the command to its left (`&&`, <code>&#124;&#124;</code>). |   ✅   |
-| **Logical Layering**       | When parenthesized expression `()`, its execution depends on any anteceding logical switch.                                                            |   ✅   |
-| **Pipes**                  | `cat \| sort`; support for indefinite length pipeline                                                                                                  |   ✅   |
-| **Signal Handling**        | Handles `SIGINT`, `SIGQUIT` in non-interactive mode, as well as for STDIN_FILENO prompting and heredoc prompting.                                      |   ✅   |
-| **History**                | Command history and navigation.                                                                                                                        |   ✅   |
-| **Error Handling**         | incl. exit statuses. `echo $?`                                                                                                                         |   ✅   |
-| **Err and fd redirection** | `2>`, `&>`, `4096>`                                                                                                                                    |   ❌   |
-| **Shell variables**        | `echo $SECONDS` (sec since the Shell was started)                                                                                                      |   ❌   |
-| **Built-in variables**     | `echo $HISTSIZE`                                                                                                                                       |   ❌   |
-| **Subshells**              | Execution in a child process when parentheses `()`.                                                                                                    |   ❌   |
-| **Escaped Characters**     | Escaping is not interpreted as such `\n`, `\t`                                                                                                         |   ❌   |
-| **Ansi C Expansion**       | `echo $'apple\nbanana'` prints `apple` `newline` `banana`                                                                                              |   ❌   |
-| **Wildcards \* **          | `rm \*.c`                                                                                                                                              |   ❌   |
-| **Backgrounding**          | Background a process with `&`.                                                                                                                         |   ❌   |
-| **Pipes through ()**       | Yes: `ls \| (cat) \| cat`. No: `(echo aa && echo bb) \| cat`.                                                                                          |   🚧   |
+## Minishell🌸 Features Overview
 
 ### Legend
 
 - ✅ Implemented and tested.
 - 🚧 In Progress: implemented for learning purposes but not entirely Bash-like.
-- ❌ Not Implemented.
+- 🟥 Not Implemented.
+
+### Input processing
+| Feature                    | Description and Example                                                                                                                                | Status |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | :----: |
+| **Parsing Errors**         | `<(`, `(`, `&&\|`, `'`, `"`, etc. No prompt for closure of open pairs, instead treated as errors.                                      |   ✅   |
+| **Expansions Execution**   | `export CMD="echo aa && echo bb"` ==> `$CMD` prints `aa` `bb`                                                     |   ✅   |
+| **Variable Expansion**     | `echo $TEST` prints `99`                                                                                                                               |   ✅   |
+| **Escaped Characters**     | Escaping is not interpreted as such `\n`, `\t`                                                                                                         |   🟥   |
+| **Ansi C Expansion**       | `echo $'apple\nbanana'` prints `apple` `newline` `banana`                                                                                              |   🟥   |
+| **Wildcards \***          | `rm \*.c`                                                                                                                                              |   🟥   |
+
+### Variables
+| Feature                    | Description and Example                                                                                                                                | Status |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | :----: |
+| **Environment Variables**  | Interfaced via `export` and `unset`. 				                                                                                      |   ✅   |
+| **Overwriting order**	     | `export TEST=55 TEST=99`. `echo $TEST` ==> `99`													      |   ✅   |
+| **Shell variables**        | `echo $SECONDS` (sec since the Shell was started)                                                                                                      |   🟥   |
+| **Built-in variables**     | `echo $HISTSIZE`                                                                                                                                       |   🟥   |
+
+### Runtime Management
+| Feature                    | Description and Example                                                                                                                                | Status |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | :----: |
+| **Signal Handling**        | Handles `SIGINT`, `SIGQUIT` in non-interactive mode, as well as during STDIN_FILENO prompting and heredoc prompting.                                   |   ✅   |
+| **History**                | Command history and navigation.                                                                                                                        |   ✅   |
+| **Exit Statuses**          | `echo $?`. Relevant to Logical Switching		                                                                                                      |   ✅   |
+| **Logical Switching**      | Execution of the command to the right of the logical operator depends on the exit status of the command to its left (`&&`, <code>&#124;&#124;</code>). |   ✅   |
+| **Logical Layering**       | `echo "printed" \|\| (echo "not printed" \|\| echo "also not printed) && echo "printed"`                                                               |   ✅   |
+
+### Execution
+| Feature                    | Description and Example                                                                                                                                | Status |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | :----: |
+| **Basic Commands**         | Execution of binaries like `ls`, `cat`.                                                                                                                |   ✅   |
+| **Absolute Path Exec**     | `/bin/ls`                                                                                                                                              |   ✅   |
+| **Built-in Commands**      | `cd`, `echo`, `pwd`, `exit`, `export`, `unset`, `env` without options.                                                                                 |   ✅   |
+| **Subshells**              | Execution in a child process when parentheses `()`.                                                                                                    |   🟥   |
+| **Backgrounding**          | Background a process with `&`.                                                                                                                         |   🟥   |
+
+### Implicit (pipes) and explicit redirections
+| Feature                    | Description and Example                                                                                                                                | Status |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | :----: |
+| **Pipes**                  | `cat \| sort`					                                                                                                      |   ✅   |
+| **Indefinite Pipeline len**| `echo "hello world" \| cat \| cat \| cat` ... `cat \| cat`											      |   ✅   |
+| **Expl. Redirections**     | input (`<`), output (`>`), heredoc (`<<`) and append (`>>`) redirections.                                                                              |   ✅   |
+| **Implicit File Creation** | `echo "hello" >file1 >>file2 >file3` ==> creates file1, file2, file3                                                                                   |   ✅   |
+| **Redirection Order**      | `echo "hello" >file1 >>file2 >file3` ==> only file3 has "hello" 											      |   ✅   |
+| **Pipes through ()**       | Yes: `ls \| (cat) \| cat`. No: `(echo aa && echo bb) \| cat`.                                                                                          |   🚧   |
+| **Err and fd redirection** | `2>`, `&>`, `4096>`                                                                                                                                    |   🟥   |
 
 ## Navigating the massive lore of Bash shell
 
