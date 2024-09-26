@@ -40,7 +40,7 @@ The result is a single-layer interface for a program, a shell, which can execute
 
 </details>
 
-## Minishell🌸 Features Overview
+## 🌸minishell Features Overview
 
 ### Legend
 
@@ -51,12 +51,12 @@ The result is a single-layer interface for a program, a shell, which can execute
 ### Input processing
 | Feature                    | Description and Example                                                                                                                                | Status |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | :----: |
-| **Parsing Errors**         | `<(`, `(`, `&&\|`, `'`, `"`, etc. No prompt for closure of open pairs, instead treated as errors.                                      |   ✅   |
-| **Expansions Execution**   | `export CMD="echo aa && echo bb"` ==> `$CMD` prints `aa` `bb`                                                     |   ✅   |
+| **Parsing Errors**         | `<(`, `(`, `&&\|`, `'`, `"`, etc. No prompt for closure of open pairs, instead treated as errors.                                  		      |   ✅   |
+| **Expansions Execution**   | `export CMD="echo aa && echo bb"` ==> `$CMD` prints `aa` `bb`                                                    				      |   ✅   |
 | **Variable Expansion**     | `echo $TEST` prints `99`                                                                                                                               |   ✅   |
 | **Escaped Characters**     | Escaping is not interpreted as such `\n`, `\t`                                                                                                         |   🟥   |
 | **Ansi C Expansion**       | `echo $'apple\nbanana'` prints `apple` `newline` `banana`                                                                                              |   🟥   |
-| **Wildcards \***          | `rm \*.c`                                                                                                                                              |   🟥   |
+| **Wildcards \***          | `rm \*.c`                                                                                                                                               |   🟥   |
 
 ### Variables
 | Feature                    | Description and Example                                                                                                                                | Status |
