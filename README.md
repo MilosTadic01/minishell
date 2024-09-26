@@ -11,19 +11,19 @@ This is a custom implementation of a shell for UNIX-like systems.
 On Linux or Mac OS, open a terminal and execute the following commands.
 
 ```bash
-$ git clone git@github.com:MilosTadic01/minishell.git
+git clone git@github.com:MilosTadic01/minishell.git
 ```
 
 ```bash
-$ cd minishell
+cd minishell
 ```
 
 ```bash
-$ make
+make
 ```
 
 ```bash
-$ ./minishell
+./minishell
 ```
 
 After the greeting message, you will notice `minishell>` at the beginning of each prompt rather than `%` or `$`. Try giving minishell a spin. To exit to the parent shell, enter `CTRL + D` on your keyboard.
