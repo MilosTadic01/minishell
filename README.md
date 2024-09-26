@@ -1,8 +1,8 @@
 # minishell
 
-## Introduction
+This is a custom implementation of a shell for UNIX-like systems.
 
-This is a custom implementation of a shell program for UNIX-like systems.
+## Demo
 
 ![output2](https://github.com/user-attachments/assets/5ac8626e-2686-438b-8222-3687f0cf42f0)
 
@@ -26,11 +26,16 @@ $ make
 $ ./minishell
 ```
 
-After the greeting message, you will notice `minishell>` at the beginning of the prompt rather than `%` or `$`. Try giving minishell a spin. To exit to the parent shell, enter `CTRL + D` on your keyboard.
+After the greeting message, you will notice `minishell>` at the beginning of each prompt rather than `%` or `$`. Try giving minishell a spin. To exit to the parent shell, enter `CTRL + D` on your keyboard.
 
 ## Project details
 
 Visit the [technical page](/docs/technical_page.md) for details about shells in general, about our minishell's features, about abstract syntax trees and more.
+
+| ![image](https://github.com/user-attachments/assets/4c4ed79d-65e4-46af-a822-2dcc92e490a6) | 
+|:--:| 
+| *An excerpt from the features overview* |
+
 
 ## Credits & Feedback
 
