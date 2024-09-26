@@ -1,6 +1,6 @@
 # minishell
 
-![output](https://github.com/user-attachments/assets/00b374dc-bf84-4e8b-8282-aa02bb319a90)
+![output2](https://github.com/user-attachments/assets/5ac8626e-2686-438b-8222-3687f0cf42f0)
 
 ## Intro
 
