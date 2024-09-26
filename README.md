@@ -1,4 +1,4 @@
-# minishell
+# 🌸minishell
 
 This is a custom implementation of a shell for UNIX-like systems.
 
@@ -30,9 +30,9 @@ After the greeting message, you will notice `minishell>` at the beginning of eac
 
 ## Project details
 
-Visit the [technical page](/docs/technical_page.md) for details about shells in general, about our minishell's features, about abstract syntax trees and more.
+Visit the [technical page](/docs/technical_page.md) for details about shells in general, about 🌸minishell's features, about abstract syntax trees and more.
 
-| ![image](https://github.com/user-attachments/assets/4c4ed79d-65e4-46af-a822-2dcc92e490a6) | 
+| ![image](https://github.com/user-attachments/assets/3a49836c-c8da-4543-add0-f162aad8c035) | 
 |:--:| 
 | *An excerpt from the features overview* |
 
